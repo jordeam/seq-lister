@@ -20,7 +20,7 @@ controller.home = asyncHandler(async (req, res, next) => {
   const ccase = await Case.findOne({where: {id: req.params.id}});
   if (ccase === null) {
     // No results.
-    const err = new Error("Invólucro não encontrado");
+    const err = new Error("Encapsulamento não encontrado");
     err.status = 404;
     return next(err);
   }

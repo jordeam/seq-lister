@@ -1,0 +1,42 @@
+extends base
+
+block content
+  h1
+    a.btn.btn-primary(href=location.url)
+      img(src="/image/loc-icon.svg" alt="Localização" width="20pt" height="24pt")
+    | &nbsp;
+    a.btn.btn-primary(href=location.url+"/table")
+      img(src="/image/table-icon.svg" alt="Tabela" width="20pt" height="24pt")
+    | &nbsp; #[Strong Localização:] #{location.name}
+  p Obs.: #{location.note}
+
+  p #[Strong Quantidade de caixas:] #{location.nbox}
+
+  h2 Componentes:
+
+  form(action="/location/"+location.id+"/labels" method="post")
+    p
+      input#box(type="checkbox" name="box" checked)
+      label(for="box") Etiqueta da caixa
+      | &nbsp;
+      input#box(type="checkbox" name="box2" checked)
+      label(for="box") Imprimir duas
+    dl
+    each val, idx in entries
+      dd
+        input(type="checkbox" name="comp_"+val.component_id checked)
+        | &nbsp; #{idx+1}
+        | &nbsp; #{val.gname}: &nbsp;
+        a(href='/component/' + val.component_id) #[Strong #{val.cname}]
+        | &nbsp;
+        if val.csname.length > 0
+          | &mdash; #{val.csname}
+        | &nbsp;
+        a(href='/locationentry/'+val.id) &times;#{val.quant}
+        | &nbsp; &middot;#{val.quant_unit} #[Strong cx:]#{val.box} &nbsp; | #{val.labels}
+    if entries
+      button.btn.btn-primary Gerar
+    else
+      li Não existem componentes nesta localização.
+
+  script(src="/script/component_new.js")

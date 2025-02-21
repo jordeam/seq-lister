@@ -32,7 +32,13 @@ controller.home = asyncHandler(async (req, res, next) => {
     return next(err);
   }
 
-  const pugURL = /table$/.test(req.originalUrl) ? "location_table" : "location_home";
+  let pugURL = '';
+  if (/table$/.test(req.originalUrl))
+    pugURL = "location_table";
+  else if (/labels$/.test(req.originalUrl))
+    pugURL = "location_labels";
+  else
+    pugURL = "location_home";
   res.render(pugURL, {
     user: req.user,
     location: loc,
@@ -79,6 +85,17 @@ controller.delete = asyncHandler(async (req, res, next) => {
 
     await location.destroy();
     res.redirect('/location/');
+});
+
+// List all components of a location to print labels
+controller.labels = asyncHandler(async (req, res, next) => {
+  console.log(`location_id=${req.params.id}`);
+  for (let idx in req.body) {
+    console.log(`${idx} = ${req.body[idx]}`);
+  }
+
+
+  res.redirect('/location/'+req.params.id+'/labels');
 });
 
 export default controller;

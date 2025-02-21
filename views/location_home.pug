@@ -7,6 +7,9 @@ block content
     | &nbsp;
     a.btn.btn-primary(href=location.url+"/table")
       img(src="/image/table-icon.svg" alt="Tabela" width="20pt" height="24pt")
+    | &nbsp;
+    a.btn.btn-primary(href=location.url+"/labels")
+      img(src="/image/label-icon.svg" alt="Etiquetas" width="20pt" height="24pt")
     if entries.length === 0
       | &nbsp;
       a.btn.btn-primary(href=location.url+"/delete" onclick="return confirm('Tem certeza que quer excluir a localização?')" class='btn btn-primary')
@@ -28,7 +31,7 @@ block content
 
   p #[Strong Quantidade de caixas:] #{location.nbox}
 
-  p Componentes na localização:
+  p Componentes:
 
   a(href='/locationentry/create/'+location.id.toString() class='btn btn-primary')
     img(src="/image/add-icon.svg" alt="Adicionar" width="20pt" height="24pt")
@@ -36,17 +39,19 @@ block content
   dl
   each val in entries
     dd
-      a(href='/locationentry/'+val.id.toString() class='btn btn-primary')
+      a.btn.btn-primary(href='/locationentry/'+val.id)
         img(src="/image/edit-icon.svg" alt="Editar" width="20pt" height="24pt")
       | &nbsp;
-      a(href='/locationentry/'+val.id.toString()+'/delete' onclick="return confirm('Tem certeza que quer excluir a entrada?');" class='btn btn-primary')
+      a.btn.btn-primary(href='/locationentry/'+val.id+'/delete' onclick="return confirm('Tem certeza que quer excluir a entrada?');")
         img(src="/image/trash-icon.svg" alt="Excluir" width="20pt" height="24pt")
       | &nbsp; #{val.gname}: &nbsp;
       a(href='/component/' + val.component_id) #[Strong #{val.cname}]
       | &nbsp;
       if val.csname.length > 0
         | &mdash; #{val.csname}
-      | &nbsp; |  #{val.quant_unit}&times;&square;, #[Strong qt=]#{val.quant}, #[Strong cx:]#{val.box} &nbsp; | #{val.labels}
+      | &nbsp;
+      a(href='/locationentry/'+val.id) &times;#{val.quant}
+      | &nbsp; &middot;#{val.quant_unit} #[Strong cx:]#{val.box} &nbsp; | #{val.labels}
 
   else
     li Não existem componentes nesta localização.

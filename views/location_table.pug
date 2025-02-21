@@ -7,6 +7,9 @@ block content
     | &nbsp;
     a.btn.btn-primary(href=location.url)
       img(src="/image/loc-icon.svg" alt="Localização" width="20pt" height="24pt")
+    | &nbsp;
+    a.btn.btn-primary(href=location.url+"/labels")
+      img(src="/image/label-icon.svg" alt="Etiquetas" width="20pt" height="24pt")
     if entries.length === 0
       | &nbsp;
       a.btn.btn-primary(href=location.url+"/delete" onclick="return confirm('Tem certeza que quer excluir a localização?')" class='btn btn-primary')
@@ -35,6 +38,7 @@ block content
 
   table
     tr
+      th #
       th Grupo
       th Componente
       th Case
@@ -42,8 +46,9 @@ block content
       th Qt.
       th Un.
       th Saldo
-    each val in entries
+    each val, idx in entries
       tr
+        td(align="right") #{idx+1}
         td #{val.gname}
         td
           a(href='/component/' + val.component_id) #[Strong #{val.cname}]
