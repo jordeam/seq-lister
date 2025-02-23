@@ -1,5 +1,7 @@
 import { seqlz } from "../db.mjs";
 import { DataTypes } from "sequelize";
+import Case from "./case.mjs";
+import Group from "./group.mjs";
 
 const Component = seqlz.define("component", {
   id: { type: DataTypes.INTEGER, autoIncrement: true, allowNull: false, primaryKey: true, unique: true },
@@ -11,11 +13,14 @@ const Component = seqlz.define("component", {
     get() {
       return '/component/' + this.id;
     }
-  }
+  },
 },
   {
     timestamps: false,
     raw: true
   });
+
+Component.belongsTo(Case, {foreignKey: "case_id", allowNull: true});
+Component.belongsTo(Group, {foreignKey: "group_id", allowNull: true});
 
 export default Component;

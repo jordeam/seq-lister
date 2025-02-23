@@ -26,10 +26,11 @@ block content
       label(for='quant') Quantidade a fabricar:
       input#quant.form-control(type="text", placeholder="Nome" name="quant" required="true" value=(undefined===location ? '' : location.quant) )
 
+      label(for='nbox') Quantidade de caixas:
+      input#nbox.form-control(type="text", placeholder="1" name="nbox" required="true" value=(undefined===location ? '' : location.nbox))
+
       button(type="submit" class='btn btn-primary')
         img(src="/image/ok-icon.svg" alt="Alterar" width="16pt" height="20pt")
-
-  p #[Strong Quantidade de caixas:] #{location.nbox}
 
   p Componentes na localização:
 

@@ -1,9 +1,34 @@
 import { seqlz } from '../db.mjs';
 import { QueryTypes, Op} from 'sequelize';
 import Location from "../models/location.mjs";
+import LocationEntry from "../models/locationentry.mjs";
+import Component from "../models/component.mjs";
+import Case from "../models/case.mjs";
+import Group from "../models/group.mjs";
 import asyncHandler from "express-async-handler";
+import path from 'path';
+import { fileURLToPath } from 'url';
+import fs from 'fs';
+import lescape from 'escape-latex';
+import pkg from 'template-file';
+import selflatex from 'node-latex-pdf';
+
+const { render, renderToFolder } = pkg;
 
 const controller = {};
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+function deleteAllFilesInDir(dirPath) {
+  try {
+    fs.readdirSync(dirPath).forEach(file => {
+      fs.rmSync(path.join(dirPath, file));
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 // List all locations
 controller.list = asyncHandler(async (req, res, next) => {
@@ -60,6 +85,7 @@ controller.update = asyncHandler(async (req, res, next) => {
     loc.name = req.body.name;
     loc.quant = req.body.quant;
     loc.note = req.body.note;
+    loc.nbox = req.body.nbox;
 
     await loc.save();
 
@@ -88,14 +114,149 @@ controller.delete = asyncHandler(async (req, res, next) => {
 });
 
 // List all components of a location to print labels
-controller.labels = asyncHandler(async (req, res, next) => {
+controller.labels_post = asyncHandler(async (req, res, next) => {
   console.log(`location_id=${req.params.id}`);
+  const template_dir = __dirname + '/../public/templates/';
+  const component_template = fs.readFileSync(template_dir + 'label-comp.tex', 'utf-8');
+  const location_template = fs.readFileSync(template_dir + 'label-loc.tex', 'utf-8');
+
+  //
+  // Labels and page lengths
+  //
+  const nColumns = parseInt(req.body.nColumns);
+  const nRows = parseInt(req.body.nRows);
+  const pageWidth = parseFloat(req.body.pageWidth); // mm
+  const pageHeight = parseFloat(req.body.pageHeight); // mm
+  const topMargin = parseFloat(req.body.topMargin); //mm
+  const bottomMargin = parseFloat(req.body.bottomMargin); //mm
+  const leftMargin = parseFloat(req.body.leftMargin); // mm
+  const rightMargin = parseFloat(req.body.rightMargin); // mm
+  const tolHeight = 0.1; // mm tolerance in height
+  const labelWidth = (pageWidth - leftMargin - rightMargin) / nColumns;
+  const labelHeight = (pageHeight - tolHeight - topMargin - bottomMargin) / nRows;
+  const initPos = parseInt(req.body.initPos) - 1;
+  // Initial values
+  let row = 1;
+  let col = 1;
+  let out_str = "";
+  const location = await Location.findOne({where: {id: req.params.id}});
+  // Initial position
+  for (let _ in [...Array(initPos)]) {
+    out_str += "\\begin{tikzpicture}\n\\useasboundingbox (0,0) rectangle (\\labelWidth,\\labelHeight);\n\\\end{tikzpicture}%\n";
+    // increment position
+    if (++col > nColumns) {
+      col = 1;
+      if (++row > nRows) {
+        row = 1;
+        out_str += "\\newpage\n\\noindent%\n";
+      }
+      else
+        out_str += "\\\\[-\\lineskip]\n";
+    }
+  }
+  // Box labels
+  console.log(`location.nbox=${location.nbox}`);
+  for (let box of [...Array(location.nbox).keys()]) {
+    console.log(`box=${box} ${typeof(box)} req.body['nLabes'+box]=${req.body['nLabels'+box]}`);
+    const nLabels = parseInt(req.body['nLabels'+box]);
+    for (let _ in [...Array(nLabels)]) {
+      out_str += render(location_template,
+                        {
+                          location: lescape(location.name),
+                          box: box + 1,
+                        });
+      // increment position
+      if (++col > nColumns) {
+        col = 1;
+        if (++row > nRows) {
+          row = 1;
+          out_str += "\\newpage\n\\noindent%\n";
+        }
+        else
+          out_str += "\\\\[-\\lineskip]\n";
+      }
+    }
+  }
+  // Component labels
   for (let idx in req.body) {
     console.log(`${idx} = ${req.body[idx]}`);
+    const re = idx.toString().match(/^comp_([0-9]+)/);
+    console.log(`re=${re}`);
+    if (re && req.body[idx] === 'on') {
+      const comp = await Component.findOne({
+        where: {id: parseInt(re[1])},
+        raw: true,
+        include: [
+          {
+            model: Case,
+            required: false,
+            attributes: ["name"],
+          },
+          {
+            model: Group,
+            required: true,
+            attributes: ["name"],
+          }]
+      });
+
+      const le = await LocationEntry.findOne({where: {location_id: req.params.id, component_id : parseInt(re[1])}});
+      const str = render(component_template, {
+        component: lescape(comp.name, { preserveFormatting: false }),
+        case: lescape(comp['case.name'], { preserveFormatting: false }),
+        group: lescape(comp['group.name'], { preserveFormatting: false }),
+        location: lescape(location.name, { preserveFormatting: false }),
+        box: le.box,
+      });
+      out_str += str;
+      if (++col > nColumns) {
+        col = 1;
+        if (++row > nRows) {
+          row = 1;
+          out_str += "\\newpage\n\\noindent%\n";
+        }
+        else
+          out_str += "\\\\[-\\lineskip]\n";
+      }
+    }
   }
 
+  // Create output temporary directory
+  const out_dir = __dirname + '/../public/temp/';
+  try {
+    // check if directory already exists
+    if (!fs.existsSync(out_dir)) {
+      fs.mkdirSync(out_dir);
+      console.log(`Directory ${out_dir} is created.`);
+    }
+    // else {
+    //   console.log("Directory already exists.");
+    //   deleteAllFilesInDir(out_dir);
+    //   console.log(`Removed all files from ${out_dir}`);
+    // }
+  } catch (err) {
+    console.log(err);
+  }
 
-  res.redirect('/location/'+req.params.id+'/labels');
+  // Render final template
+  await renderToFolder(template_dir + 'label-doc.tex', out_dir, {
+    topMargin,
+    textHeight: pageHeight - topMargin - bottomMargin,
+    leftMargin: -25.4 + leftMargin,
+    textWidth: pageWidth - rightMargin - leftMargin,
+    labelWidth,
+    labelHeight,
+    str: out_str,
+  });
+
+  // run LaTeX
+  selflatex(out_dir + 'label-doc.tex', out_dir, (err,msg) => {
+    if(err) {
+      console.log(`Error, ${msg}`);
+      return res.status(500).send('Could not process TEX file for recipe');
+    }
+    // const content = fs.readFileSync(out_dir + 'recipe-template.pdf', 'utf-8');
+    return res.type('pdf').download(out_dir + 'label-doc.pdf', 'labels.pdf');
+  });
 });
 
 export default controller;

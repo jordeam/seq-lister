@@ -15,6 +15,6 @@ router.post("/:id", ensureAuthenticated, locationController.update);
 router.get('/:id/delete', ensureAuthenticated, locationController.delete);
 router.get('/:id/table', locationController.home);
 router.get('/:id/labels', locationController.home);
-router.post('/:id/labels', locationController.labels);
+router.post('/:id/labels', locationController.labels_post);
 
 export default router;

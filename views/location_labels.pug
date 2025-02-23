@@ -12,19 +12,52 @@ block content
 
   p #[Strong Quantidade de caixas:] #{location.nbox}
 
-  h2 Componentes:
 
   form(action="/location/"+location.id+"/labels" method="post")
+    h2 Dimensões:
     p
-      input#box(type="checkbox" name="box" checked)
-      label(for="box") Etiqueta da caixa
+      label(for="nColumns") Colunas:
+      input#nColumns(type="text" name="nColumns" value="5")
       | &nbsp;
-      input#box(type="checkbox" name="box2" checked)
-      label(for="box") Imprimir duas
+      label(for="nRows") Linhas:
+      input#nRows(type="text" name="nRows" value="10" required)
+      | &nbsp;
+      label(for="initPos") Posição incial:
+      input#initPos(type="text" name="initPos" value="1" required)
+      | &nbsp;
+      label(for="pageWidth") Largura da página (mm):
+      input#pageWidth(type="text" name="pageWidth" vale="210" required)
+      | &nbsp;
+      label(for="pageHeight") Altura da página (mm):
+      input#pageHeight(type="text" name="pageHeight" value="297" required)
+      | &nbsp;
+      label(for="topMargin") Margem superior (mm):
+      input#topMargin(type="text" name="topMargin" value="2" required)
+      | &nbsp;
+      label(for="bottomMargin") Margem inferior (mm):
+      input#bottomMargin(type="text" name="bottomMargin" value="2" required)
+      | &nbsp;
+      label(for="leftMargin") Margem esquerda (mm):
+      input#leftMargin(type="text" name="leftMargin" value="2" required)
+      | &nbsp;
+      label(for="rightMargin") Margem direita (mm):
+      input#rightMargin(type="text" name="rightMargin" value="2" required)
+
+    h2 Etiquetas:
+
+    each _, box in Array(location.nbox)
+      p
+        label(for="nLabels"+box) Número de etiquetas da caixa #{box+1}/#{location.nbox}:
+        select#nLabels(name="nLabels"+box)
+          option(value="0") Nenhuma
+          option(value="1" selected) 1
+          option(value="2") 2
+          option(value="3") 3
+          option(value="4") 4
     dl
     each val, idx in entries
       dd
-        input(type="checkbox" name="comp_"+val.component_id checked)
+        input(type="checkbox" name="comp_"+val.component_id)
         | &nbsp; #{idx+1}
         | &nbsp; #{val.gname}: &nbsp;
         a(href='/component/' + val.component_id) #[Strong #{val.cname}]
@@ -35,8 +68,14 @@ block content
         a(href='/locationentry/'+val.id) &times;#{val.quant}
         | &nbsp; &middot;#{val.quant_unit} #[Strong cx:]#{val.box} &nbsp; | #{val.labels}
     if entries
-      button.btn.btn-primary Gerar
+      p
+        button.btn.btn-primary(type="button" onclick="checkAll(this.form);") Marcar todos
+        | &nbsp;
+        button.btn.btn-primary(type="button" onclick="uncheckAll(this.form);") Desmarcar
+        | &nbsp;
+        button.btn.btn-primary Gerar
     else
       li Não existem componentes nesta localização.
 
-  script(src="/script/component_new.js")
+  script(src="/script/labels.js")
+

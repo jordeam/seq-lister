@@ -1,0 +1,8 @@
+\begin{tikzpicture}
+  \useasboundingbox (0,0) rectangle (\labelWidth,\labelHeight);
+  \draw (\labelWidth*0.45,0) -- (\labelWidth*0.55,0);
+  \draw (\labelWidth*0.45,\labelHeight) -- (\labelWidth*0.55,\labelHeight);
+  \draw (\labelWidth,\labelHeight*0.45) -- (\labelWidth,\labelHeight*0.55);
+  \draw (0,\labelHeight*0.45) -- (0,\labelHeight*0.55);
+  \node at (\labelWidth*0.5,\labelHeight*0.5) {\bf {{location}}/{{box}}};
+\end{tikzpicture}%

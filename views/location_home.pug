@@ -18,18 +18,19 @@ block content
   form(name="alter" method="post" action=location.url)
     div.form-group
       label(for='name') Nome:
-      input#name.form-control(type="text", placeholder="Nome" name="name" required="true" value=(undefined===location ? '' : location.name) )
+      input#name.form-control(type="text", placeholder="Nome" name="name" required="true" value=(undefined===location ? '' : location.name))
 
       label(for='note') Obs.:
-      input#note.form-control(type="text", placeholder="Observações e notas" name="note" value=(undefined===location ? '' : location.note) )
+      input#note.form-control(type="text", placeholder="Observações e notas" name="note" value=(undefined===location ? '' : location.note))
 
       label(for='quant') Quantidade a fabricar:
-      input#quant.form-control(type="text", placeholder="Nome" name="quant" required="true" value=(undefined===location ? '' : location.quant) )
+      input#quant.form-control(type="text", placeholder="1" name="quant" required="true" value=(undefined===location ? '' : location.quant))
+
+      label(for='nbox') Quantidade de caixas:
+      input#nbox.form-control(type="text", placeholder="1" name="nbox" required="true" value=(undefined===location ? '' : location.nbox))
 
       button(type="submit" class='btn btn-primary')
         img(src="/image/ok-icon.svg" alt="Alterar" width="20pt" height="24pt")
-
-  p #[Strong Quantidade de caixas:] #{location.nbox}
 
   p Componentes:
 
