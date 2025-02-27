@@ -70,4 +70,12 @@ controller.delete = asyncHandler(async (req, res, next) => {
   res.redirect('/supergroup/'+supergroup_id);
 });
 
+// Paramameters:
+// :id is the id of group, receives name in body
+controller.update = asyncHandler(async (req, res, next) => {
+    await Group.update({name: req.body.name}, {where: {id: req.params.id}});
+
+    res.redirect('/group/'+req.params.id);
+});
+
 export default controller;

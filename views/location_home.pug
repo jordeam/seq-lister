@@ -3,10 +3,13 @@ extends base
 block content
   h1
     a.btn.btn-primary(href="/location")
-      img(src="/image/back-icon.svg" alt="Voltar" width="20pt" height="24pt")
+      img(src="/image/locs-icon.svg" alt="Localizações" width="20pt" height="24pt")
     | &nbsp;
     a.btn.btn-primary(href=location.url+"/table")
       img(src="/image/table-icon.svg" alt="Tabela" width="20pt" height="24pt")
+    | &nbsp;
+    a.btn.btn-primary(href=location.url+"/csv")
+      img(src="/image/csv-icon.svg" alt="CSV" width="20pt" height="24pt")
     | &nbsp;
     a.btn.btn-primary(href=location.url+"/labels")
       img(src="/image/label-icon.svg" alt="Etiquetas" width="20pt" height="24pt")
@@ -56,5 +59,16 @@ block content
 
   else
     li Não existem componentes nesta localização.
+
+    hr
+
+    p Inserir componentes de outra localização (sem totais)
+    form(name="location_insert_from" method="post" action=location.url+"/insert_from")
+      div.form-group
+        select.form-control(name="location_id")
+          each loc in allLocations
+            option(value=loc.id ) #{loc.name}
+
+      button.btn.btn-primary(type="submit") Inserir
 
   script(src="/script/component_new.js")

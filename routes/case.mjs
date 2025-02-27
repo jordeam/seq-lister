@@ -14,7 +14,7 @@ router.get('/create', caseController.create);
 router.post('/create', caseController.create_post);
 router.get("/:id", caseController.home);
 router.post("/:id", ensureAuthenticated, caseController.update);
-// it is not possible to delete router.get('/:id/delete', caseController.delete);
+router.get('/:id/delete', caseController.delete);
 
 
 export default router;

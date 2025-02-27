@@ -16,5 +16,7 @@ router.get('/:id/delete', ensureAuthenticated, locationController.delete);
 router.get('/:id/table', locationController.home);
 router.get('/:id/labels', locationController.home);
 router.post('/:id/labels', locationController.labels_post);
+router.get('/:id/csv', locationController.csv);
+router.post('/:id/insert_from', locationController.insert_from);
 
 export default router;

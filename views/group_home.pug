@@ -9,9 +9,21 @@ block content
     | #[Strong Grupo:] #{group.name}
 
   p
-    a(href=supergroup.url class='btn btn-primary')
+    a.btn.btn-primary(href=supergroup.url)
       img(src="/image/sg-icon.svg" alt="Supergrupo" width="20pt" height="24pt")
     | &nbsp; #[Strong Supergrupo:] #{supergroup.name}
+
+  hr
+  h2 Editar
+  form(method='post' action=group.url)
+    p
+      label(for="name") #[Strong Nome:]
+      input#name.form-control(type='text', placeholder='Nome do grupo' name='name' required='true' value=(undefined===group ? '' : group.name))
+    p
+      button.btn.btn-primary(type='submit')
+        img(src="/image/ok-icon.svg" alt="Alterar" width="20pt" height="24pt")
+
+  hr
 
   p Lista dos componentes contidos neste grupo
 

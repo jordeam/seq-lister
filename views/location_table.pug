@@ -3,10 +3,13 @@ extends base
 block content
   h1
     a.btn.btn-primary(href="/location")
-      img(src="/image/back-icon.svg" alt="Voltar" width="20pt" height="24pt")
+      img(src="/image/locs-icon.svg" alt="Localizações" width="20pt" height="24pt")
     | &nbsp;
     a.btn.btn-primary(href=location.url)
       img(src="/image/loc-icon.svg" alt="Localização" width="20pt" height="24pt")
+    | &nbsp;
+    a.btn.btn-primary(href=location.url+"/csv")
+      img(src="/image/csv-icon.svg" alt="CSV" width="20pt" height="24pt")
     | &nbsp;
     a.btn.btn-primary(href=location.url+"/labels")
       img(src="/image/label-icon.svg" alt="Etiquetas" width="20pt" height="24pt")
@@ -46,7 +49,7 @@ block content
       th Case
       th Cx.
       th Qt.
-      th Un.
+      th P/P
       th Saldo
       th Labels
     each val, idx in entries

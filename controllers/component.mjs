@@ -26,6 +26,12 @@ controller.home = asyncHandler(async (req, res, next) => {
     await Promise.all([
       Group.findOne({ where: { id: comp.group_id } }),
       Case.findOne({ where: { id: comp.case_id } }),
+      ]);
+  const [allLocations, allCases, allGroups] =
+    await Promise.all([
+      Location.findAll({ order: [['name']] }),
+      Case.findAll({ order: [['name']] }),
+      Group.findAll({ where: {supergroup_id: group.supergroup_id}, order: [['name']] }),
     ]);
 
   const suppliercodes = await seqlz.query("select sc.id, s.name as s_name, code, rounding, active, manufact_pn, m.name as m_name from suppliercodes as sc, suppliers as s, manufacturers as m where supplier_id = s.id and manufact_id=m.id and component_id = $1",
@@ -39,8 +45,6 @@ controller.home = asyncHandler(async (req, res, next) => {
       bind: [comp.id],
       type: QueryTypes.SELECT,
     }); // await Location.findAll({ where: { id: { [Op.in]: locList } } });
-  const allLocations = await Location.findAll({ order: [['name']] });
-  const allCases = await Case.findAll({ order: [['name']] });
 
   res.render("component_home", {
     user: req.user,
@@ -50,16 +54,15 @@ controller.home = asyncHandler(async (req, res, next) => {
     locations,
     allCases,
     allLocations,
+    allGroups,
     suppliercodes,
   });
 });
 
+// Paramameters:
+// :id is the id of component, receives case_id and name in body
 controller.update = asyncHandler(async (req, res, next) => {
-    console.log("Aqui!");
-    console.log(`id=${req.params.id}`);
-    console.log(`name=${req.body.name}`);
-
-    await Component.update({name: req.body.name}, {where: {id: req.params.id}});
+    await Component.update({name: req.body.name, case_id: req.body.case_id, group_id: req.body.group_id}, {where: {id: req.params.id}});
 
     res.redirect('/component/'+req.params.id.toString());
 });
@@ -97,14 +100,6 @@ controller.delete = asyncHandler(async (req, res, next) => {
     await LocationEntry.destroy({where: {component_id: comp.id}});
     await comp.destroy();
     res.redirect('/group/'+group_id.toString());
-});
-
-// Paramameters:
-// id: is the id of component, receives case id in body
-controller.set_case = asyncHandler(async (req, res, next) => {
-    await Component.update({case_id: req.body.case_id}, {where: {id: req.params.id}});
-
-    res.redirect('/component/'+req.params.id);
 });
 
 export default controller;

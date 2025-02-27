@@ -9,8 +9,8 @@ block content
       button.btn.btn-primary(type="submit")
         img(src="/image/add-icon.svg" alt="Adicionar" width="20pt" height="24pt")
 
-  dl
   h2 Em montagem
+  dl
   each val in underConst
     dd
       a(href=val.url class='btn btn-primary')
@@ -23,6 +23,7 @@ block content
         | &nbsp; &mdash; #[i #{val.note}]
 
   h2 Fora de montagem
+  dl
   each val in otherLocations
     dd
       a(href=val.url class='btn btn-primary')

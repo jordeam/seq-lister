@@ -16,6 +16,9 @@ router.post("/create/:id", ensureAuthenticated, groupController.create);
 // GET group list
 router.get("/:id", groupController.home);
 
+// POST group update
+router.post("/:id", groupController.update);
+
 // GET group list
 router.get("/:id/delete", ensureAuthenticated, groupController.delete);
 

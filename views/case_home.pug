@@ -2,9 +2,14 @@ extends base
 
 block content
   h1
+    if components.length === 0
+      a.btn.btn-primary(href="/case/"+ccase.id+"/delete" onclick="return confirm('Tem certeza que deseja excluir o encapsulamento?')")
+        img(src="/image/trash-icon.svg" alt="Excluir" width="20pt" height="24pt")
+      | &nbsp;
+
     a.btn.btn-primary(href="/case")
       img(src="/image/back-icon.svg" alt="Voltar" width="20pt" height="24pt")
-    | &nbsp; #[Strong Case:] #{ccase.name}
+    | &nbsp; #[Strong Encapsulamento] #{ccase.name}
 
   form(name="alter" method="post" action="/case/"+ccase.id)
     div.form-group
@@ -16,4 +21,16 @@ block content
 
       button(type="submit" class='btn btn-primary')
         img(src="/image/ok-icon.svg" alt="Alterar" width="20pt" height="24pt")
+
+  h2 Componentes com esse encapsulamento
+
+  dl
+  each val in components
+    dd
+      a.btn.btn-primary(href='/component/'+val.id)
+        img(src="/image/component-icon.svg" alt="Editar" width="20pt" height="24pt")
+      | &nbsp; #{val.name} &nbsp; #{val.csname}
+
+  else
+    li Não existem componentes utilizando este encapsulamento.
 

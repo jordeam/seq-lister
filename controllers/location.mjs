@@ -44,12 +44,15 @@ controller.list = asyncHandler(async (req, res, next) => {
 // List all components of a location
 controller.home = asyncHandler(async (req, res, next) => {
   // Get details of supergroup and all associated pets (in parallel)
-  const [entries, loc] =
-        await Promise.all(
-            [seqlz.query("SELECT location_entry.id, components.name AS cname,groups.name AS gname, component_id, quant, quant_unit, box,labels, cs.name AS csname FROM location_entry, components, groups, cases AS cs WHERE component_id = components.id AND group_id = groups.id AND case_id = cs.id AND location_id = ? ORDER BY groups.name, components.name",
-                             { replacements: [req.params.id],
-                               type: QueryTypes.SELECT }),
-             Location.findOne({where: {id: req.params.id}})]);
+  const [entries, loc, allLocations] =
+        await Promise.all([
+          seqlz.query("SELECT location_entry.id, components.name AS cname,groups.name AS gname, component_id, quant, quant_unit, box,labels, cs.name AS csname FROM location_entry, components, groups, cases AS cs WHERE component_id = components.id AND group_id = groups.id AND case_id = cs.id AND location_id = ? ORDER BY groups.name, components.name", {
+            replacements: [req.params.id],
+            type: QueryTypes.SELECT
+          }),
+          Location.findOne({where: {id: req.params.id}}),
+          Location.findAll(),
+        ]);
   if (loc === null) {
     // No results.
     const err = new Error("Localização não encontrada");
@@ -68,6 +71,7 @@ controller.home = asyncHandler(async (req, res, next) => {
     user: req.user,
     location: loc,
     entries,
+    allLocations,
   });
 });
 
@@ -206,6 +210,7 @@ controller.labels_post = asyncHandler(async (req, res, next) => {
         group: lescape(comp['group.name'], { preserveFormatting: false }),
         location: lescape(location.name, { preserveFormatting: false }),
         box: le.box,
+        unit: le.quant_unit,
       });
       out_str += str;
       if (++col > nColumns) {
@@ -257,6 +262,53 @@ controller.labels_post = asyncHandler(async (req, res, next) => {
     // const content = fs.readFileSync(out_dir + 'recipe-template.pdf', 'utf-8');
     return res.type('pdf').download(out_dir + 'label-doc.pdf', 'labels.pdf');
   });
+});
+
+controller.csv = asyncHandler(async (req, res, next) => {
+  const [entries, loc] =
+        await Promise.all([
+          seqlz.query("SELECT location_entry.id, components.name AS cname,groups.name AS gname, component_id, quant, quant_unit, box,labels, cs.name AS case_name FROM location_entry, components, groups, cases AS cs WHERE component_id = components.id AND group_id = groups.id AND case_id = cs.id AND location_id = ? ORDER BY groups.name, components.name", {
+            replacements: [req.params.id],
+            type: QueryTypes.SELECT
+          }),
+          Location.findOne({where: {id: req.params.id}})
+        ]);
+
+  if (loc === null) {
+    // No results.
+    const err = new Error("Localização não encontrada");
+    err.status = 404;
+    return next(err);
+  }
+
+  // initializing the CSV string content with the headers
+  let csvData = ["Item", "Grupo", "Valor", "Case", "Cx", "Estoque", "P/placa", "Saldo", "Labels"].join(",") + "\r\n";
+  let i = 1;
+  entries.forEach(elt => {
+    // populating the CSV content
+    // and converting the null fields to ""
+    const saldo = elt.quant - loc.quant * elt.quant_unit;
+    csvData += [i++, elt.gname, '"'+elt.cname+'"', '"'+elt.case_name+'"', elt.box, elt.quant, elt.quant_unit, saldo, '"'+elt.labels+'"'].join(",") + "\r\n";
+  });
+
+  // returning the CSV content via the "users.csv" file
+  res
+    .set({
+      "Content-Type": "text/csv",
+      "Content-Disposition": `attachment; filename="location.csv"`,
+    })
+    .send(csvData);
+});
+
+// List all components of a location
+controller.insert_from = asyncHandler(async (req, res, next) => {
+  // get entries from source location id:
+    const entries = await LocationEntry.findAll({where: {location_id: req.body.location_id}});
+
+  for (const entry of entries) {
+    await LocationEntry.create({labels: entry.labels, location_id: req.params.id, component_id: entry.component_id, quant_unit: entry.quant_unit, box: entry.box});
+  }
+    res.redirect("/location/"+req.params.id);
 });
 
 export default controller;

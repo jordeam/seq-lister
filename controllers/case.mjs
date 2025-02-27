@@ -2,10 +2,11 @@ import { seqlz } from '../db.mjs';
 import Case from "../models/case.mjs";
 
 import asyncHandler from "express-async-handler";
+import Component from '../models/component.mjs';
 
 const controller = {};
 
-// Display list of all Case.
+// Display list of all Cases
 controller.list = asyncHandler(async (req, res, next) => {
     const allCases = await Case.findAll({order: seqlz.col('name')});
     res.render("case_list", {
@@ -25,9 +26,13 @@ controller.home = asyncHandler(async (req, res, next) => {
     return next(err);
   }
 
+  // get all components using this case
+  const components = await Component.findAll({where: {case_id: req.params.id}});
+
   res.render("case_home", {
     user: req.user,
     ccase,
+    components,
   });
 });
 
@@ -56,6 +61,19 @@ controller.create_post = asyncHandler(async (req, res, next) => {
   await Case.create({name: req.body.name, descr: req.body.descr});
 
   res.redirect("/case/");
+});
+
+// Display detail page for a specific Case.
+controller.delete = asyncHandler(async (req, res, next) => {
+  // Get details of case and all associated pets (in parallel)
+
+  // get all components using this case
+  const n = await Component.count({where: {case_id: req.params.id}});
+
+  if (n === 0)
+    await Case.destroy({where: {id: req.params.id}});
+
+  res.redirect("/case");
 });
 
 

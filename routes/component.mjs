@@ -17,9 +17,6 @@ router.get("/select/:id", componentController.select);
 // delete component
 router.get("/:id/delete", ensureAuthenticated, componentController.delete);
 
-// set case component
-router.post("/:id/set_case", ensureAuthenticated, componentController.set_case);
-
 // GET supercomponent list
 router.get("/:id", componentController.home);
 
