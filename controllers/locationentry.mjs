@@ -75,7 +75,11 @@ controller.delete = asyncHandler(async (req, res, next) => {
 
   const id = locationEntry.location_id;
   await locationEntry.destroy();
-  res.redirect('/location/' + id.toString());
+  await locationEntry.destroy();
+  if (/table$/.test(req.originalUrl))
+      res.redirect('/location/' + id + "/table");
+  else
+      res.redirect('/location/' + id.toString());
 });
 
 // Insert a new location_entry, i.e., a new component in a location
@@ -94,6 +98,7 @@ controller.choose = asyncHandler(async (req, res, next) => {
     }
   );
 
+  const usingTable = /table$/.test(req.originalUrl) ? true : false;
   res.render('locationentry_choose', {
     user: req.user,
     location,
@@ -101,7 +106,8 @@ controller.choose = asyncHandler(async (req, res, next) => {
     groups: allGroups,
     default_supergroup,
     default_group,
-    components: allComponents
+    components: allComponents,
+    usingTable,
   });
 });
 
@@ -110,7 +116,10 @@ controller.insert = asyncHandler(async (req, res, next) => {
   const component_id = (undefined === req.body.component_id) ? req.params.id : req.body.component_id;
 
   const locationEntry = await LocationEntry.create({ location_id: location_id, component_id: component_id, quant: 0, quant_unit: 1, box: 1, labels: '' });
-  res.redirect("/locationentry/" + locationEntry.id.toString());
+  if (/table$/.test(req.originalUrl))
+    res.redirect("/locationentry/" + locationEntry.id +"/table");
+  else
+    res.redirect("/locationentry/" + locationEntry.id);
 });
 
 export default controller;

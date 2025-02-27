@@ -28,7 +28,7 @@ block content
 
   h3 Componentes
 
-  a(href='/locationentry/create/'+location.id.toString() class='btn btn-primary')
+  a.btn.btn-primary(href='/locationentry/create/'+location.id+"/table")
     img(src="/image/add-icon.svg" alt="Adicionar" width="20pt" height="24pt")
 
   if entries.length > 0
@@ -48,7 +48,8 @@ block content
         tr
           td(align="right") #{idx+1}
           td
-            a.btn.btn-primary(href='/locationentry/'+val.id+'/delete' onclick="return confirm('Tem certeza que quer excluir a entrada?');")
+            a.btn.btn-primary(href='/locationentry/'+val.id+'/delete_table'
+onclick="return confirm('Tem certeza que quer excluir a entrada?');")
               img(src="/image/trash-icon.svg" alt="Excluir" width="12pt" height="15pt")
           td #{val.gname}
           td

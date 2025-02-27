@@ -9,7 +9,7 @@ block content
 
   p Escolha um componente
 
-  form(method='POST' action= '/locationentry/insert/'+location.id.toString())
+  form(method='POST' action='/locationentry/insert/'+location.id+(usingTable ? "/table" : ""))
     p
       select#sg(onchange="on_supergroup_changed(this);")
         each sg in supergroups
