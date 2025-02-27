@@ -18,55 +18,47 @@ block content
       a.btn.btn-primary(href=location.url+"/delete" onclick="return confirm('Tem certeza que quer excluir a localização?')" class='btn btn-primary')
         img(src="/image/trash-icon.svg" alt="Excluir" width="16pt" height="20pt")
     | &nbsp; #[Strong Localização:] #{location.name}
-  form(name="alter" method="post" action=location.url)
-    div.form-group
-      label(for='name') Nome:
-      input#name.form-control(type="text", placeholder="Nome" name="name" required="true" value=(undefined===location ? '' : location.name) )
 
-      label(for='note') Obs.:
-      input#note.form-control(type="text", placeholder="Observações e notas" name="note" value=(undefined===location ? '' : location.note) )
+  p Quantidade a fabricar: #{location.quant}
 
-      label(for='quant') Quantidade a fabricar:
-      input#quant.form-control(type="text", placeholder="Nome" name="quant" required="true" value=(undefined===location ? '' : location.quant) )
+  p Quantidade de caixas: #{location.nbox}
 
-      label(for='nbox') Quantidade de caixas:
-      input#nbox.form-control(type="text", placeholder="1" name="nbox" required="true" value=(undefined===location ? '' : location.nbox))
+  if location.note > 0
+    p Obs.: #{location.note}
 
-      button(type="submit" class='btn btn-primary')
-        img(src="/image/ok-icon.svg" alt="Alterar" width="16pt" height="20pt")
-
-  p Componentes na localização:
+  h3 Componentes
 
   a(href='/locationentry/create/'+location.id.toString() class='btn btn-primary')
     img(src="/image/add-icon.svg" alt="Adicionar" width="20pt" height="24pt")
 
-  table
-    tr
-      th(align="center") #
-      th
-      th Grupo
-      th Componente
-      th Case
-      th Cx.
-      th Qt.
-      th P/P
-      th Saldo
-      th Labels
-    each val, idx in entries
+  if entries.length > 0
+    table
       tr
-        td(align="right") #{idx+1}
-        td
-          a.btn.btn-primary(href='/locationentry/'+val.id+'/delete' onclick="return confirm('Tem certeza que quer excluir a entrada?');")
-            img(src="/image/trash-icon.svg" alt="Excluir" width="12pt" height="15pt")
-        td #{val.gname}
-        td
-          a(href='/component/' + val.component_id) #[Strong #{val.cname}]
-        td &nbsp; #{val.csname}
-        td(align="center") #{val.box}
-        td(align="right")
-          a.btn(style="background: #0bb;" href="/locationentry/"+val.id+"/table") #{val.quant}
-        td(style="padding-right: 5px; padding-left: 5px" align="right") #{val.quant_unit}
-        td(style="padding-right: 5px;" align="right") #{val.quant - val.quant_unit * location.quant}
-        td #{val.labels}
+        th(align="center") #
+        th
+        th Grupo
+        th Componente
+        th Case
+        th Cx.
+        th Qt.
+        th P/P
+        th Saldo
+        th Labels
+      each val, idx in entries
+        tr
+          td(align="right") #{idx+1}
+          td
+            a.btn.btn-primary(href='/locationentry/'+val.id+'/delete' onclick="return confirm('Tem certeza que quer excluir a entrada?');")
+              img(src="/image/trash-icon.svg" alt="Excluir" width="12pt" height="15pt")
+          td #{val.gname}
+          td
+            a(href='/component/' + val.component_id) #[Strong #{val.cname}]
+          td &nbsp; #{val.csname}
+          td(align="center") #{val.box}
+          td(align="right")
+            a.btn(style="background: #0bb;" href="/locationentry/"+val.id+"/table") #{val.quant}
+          td(style="padding-right: 5px; padding-left: 5px" align="right") #{val.quant_unit}
+          td(style="padding-right: 5px;" align="right") #{val.quant - val.quant_unit * location.quant}
+          td #{val.labels}
 
   script(src="/script/component_new.js")

@@ -13,29 +13,48 @@ block content
     | &nbsp;
     a.btn.btn-primary(href=location.url+"/labels")
       img(src="/image/label-icon.svg" alt="Etiquetas" width="20pt" height="24pt")
+    | &nbsp;
+    a.btn.btn-primary
+      img(src="/image/edit-icon.svg" alt="Editar" width="20pt" height="24pt" onclick="document.getElementById('edit').style.display='block'")
     if entries.length === 0
       | &nbsp;
       a.btn.btn-primary(href=location.url+"/delete" onclick="return confirm('Tem certeza que quer excluir a localização?')" class='btn btn-primary')
         img(src="/image/trash-icon.svg" alt="Excluir" width="20pt" height="24pt")
     | &nbsp; #[Strong Localização:] #{location.name}
-  form(name="alter" method="post" action=location.url)
-    div.form-group
-      label(for='name') Nome:
-      input#name.form-control(type="text", placeholder="Nome" name="name" required="true" value=(undefined===location ? '' : location.name))
 
-      label(for='note') Obs.:
-      input#note.form-control(type="text", placeholder="Observações e notas" name="note" value=(undefined===location ? '' : location.note))
+  div#edit(style="display: none;")
+    hr
+    h2
+      a.btn.btn-primary
+        img(src="/image/shrink-icon.svg" alt="Cancelar" width="20pt" height="24pt" onclick="document.getElementById('edit').style.display='none'")
+      | &nbsp; Editar
+    form(name="alter" method="post" action=location.url)
+      div.form-group
+        label(for='name') Nome:
+        input#name.form-control(type="text", placeholder="Nome" name="name" required="true" value=(undefined===location ? '' : location.name))
 
-      label(for='quant') Quantidade a fabricar:
-      input#quant.form-control(type="text", placeholder="1" name="quant" required="true" value=(undefined===location ? '' : location.quant))
+        label(for='note') Obs.:
+        input#note.form-control(type="text", placeholder="Observações e notas" name="note" value=(undefined===location ? '' : location.note))
 
-      label(for='nbox') Quantidade de caixas:
-      input#nbox.form-control(type="text", placeholder="1" name="nbox" required="true" value=(undefined===location ? '' : location.nbox))
+        label(for='quant') Quantidade a fabricar:
+        input#quant.form-control(type="text", placeholder="1" name="quant" required="true" value=(undefined===location ? '' : location.quant))
 
-      button(type="submit" class='btn btn-primary')
-        img(src="/image/ok-icon.svg" alt="Alterar" width="20pt" height="24pt")
+        label(for='nbox') Quantidade de caixas:
+        input#nbox.form-control(type="text", placeholder="1" name="nbox" required="true" value=(undefined===location ? '' : location.nbox))
 
-  p Componentes:
+        button(type="submit" class='btn btn-primary')
+          img(src="/image/ok-icon.svg" alt="Alterar" width="20pt" height="24pt")
+
+    hr
+
+  p Quantidade a fabricar: #{location.quant}
+
+  p Quantidade de caixas: #{location.nbox}
+
+  if location.note > 0
+    p Obs.: #{location.note}
+
+  h3 Componentes
 
   a(href='/locationentry/create/'+location.id.toString() class='btn btn-primary')
     img(src="/image/add-icon.svg" alt="Adicionar" width="20pt" height="24pt")
