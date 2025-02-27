@@ -60,18 +60,12 @@ controller.home = asyncHandler(async (req, res, next) => {
     return next(err);
   }
 
-  let pugURL = '';
-  if (/table$/.test(req.originalUrl))
-    pugURL = "location_table";
-  else if (/labels$/.test(req.originalUrl))
-    pugURL = "location_labels";
-  else
-    pugURL = "location_home";
-  res.render(pugURL, {
+  res.render(/labels$/.test(req.originalUrl) ? "location_labels" : "location_home", {
     user: req.user,
     location: loc,
     entries,
     allLocations,
+    usingTable: /table$/.test(req.originalUrl),
   });
 });
 
@@ -93,7 +87,7 @@ controller.update = asyncHandler(async (req, res, next) => {
 
     await loc.save();
 
-    res.redirect(loc.url);
+    res.redirect(loc.url+(/table$/.test(req.originalUrl) ? "/table" : ""));
 });
 
 // List all components of a location

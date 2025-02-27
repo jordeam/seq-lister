@@ -4,9 +4,7 @@ const router = express.Router();
 import asyncHandler from "express-async-handler";
 
 const index = asyncHandler(async (req, res, next) => {
-  res.render("index", {
-  user: req.user ? req.user : undefined,
-  });
+  res.redirect("/supergroup");
 });
 
 /* GET home page. */

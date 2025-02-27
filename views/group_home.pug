@@ -2,28 +2,36 @@ extends base
 
 block content
   h1
+    a.btn.btn-primary
+      img(src="/image/edit-icon.svg" alt="Editar" width="20pt" height="24pt" onclick="document.getElementById('edit').style.display='block'")
+    | &nbsp;
     if allComponents.length === 0
       a.btn.btn-primary(href=group.url+"/delete" onclick="return confirm('Tem certeza que quer excluir o grupo?')")
         img(src="/image/trash-icon.svg" alt="Excluir" width="20pt" height="24pt")
       | &nbsp;
     | #[Strong Grupo:] #{group.name}
 
+  div#edit(style="display: none;")
+    hr
+    h2
+      a.btn.btn-primary
+        img(src="/image/shrink-icon.svg" alt="Cancelar" width="20pt" height="24pt" onclick="document.getElementById('edit').style.display='none'")
+      | &nbsp; Editar
+    form(method='post' action=group.url)
+      p
+        label(for="name") #[Strong Nome:]
+        input#name.form-control(type='text', placeholder='Nome do grupo' name='name' required='true' value=(undefined===group ? '' : group.name))
+      p
+        button.btn.btn-primary(type='submit')
+          img(src="/image/ok-icon.svg" alt="Alterar" width="20pt" height="24pt")
+
+    hr
+
   p
     a.btn.btn-primary(href=supergroup.url)
       img(src="/image/sg-icon.svg" alt="Supergrupo" width="20pt" height="24pt")
     | &nbsp; #[Strong Supergrupo:] #{supergroup.name}
 
-  hr
-  h2 Editar
-  form(method='post' action=group.url)
-    p
-      label(for="name") #[Strong Nome:]
-      input#name.form-control(type='text', placeholder='Nome do grupo' name='name' required='true' value=(undefined===group ? '' : group.name))
-    p
-      button.btn.btn-primary(type='submit')
-        img(src="/image/ok-icon.svg" alt="Alterar" width="20pt" height="24pt")
-
-  hr
 
   p Lista dos componentes contidos neste grupo
 
