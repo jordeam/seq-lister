@@ -130,9 +130,11 @@ controller.labels_post = asyncHandler(async (req, res, next) => {
   const leftMargin = parseFloat(req.body.leftMargin); // mm
   const rightMargin = parseFloat(req.body.rightMargin); // mm
   const tolHeight = 0.1; // mm tolerance in height
-  const labelWidth = (pageWidth - leftMargin - rightMargin) / nColumns;
-  const labelHeight = (pageHeight - tolHeight - topMargin - bottomMargin) / nRows;
   const initPos = parseInt(req.body.initPos) - 1;
+  const horizSpacing = parseFloat(req.body.horizSpacing); // mm
+  const labelWidth = (pageWidth - leftMargin - rightMargin - (nColumns - 1) * horizSpacing) / nColumns;
+  const labelHeight = (pageHeight - tolHeight - topMargin - bottomMargin) / nRows;
+
   // Initial values
   let row = 1;
   let col = 1;
@@ -151,6 +153,9 @@ controller.labels_post = asyncHandler(async (req, res, next) => {
       else
         out_str += "\\\\[-\\lineskip]\n";
     }
+    else {
+      out_str += `\\hspace*{${horizSpacing}mm}%\n`;
+    }
   }
   // Box labels
   console.log(`location.nbox=${location.nbox}`);
@@ -162,6 +167,7 @@ controller.labels_post = asyncHandler(async (req, res, next) => {
                         {
                           location: lescape(location.name),
                           box: box + 1,
+                          enableBorderline: req.body.drawBorderline ? "" : "%",
                         });
       // increment position
       if (++col > nColumns) {
@@ -173,13 +179,16 @@ controller.labels_post = asyncHandler(async (req, res, next) => {
         else
           out_str += "\\\\[-\\lineskip]\n";
       }
+      else {
+        out_str += `\\hspace*{${horizSpacing}mm}%\n`;
+      }
     }
   }
   // Component labels
   for (let idx in req.body) {
-    console.log(`${idx} = ${req.body[idx]}`);
+    // console.log(`${idx} = ${req.body[idx]}`);
     const re = idx.toString().match(/^comp_([0-9]+)/);
-    console.log(`re=${re}`);
+    // console.log(`re=${re}`);
     if (re && req.body[idx] === 'on') {
       const comp = await Component.findOne({
         where: {id: parseInt(re[1])},
@@ -205,6 +214,7 @@ controller.labels_post = asyncHandler(async (req, res, next) => {
         location: lescape(location.name, { preserveFormatting: false }),
         box: le.box,
         unit: le.quant_unit,
+        enableBorderline: req.body.drawBorderline ? "" : "%",
       });
       out_str += str;
       if (++col > nColumns) {
@@ -215,6 +225,9 @@ controller.labels_post = asyncHandler(async (req, res, next) => {
         }
         else
           out_str += "\\\\[-\\lineskip]\n";
+      }
+      else {
+        out_str += `\\hspace*{${horizSpacing}mm}%\n`;
       }
     }
   }
