@@ -490,7 +490,7 @@ CREATE TABLE public.suppliercodes (
     rounding integer DEFAULT 1,
     active boolean DEFAULT true,
     id integer NOT NULL,
-    manufact_pn text DEFAULT ''::text,
+    partnumber text DEFAULT ''::text,
     manufact_id integer DEFAULT 1,
     price double precision DEFAULT 0,
     tax double precision DEFAULT 0
@@ -6906,7 +6906,7 @@ Material de Consumo/Acessórios	7
 -- Data for Name: suppliercodes; Type: TABLE DATA; Schema: public; Owner: jrm
 --
 
-COPY public.suppliercodes (supplier_id, component_id, code, rounding, active, id, manufact_pn, manufact_id, price, tax) FROM stdin;
+COPY public.suppliercodes (supplier_id, component_id, code, rounding, active, id, partnumber, manufact_id, price, tax) FROM stdin;
 1	493		1	t	568	LM741CN	1	0	0
 1	493		1	t	569	CA741CE	1	0	0
 1	493		1	t	570	UA741CN	1	0	0

@@ -12,6 +12,8 @@ import fs from 'fs';
 import lescape from 'escape-latex';
 import pkg from 'template-file';
 import selflatex from 'node-latex-pdf';
+import Suppliercode from '../models/suppliercode.mjs';
+import Supplier from '../models/supplier.mjs';
 
 const { render, renderToFolder } = pkg;
 
@@ -274,7 +276,7 @@ controller.labels_post = asyncHandler(async (req, res, next) => {
 controller.csv = asyncHandler(async (req, res, next) => {
   const [entries, loc] =
         await Promise.all([
-          seqlz.query("SELECT location_entry.id, components.name AS cname,groups.name AS gname, component_id, quant, quant_unit, box,labels, cs.name AS case_name FROM location_entry, components, groups, cases AS cs WHERE component_id = components.id AND group_id = groups.id AND case_id = cs.id AND location_id = ? ORDER BY groups.name, components.name", {
+          seqlz.query("SELECT le.id, c.name AS cname, g.name AS gname, le.component_id AS compid, quant, quant_unit, box,labels, cs.name AS case_name FROM location_entry AS le, components AS c, groups AS g, cases AS cs WHERE le.component_id = c.id AND group_id = g.id AND case_id = cs.id AND location_id = ? ORDER BY g.name, c.name", {
             replacements: [req.params.id],
             type: QueryTypes.SELECT
           }),
@@ -287,22 +289,37 @@ controller.csv = asyncHandler(async (req, res, next) => {
     err.status = 404;
     return next(err);
   }
+  // Find Mouser supplier ID
+  const sup = await Supplier.findOne({where: {name: {[Op.regexp]: 'Mouser'}}});
+  const mouser_id = sup.id;
+
+  for (let i = 0; i < entries.length; i++) {
+    const supcode = await Suppliercode.findOne({where: {component_id: entries[i].compid, supplier_id: mouser_id}});
+    if (supcode) {
+      entries[i].supcode = supcode.code;
+      entries[i].partnumber = supcode.partnumber;
+    }
+    else {
+      entries[i].supcode = "";
+      entries[i].partnumber = "";
+    }
+  }
 
   // initializing the CSV string content with the headers
-  let csvData = ["Item", "Grupo", "Valor", "Case", "Cx", "Estoque", "P/placa", "Saldo", "Labels"].join(",") + "\r\n";
+  let csvData = ["Item", "Grupo", "Valor", "Case", "Cx", "Estoque", "P/placa", "Saldo", "Labels", "SupCode"].join(",") + "\r\n";
   let i = 1;
   entries.forEach(elt => {
     // populating the CSV content
     // and converting the null fields to ""
     const saldo = elt.quant - loc.quant * elt.quant_unit;
-    csvData += [i++, elt.gname, '"'+elt.cname+'"', '"'+elt.case_name+'"', elt.box, elt.quant, elt.quant_unit, saldo, '"'+elt.labels+'"'].join(",") + "\r\n";
+    csvData += [i++, elt.gname, '"'+elt.cname+'"', '"'+elt.case_name+'"', elt.box, elt.quant, elt.quant_unit, saldo, '"'+elt.labels+'"', '"'+elt.supcode+'"'].join(",") + "\r\n";
   });
 
   // returning the CSV content via the "users.csv" file
   res
     .set({
       "Content-Type": "text/csv",
-      "Content-Disposition": `attachment; filename="location.csv"`,
+      "Content-Disposition": `attachment; filename="${loc.name}.csv"`,
     })
     .send(csvData);
 });

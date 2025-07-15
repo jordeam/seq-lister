@@ -90,8 +90,8 @@ block content
             td(align="center") #{val.box}
             td(align="right")
               a.btn(style="background: #0bb;" href="/locationentry/"+val.id+"/table") #{val.quant}
-            td(style="padding-right: 5px; padding-left: 5px" align="right") #{val.quant_unit}
-            td(style="padding-right: 5px;" align="right") #{val.quant - val.quant_unit * location.quant}
+            td(style="padding-right: 10px; padding-left: 10px" align="right") #{val.quant_unit}
+            td(style="padding-right: 10px;" align="right") #{val.quant - val.quant_unit * location.quant}
             td #{val.labels}
     else
       dl

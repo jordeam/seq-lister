@@ -51,10 +51,12 @@ controller.update = asyncHandler(async (req, res, next) => {
   }
 
   await Suppliercode.update({
-    manufact_pn: req.body.manufact,
+    partnumer: req.body.manufact,
     code: req.body.code,
     supplier_id: req.body.supplier,
     manufact_id: req.body.manufact,
+    partnumber: req.body.partnumber,
+    rounding: req.body.rounding,
   }, {where: {id: req.params.id}});
 
   res.redirect("/component/"+suppliercode.component_id);
@@ -63,7 +65,7 @@ controller.update = asyncHandler(async (req, res, next) => {
 // Display Suppliercode create form on GET
 controller.create = asyncHandler(async (req, res, next) => {
     const suppliercode = new Suppliercode({
-      manufact_pn: req.body.partnumber,
+      partnumber: req.body.partnumber,
       component_id: req.params.id,
     });
 

@@ -5,31 +5,35 @@ block content
   h2 #[strong Componente:] #{component.name}
   h2 #[strong Grupo:] #{group.name}
   p
-    if suppliercode.manufact_pn !== undefined && suppliercode.manufact_pn.length > 0
+    if suppliercode.partnumber !== undefined && suppliercode.partnumber.length > 0
       a.btn.btn-primary(href="/component/"+component.id.toString())
         img(src='/image/back-icon.svg' alt="Voltar" width="20pt" height="24pt")
     a.btn.btn-primary(href="/suppliercode/"+suppliercode.id.toString()+'/delete')
       img(src='/image/trash-icon.svg' alt="Excluir" width="20pt" height="24pt" onclick="return confirm('Tem certeza que quer excluir o código?');")
 
-  p Dados do Código do Componente
+  p Dados do Código de Componente
 
   form(method='POST' action=suppliercode.url)
     div.form-group
       label(for='partnumber') Partnumber:
-      input#name.form-control(placeholder='Partnumber' name='partnumber' value=suppliercode.manufact_pn)
+      input#name.form-control(placeholder='Partnumber' name='partnumber' value=suppliercode.partnumber)
 
       label(for="manufact") Fabricante:
       select#man.form-control(name="manufact")
         each val in manufacturers
           option(value=val.id selected=(val.id === suppliercode.manufact_id) ? "selected" : false) #{val.name}
 
-      label(for='code') Código do fornecedor:
-      input#legalname.form-control(placeholder='Código do fornecedor' name='code' value=suppliercode.code)
-
       label(for="supplier") Fornecedor:
       select#man.form-control(name="supplier")
         each val in suppliers
           option(value=val.id selected=(val.id === suppliercode.supplier_id) ? "selected" : false) #{val.name}
+
+      label(for='code') Código no fornecedor:
+      input#legalname.form-control(placeholder='Código do fornecedor' name='code' value=suppliercode.code)
+
+      label(for='rounding') Arredondamento:
+      input#legalname.form-control(placeholder='Arredondamento' name='rounding' value=suppliercode.rounding)
+
 
 
     button.btn.btn-primary(type='submit')

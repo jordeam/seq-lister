@@ -34,7 +34,7 @@ controller.post = asyncHandler(async (req, res, next) => {
                                       type: QueryTypes.SELECT,
                                     });
 
-  const partnumbers = await seqlz.query("SELECT c.id, c.name, g.name AS g_name, sc.manufact_pn, sc.code, s.name AS s_name, m.name AS m_name from suppliercodes AS sc, components AS c, groups AS g, suppliers AS s, manufacturers AS m WHERE manufact_id = m.id AND supplier_id = s.id AND component_id = c.id AND group_id = g.id AND (manufact_pn ~* $1 OR code ~* $1)",
+  const partnumbers = await seqlz.query("SELECT c.id, c.name, g.name AS g_name, sc.partnumber, sc.code, s.name AS s_name, m.name AS m_name from suppliercodes AS sc, components AS c, groups AS g, suppliers AS s, manufacturers AS m WHERE manufact_id = m.id AND supplier_id = s.id AND component_id = c.id AND group_id = g.id AND (partnumber ~* $1 OR code ~* $1)",
                                     {
                                       bind: [req.body.expr],
                                       type: QueryTypes.SELECT,
