@@ -15,6 +15,9 @@ block content
       th Estoque
       th Necessário
       th A comprar
+      th Partnumber
+      th Ordercode
+
     each val in shoplist
       tr
         td #{val.gname}
@@ -23,4 +26,6 @@ block content
         td &nbsp; #{val.case_name}
         td(align="right") #{val.stock}
         td(align="right") #{val.needed}
-        td(align="right") #{val.to_buy}
+        td(style="padding-right: 10px;" align="right") #{val.to_buy}
+        td #{val.partnumber}
+        td #{val.supcode}

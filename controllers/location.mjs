@@ -289,6 +289,7 @@ controller.csv = asyncHandler(async (req, res, next) => {
     err.status = 404;
     return next(err);
   }
+
   // Find Mouser supplier ID
   const sup = await Supplier.findOne({where: {name: {[Op.regexp]: 'Mouser'}}});
   const mouser_id = sup.id;
@@ -312,7 +313,7 @@ controller.csv = asyncHandler(async (req, res, next) => {
     // populating the CSV content
     // and converting the null fields to ""
     const saldo = elt.quant - loc.quant * elt.quant_unit;
-    csvData += [i++, elt.gname, '"'+elt.cname+'"', '"'+elt.case_name+'"', elt.box, elt.quant, elt.quant_unit, saldo, '"'+elt.labels+'"', '"'+elt.supcode+'"'].join(",") + "\r\n";
+    csvData += [i++, elt.gname, '"'+elt.cname+'"', '"'+elt.case_name+'"', elt.box, elt.quant, elt.quant_unit, saldo, '"'+elt.labels+'"', '"'+elt.supcode.trim()+'"'].join(",") + "\r\n";
   });
 
   // returning the CSV content via the "users.csv" file

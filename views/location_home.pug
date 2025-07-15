@@ -97,9 +97,6 @@ block content
       dl
       each val in entries
         dd
-          a.btn.btn-primary(href='/locationentry/'+val.id)
-            img(src="/image/edit-icon.svg" alt="Editar" width="20pt" height="24pt")
-          | &nbsp;
           a.btn.btn-primary(href='/locationentry/'+val.id+'/delete' onclick="return confirm('Tem certeza que quer excluir a entrada?');")
             img(src="/image/trash-icon.svg" alt="Excluir" width="20pt" height="24pt")
           | &nbsp; #{val.gname}: &nbsp;
