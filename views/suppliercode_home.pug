@@ -34,7 +34,8 @@ block content
       label(for='rounding') Arredondamento:
       input#legalname.form-control(placeholder='Arredondamento' name='rounding' value=suppliercode.rounding)
 
-
+      label(for="active") Ativo:
+      input#active.form-control(name="active" type="checkbox" checked=(suppliercode.active ? "checked" : false))
 
     button.btn.btn-primary(type='submit')
       img(src='/image/ok-icon.svg' alt="Atualizar" width="20pt" height="24pt")

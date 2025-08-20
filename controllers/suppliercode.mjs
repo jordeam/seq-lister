@@ -6,6 +6,7 @@ import Component from '../models/component.mjs';
 import Group from '../models/group.mjs';
 
 import asyncHandler from "express-async-handler";
+import { QueryTypes } from 'sequelize';
 
 const controller = {};
 
@@ -50,15 +51,26 @@ controller.update = asyncHandler(async (req, res, next) => {
     return next(err);
   }
 
+  const active = req.body.active === 'on';
+
+  console.log(`UPDATE id = ${req.params.id} active=${active}`);
+
   await Suppliercode.update({
-    partnumer: req.body.manufact,
     code: req.body.code,
     supplier_id: req.body.supplier,
     manufact_id: req.body.manufact,
     partnumber: req.body.partnumber,
+    active,
     rounding: req.body.rounding,
   }, {where: {id: req.params.id}});
 
+  // if active is set to TRUE, then it must set all others to false
+  if (active)
+    await seqlz.query("UPDATE suppliercodes SET active = false WHERE component_id = $1 AND id <> $2",
+                      {
+                        bind: [suppliercode.component_id, req.params.id],
+                        type: QueryTypes.UPDATE,
+                      });
   res.redirect("/component/"+suppliercode.component_id);
 });
 

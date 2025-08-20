@@ -1,31 +1,66 @@
 extends base
 
 block content
-  h1 Lista de Compras dos Componentes
+  h1 Lista de Compra dos Componentes id=#{id}
 
   p
-    a.btn.btn-primary(href="/shoplist/csv")
-      img(src='/image/csv-icon.svg' alt="CSV" width="20pt" height="24pt")
-
-  table
-    tr
-      th Grupo
-      th Componente
-      th Case
-      th Estoque
-      th Necessário
-      th A comprar
-      th Partnumber
-      th Ordercode
-
-    each val in shoplist
+    each manufact in manufacts
+      div
+        a(href="/shoplist/"+manufact.id) #{manufact.name}
+        | &nbsp;
+  if (id == 0 || id == 1)
+    h2 Lista Geral
+    p
+      a.btn.btn-primary(href="/shoplist/"+id+"/csv")
+        img(src='/image/csv-icon.svg' alt="CSV" width="20pt" height="24pt")
+    table
       tr
-        td #{val.gname}
-        td
-          a(href='/component/' + val.id) #[Strong #{val.cname}]
-        td &nbsp; #{val.case_name}
-        td(align="right") #{val.stock}
-        td(align="right") #{val.needed}
-        td(style="padding-right: 10px;" align="right") #{val.to_buy}
-        td #{val.partnumber}
-        td #{val.supcode}
+        th Item
+        th Grupo
+        th Componente
+        th Case
+        th Estoque
+        th Necessário
+        th A comprar
+        th Fornecedores
+
+      each val, i in shoplist
+        tr
+          td #{i}
+          td #{val.gname}
+          td
+            a(href='/component/' + val.id) #[Strong #{val.cname}]
+          td &nbsp; #{val.case_name}
+          td(align="right") #{val.stock}
+          td(align="right") #{val.needed}
+          td(style="padding-right: 10px;" align="right") #{val.to_buy}
+          td #{val.suppliers}
+  else
+    h2 Lista #{manufact.name}
+    p
+      a.btn.btn-primary(href="/shoplist/"+id+"/csv")
+        img(src='/image/csv-icon.svg' alt="CSV" width="20pt" height="24pt")
+    table
+      tr
+        th Item
+        th Grupo
+        th Componente
+        th Case
+        th Estoque
+        th Necessário
+        th A comprar
+        th PN
+        th OrderCode
+
+      each val, i in shoplist
+        tr
+          td #{i}
+          td #{val.gname}
+          td
+            a(href='/component/' + val.id) #[Strong #{val.cname}]
+          td &nbsp; #{val.case_name}
+          td(align="right") #{val.stock}
+          td(align="right") #{val.needed}
+          td(style="padding-right: 10px;" align="right") #{val.to_buy}
+          td #{val.pn}
+          td #{val.code}

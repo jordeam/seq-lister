@@ -6,9 +6,11 @@ import shoplistController from "../controllers/shoplist.mjs";
 
 /// Shop List ///
 
-// GET group list
-router.get("/", shoplistController.home);
+// GET CSV
+router.get("/:id/csv", shoplistController.csv);
 
-router.get("/csv", shoplistController.csv);
+// GET group list
+router.get("/:id", shoplistController.home);
+
 
 export default router;

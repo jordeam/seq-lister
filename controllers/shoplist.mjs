@@ -9,31 +9,55 @@ const controller = {};
 // Edit a location entry
 // need to pass locationentry, component, and location
 controller.home = asyncHandler(async (req, res, next) => {
-  const shoplist = await seqlz.query("SELECT c.id AS id, c.name AS cname, g.name AS gname, SUM(le.quant) AS stock, SUM(l.quant * le.quant_unit) AS needed, SUM(l.quant * le.quant_unit - le.quant) AS to_buy, cs.name AS case_name, c.id AS compid FROM locations AS l, groups AS g, components AS c, location_entry AS le, cases AS cs WHERE g.id = c.group_id AND l.id = le.location_id AND l.quant > 0 AND c.id = le.component_id AND c.case_id = cs.id GROUP BY c.id, c.name, g.name, cs.name ORDER BY gname, cname, case_name",
+  let shoplist;
+  const id = +req.params.id;
+  if (id == 0 || id == 1)
+    shoplist = await seqlz.query("SELECT c.id AS comp_id, c.name AS cname, g.name AS gname, SUM(le.quant) AS stock, SUM(l.quant * le.quant_unit) AS needed, SUM(l.quant * le.quant_unit - le.quant) AS to_buy, cs.name AS case_name FROM locations AS l, groups AS g, components AS c, location_entry AS le, cases AS cs WHERE g.id = c.group_id AND l.id = le.location_id AND l.quant > 0 AND c.id = le.component_id AND c.case_id = cs.id GROUP BY c.id, c.name, g.name, cs.name ORDER BY gname, cname, case_name",
     {
       type: QueryTypes.SELECT
     });
+  else
+    shoplist = await seqlz.query("SELECT c.id AS comp_id, c.name AS cname, g.name AS gname, sc.partnumber as pn, sc.code as code, SUM(le.quant) AS stock, SUM(l.quant * le.quant_unit) AS needed, SUM(l.quant * le.quant_unit - le.quant) AS to_buy, cs.name AS case_name FROM locations AS l, groups AS g, components AS c, location_entry AS le, cases AS cs, suppliercodes AS sc WHERE sc.supplier_id = $1 AND sc.component_id = c.id AND g.id = c.group_id AND l.id = le.location_id AND l.quant > 0 AND c.id = le.component_id AND c.case_id = cs.id AND sc.active = true GROUP BY c.id, c.name, g.name, cs.name, sc.partnumber, sc.code ORDER BY gname, cname, case_name",
+    {
+      bind: [id],
+      type: QueryTypes.SELECT
+    });
 
-  // Find Mouser supplier ID
-  const sup = await Supplier.findOne({where: {name: {[Op.regexp]: 'Mouser'}}});
-  const mouser_id = sup.id;
+  const suppliers = await seqlz.query("SELECT s.id, s.name FROM suppliers AS s, locations AS l, components AS c, location_entry AS le, suppliercodes as sc WHERE l.id = le.location_id AND l.quant > 0 AND c.id = le.component_id AND sc.supplier_id = s.id AND sc.component_id = c.id GROUP BY s.name, s.id ORDER BY s.name",
+                                     {
+                                       type: QueryTypes.SELECT,
+                                     });
 
-  for (let i = 0; i < shoplist.length; i++) {
-    const supcode = await Suppliercode.findOne({where: {component_id: shoplist[i].compid, supplier_id: mouser_id}});
-    if (supcode) {
-      shoplist[i].supcode = supcode.code;
-      shoplist[i].partnumber = supcode.partnumber;
-    }
-    else {
-      shoplist[i].supcode = "";
-      shoplist[i].partnumber = "";
+  // List all suppliers
+  if (id == 0 ||  id == 1) {
+    for (let i = 0; i < shoplist.length; i++) {
+      const supcodes = await seqlz.query("SELECT s.name, s.id FROM suppliercodes as sc, suppliers as s WHERE sc.component_id = $1 AND s.id = sc.supplier_id AND s.id > 1 GROUP BY s.name, s.id ORDER BY s.name",
+                                        {
+                                          bind: [shoplist[i].comp_id],
+                                          type: QueryTypes.SELECT,
+                                        });
+      if (supcodes.length > 0) {
+        let lst = [];
+        for (const elt of supcodes)
+          lst.push(elt.name);
+        shoplist[i].suppliers = lst.join(", ");
+      }
+      else {
+        shoplist[i].suppliers = "";
+      }
     }
   }
 
+  let supplier;
+  if (id > 0)
+    supplier = await Supplier.findOne({where: {id: id}});
   res.render('shoplist_home',
     {
       user: req.user,
-      shoplist: shoplist
+      id: req.params.id,
+      shoplist,
+      suppliers,
+      supplier,
     });
 });
 

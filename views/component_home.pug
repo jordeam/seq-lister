@@ -75,23 +75,23 @@ block content
     table
       tr
         th
+        th Part Number
         th Fornecedor
         th Cód. Fornecedor
-        th Arredondamento
-        th Ativo
-        th Part Number
         th Fabricante
+        th Arred.
+        th Ativo
       each val in suppliercodes
         tr
           td
             a.btn.btn-primary(href="/suppliercode/"+val.id.toString())
               img(src="/image/edit-icon.svg" alt="Editar"  width="20pt" height="24pt")
+          td #{val.partnumber}
           td #{val.s_name}
           td #{val.code}
+          td #{val.m_name}
           td #{val.rounding}
           td #{val.active}
-          td #{val.partnumber}
-          td #{val.m_name}
 
   p
     form(method="post" action="/suppliercode/create/"+component.id onsubmit="return insert_with_msg('Partnumber:', this.partnumber);")
