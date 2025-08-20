@@ -8,6 +8,7 @@ import searchController from "../controllers/search.mjs";
 
 // GET searchs list
 router.get("/", searchController.get);
+router.get("/comp", searchController.searchComp);
 router.post('/', searchController.post);
 
 export default router;
