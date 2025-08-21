@@ -84,19 +84,22 @@ controller.delete = asyncHandler(async (req, res, next) => {
 
 // Insert a new location_entry, i.e., a new component in a location
 controller.choose = asyncHandler(async (req, res, next) => {
-  const location = await Location.findOne({ where: { id: req.params.location_id } });
-  const allSuperGroups = await SuperGroup.findAll({ order: [['name']] });
   const default_supergroup = 1;
-  const allGroups = await Group.findAll({ where: { supergroup_id: default_supergroup }, order: [['name']] });
   const default_group = 6;
 
-  const allComponents = await seqlz.query(
-    "SELECT c.id, c.name, cs.name AS csname FROM components AS c, cases AS cs WHERE group_id = $1 AND cs.id = case_id ORDER BY c.name, cs.name",
-    {
-      bind: [default_group],
-      type: QueryTypes.SELECT,
-    }
-  );
+  const [location, allSuperGroups, allGroups, allComponents, allCases] =
+        await Promise.all([
+          Location.findOne({ where: { id: req.params.location_id } }),
+          SuperGroup.findAll({ order: [['name']] }),
+          Group.findAll({ where: { supergroup_id: default_supergroup }, order: [['name']] }),
+          seqlz.query("SELECT c.id, c.name, cs.name AS csname FROM components AS c, cases AS cs WHERE group_id = $1 AND cs.id = case_id ORDER BY c.name, cs.name",
+                      {
+                        bind: [default_group],
+                        type: QueryTypes.SELECT,
+                      }
+                     ),
+          Case.findAll({ order: [['name']]}),
+        ]);
 
   const usingTable = /table$/.test(req.originalUrl) ? true : false;
   res.render('locationentry_choose', {
@@ -108,6 +111,7 @@ controller.choose = asyncHandler(async (req, res, next) => {
     default_group,
     components: allComponents,
     usingTable,
+    allCases,
   });
 });
 
@@ -120,6 +124,15 @@ controller.insert = asyncHandler(async (req, res, next) => {
     res.redirect("/locationentry/" + locationEntry.id +"/table");
   else
     res.redirect("/locationentry/" + locationEntry.id);
+});
+
+controller.createComp = asyncHandler(async (req, res, next) => {
+  const uTable = /table$/.test(req.originalUrl) ? '/table' : '';
+  const component = await Component.create({group_id: req.body.group_id, name: req.body.compname, case_id: req.body.case_id});
+
+  const locationEntry = await LocationEntry.create({ location_id: req.params.id, component_id: component.getDataValue('id'), quant: 0, quant_unit: 1, box: 1, labels: '' });
+
+  res.redirect('/locationentry/' + locationEntry.id + uTable);
 });
 
 export default controller;

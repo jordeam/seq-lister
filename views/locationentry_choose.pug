@@ -8,9 +8,34 @@ block content
     | &nbsp; #[Strong Localização:] #{location.name}
 
   h2 Entre com o nome do componente (ou parte)
-  input#compname(name="compname" oninput="on_name_changed(this);")
   input#locid(type="hidden" value=location.id)
   input#utable(type="hidden" value=(usingTable ? "/table" : ""))
+
+  form(method='POST' action='/locationentry/create_comp/'+location.id+(usingTable ? "/table" : ""))
+    p
+      input#compname(name="compname" oninput="on_name_changed(this);")
+    input(type="hidden" name="location_id" value=location.id)
+    p
+      select#sg(onchange="on_supergroup_changed(this);")
+        each sg in supergroups
+          option(value=sg.id selected=(sg.id === default_supergroup) ? "selected" : false) #{sg.name}
+    p
+      div#group
+        select(name="group_id")
+          each group in groups
+            option(value=group.id selected=(group.id === default_group) ? "selected" : false) #{group.name}
+
+    p #[Strong Encapsulamento:] &nbsp;
+      select(name="case_id")
+        each elt in allCases
+          option(value=elt.id) #{elt.name}
+            if elt.descr.length > 0
+              | &nbsp; &mdash; #[i #{elt.descr}]
+    p
+      button.btn.btn-primary(type='submit') Criar
+
+  h2 Componentes Existentes
+
   div#choices
 
   h2 ou Escolha um componente

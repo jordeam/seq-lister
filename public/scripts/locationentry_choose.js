@@ -33,7 +33,8 @@ function on_name_changed(obj) {
   fetch(req)
     .then(res => res.json())
     .then(data => {
-      console.log(data);
+      // console.log(data);
+      choices.innerHTML = '';
       let table, tbody;
       if (data.length > 0) {
         // has some data
@@ -41,7 +42,6 @@ function on_name_changed(obj) {
         const utable = document.getElementById("utable").getAttribute('value');
         console.log(`locid = ${locid} table=${utable}`);
         const choices = document.getElementById("choices");
-        choices.innerHTML = '';
         table = document.createElement('table');
         tbody = document.createElement('tbody');
         for (let elt of data) {
