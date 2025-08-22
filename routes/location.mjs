@@ -12,12 +12,14 @@ router.get("/", locationController.list);
 router.post('/create', ensureAuthenticated, locationController.create);
 router.get("/:id", locationController.home);
 router.post("/:id", ensureAuthenticated, locationController.update);
+router.get('/:id/table', locationController.home);
 router.post("/:id/table", ensureAuthenticated, locationController.update);
 router.get('/:id/delete', ensureAuthenticated, locationController.delete);
-router.get('/:id/table', locationController.home);
 router.get('/:id/labels', locationController.home);
 router.post('/:id/labels', locationController.labels_post);
 router.get('/:id/csv', locationController.csv);
+router.get('/:id/bom', locationController.bom);
+router.get('/:id/bom/table', locationController.bom);
 router.post('/:id/insert_from', locationController.insert_from);
 
 export default router;

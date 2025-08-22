@@ -72,6 +72,34 @@ controller.home = asyncHandler(async (req, res, next) => {
 });
 
 // List all components of a location
+controller.bom = asyncHandler(async (req, res, next) => {
+  // Get details of supergroup and all associated pets (in parallel)
+  const [entries, loc, allLocations] =
+        await Promise.all([
+          seqlz.query("SELECT location_entry.id, components.name AS cname,groups.name AS gname, component_id, quant, quant_unit, box,labels, cs.name AS csname FROM location_entry, components, groups, cases AS cs WHERE component_id = components.id AND group_id = groups.id AND case_id = cs.id AND location_id = ? ORDER BY groups.name, components.name", {
+            replacements: [req.params.id],
+            type: QueryTypes.SELECT
+          }),
+          Location.findOne({where: {id: req.params.id}}),
+          Location.findAll(),
+        ]);
+  if (loc === null) {
+    // No results.
+    const err = new Error("Localização não encontrada");
+    err.status = 404;
+    return next(err);
+  }
+
+  res.render("location_bom", {
+    user: req.user,
+    location: loc,
+    entries,
+    allLocations,
+    usingTable: /table$/.test(req.originalUrl),
+  });
+});
+
+// List all components of a location
 controller.update = asyncHandler(async (req, res, next) => {
     const loc = await Location.findOne({ where: {id: req.params.id}});
 
