@@ -31,19 +31,23 @@ controller.home = asyncHandler(async (req, res, next) => {
   // List all suppliers
   if (id == 0 ||  id == 1) {
     for (let i = 0; i < shoplist.length; i++) {
-      const supcodes = await seqlz.query("SELECT s.name, s.id FROM suppliercodes as sc, suppliers as s WHERE sc.component_id = $1 AND s.id = sc.supplier_id AND s.id > 1 GROUP BY s.name, s.id ORDER BY s.name",
+      const supcodes_active = await seqlz.query("SELECT s.name, s.id FROM suppliercodes as sc, suppliers as s WHERE sc.component_id = $1 AND s.id = sc.supplier_id AND sc.active = TRUE AND s.id > 1 GROUP BY s.name, s.id ORDER BY s.name",
                                         {
                                           bind: [shoplist[i].comp_id],
                                           type: QueryTypes.SELECT,
                                         });
-      if (supcodes.length > 0) {
-        let lst = [];
-        for (const elt of supcodes)
-          lst.push(elt.name);
-        shoplist[i].suppliers = lst.join(", ");
+      const supcodes_inactive = await seqlz.query("SELECT s.name, s.id FROM suppliercodes as sc, suppliers as s WHERE sc.component_id = $1 AND s.id = sc.supplier_id AND sc.active = FALSE AND s.id > 1 GROUP BY s.name, s.id ORDER BY s.name",
+                                        {
+                                          bind: [shoplist[i].comp_id],
+                                          type: QueryTypes.SELECT,
+                                        });
+      if (supcodes_active.length > 0) {
+        let lst = supcodes_active.map(elt => elt.name);
+        shoplist[i].suppliers_a = lst.join(", ");
       }
-      else {
-        shoplist[i].suppliers = "";
+      if (supcodes_inactive.length > 0) {
+        let lst = supcodes_inactive.map(elt => elt.name);
+        shoplist[i].suppliers_i = lst.join(", ");
       }
     }
   }

@@ -23,6 +23,7 @@ block content
         th Necessário
         th A comprar
         th Fornecedores
+        th Inativos
 
       each val, i in shoplist
         tr
@@ -34,7 +35,8 @@ block content
           td(align="right") #{val.stock}
           td(align="right") #{val.needed}
           td(style="padding-right: 10px;" align="right") #{val.to_buy}
-          td #{val.suppliers}
+          td #{val.suppliers_a}
+          td #{val.suppliers_i}
   else
     h2 Lista #{supplier.name}
     p
