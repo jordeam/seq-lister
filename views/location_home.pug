@@ -15,7 +15,7 @@ block content
     a.btn.btn-primary(href=location.url+"/csv")
       img(src="/image/csv-icon.svg" alt="CSV" width="20pt" height="24pt")
     | &nbsp;
-    a.btn.btn-primary(href=location.url+"/bom"+(usingTable ? "/table" : ""))
+    a.btn.btn-primary(href="/bom/"+location.id)
       img(src="/image/bom-icon.svg" alt="BOM" width="20pt" height="24pt")
     | &nbsp;
     a.btn.btn-primary(href=location.url+"/labels")

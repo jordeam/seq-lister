@@ -56,7 +56,7 @@ controller.update = asyncHandler(async (req, res, next) => {
   console.log(`UPDATE id = ${req.params.id} active=${active}`);
 
   await Suppliercode.update({
-    code: req.body.code,
+    ordercode: req.body.ordercode,
     supplier_id: req.body.supplier,
     manufact_id: req.body.manufact,
     partnumber: req.body.partnumber,

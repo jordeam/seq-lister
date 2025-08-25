@@ -34,7 +34,7 @@ controller.home = asyncHandler(async (req, res, next) => {
       Group.findAll({ where: {supergroup_id: group.supergroup_id}, order: [['name']] }),
     ]);
 
-  const suppliercodes = await seqlz.query("select sc.id, s.name as s_name, code, rounding, active, partnumber, m.name as m_name from suppliercodes as sc, suppliers as s, manufacturers as m where supplier_id = s.id and manufact_id=m.id and component_id = $1 ORDER BY sc.active DESC, sc.partnumber",
+  const suppliercodes = await seqlz.query("select sc.id, s.name as s_name, ordercode, rounding, active, partnumber, m.name as m_name from suppliercodes as sc, suppliers as s, manufacturers as m where supplier_id = s.id and manufact_id=m.id and component_id = $1 ORDER BY sc.active DESC, sc.partnumber",
     {
       bind: [comp.id],
       type: QueryTypes.SELECT

@@ -24,6 +24,7 @@ import supergroupRouter from "./routes/supergroup.mjs";
 import groupRouter from "./routes/group.mjs";
 import componentRouter from "./routes/component.mjs";
 import locationRouter from "./routes/location.mjs";
+import bomRouter from "./routes/bom.mjs";
 import locationEntryRouter from "./routes/locationentry.mjs";
 import shoplistRouter from "./routes/shoplist.mjs";
 import supplierRouter from "./routes/supplier.mjs";
@@ -37,6 +38,7 @@ import { router as usersRouter } from './routes/users.mjs';
 
 import compression from "compression";
 // import helmet from "helmet");
+import fileUpload from 'express-fileupload';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -47,6 +49,9 @@ const app = express();
 //   app.use(express.errorHandler());
 //   app.locals.pretty = true;
 // });
+
+// default options
+app.use(fileUpload());
 
 app.set('view options', { pretty: true });
 
@@ -109,6 +114,7 @@ app.use("/supergroup", supergroupRouter);
 app.use("/supplier", supplierRouter);
 app.use("/suppliercode", suppliercodeRouter);
 app.use("/location", locationRouter);
+app.use("/bom", bomRouter);
 app.use("/locationentry", locationEntryRouter);
 app.use("/shoplist", shoplistRouter);
 app.use("/group", groupRouter);
@@ -196,11 +202,9 @@ function onError(error) {
     case 'EACCES':
       console.error(bind + ' requires elevated privileges');
       process.exit(1);
-      break;
     case 'EADDRINUSE':
       console.error(bind + ' is already in use');
       process.exit(1);
-      break;
     default:
       throw error;
   }

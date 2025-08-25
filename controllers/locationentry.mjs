@@ -130,9 +130,19 @@ controller.createComp = asyncHandler(async (req, res, next) => {
   const uTable = /table$/.test(req.originalUrl) ? '/table' : '';
   const component = await Component.create({group_id: req.body.group_id, name: req.body.compname, case_id: req.body.case_id});
 
-  const locationEntry = await LocationEntry.create({ location_id: req.params.id, component_id: component.getDataValue('id'), quant: 0, quant_unit: 1, box: 1, labels: '' });
+  let box = parseInt(req.body.box);
+  let quant = parseInt(req.body.quant);
+  let quant_unit = parseInt(req.body.quant_unit);
+  let labels = req.body.labels.trim();
 
-  res.redirect('/locationentry/' + locationEntry.id + uTable);
+  console.log(`box=${box}`);
+  console.log(`quant_unit=${quant_unit}`);
+  console.log(`quant=${quant}`);
+  console.log(`labels=${labels}`);
+
+  await LocationEntry.create({ location_id: req.params.id, component_id: component.getDataValue('id'), quant: quant, quant_unit: quant_unit, box: box, labels: labels });
+
+  res.redirect('/location/' + req.params.id + uTable);
 });
 
 export default controller;

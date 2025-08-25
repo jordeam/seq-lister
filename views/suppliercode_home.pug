@@ -28,8 +28,8 @@ block content
         each val in suppliers
           option(value=val.id selected=(val.id === suppliercode.supplier_id) ? "selected" : false) #{val.name}
 
-      label(for='code') Código no fornecedor:
-      input#legalname.form-control(placeholder='Código do fornecedor' name='code' value=suppliercode.code)
+      label(for='ordercode') Código no fornecedor:
+      input#legalname.form-control(placeholder='Código do fornecedor' name='ordercode' value=suppliercode.ordercode)
 
       label(for='rounding') Arredondamento:
       input#legalname.form-control(placeholder='Arredondamento' name='rounding' value=suppliercode.rounding)

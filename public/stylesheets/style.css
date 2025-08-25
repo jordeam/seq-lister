@@ -1,0 +1,26 @@
+.fwidth{
+    display:inline-block;
+    vertical-align: bottom;
+    width: 4ch;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.btn2{
+    border: 0px solid green;
+    border-radius: 5px;
+    padding: 5px;
+    background-color: lightgreen;
+}
+.btn2:hover {
+    background-color: green;
+}
+.btnC{
+    border: 0px solid green;
+    border-radius: 5px;
+    padding: 5px;
+    background-color: lightblue;
+}
+.btnC:hover {
+    background-color: yellow;
+}

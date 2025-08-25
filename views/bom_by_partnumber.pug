@@ -1,0 +1,42 @@
+h4 Inserindo com Partnumber existente
+
+
+p Componente encontrado: &nbsp;
+  a(href='/component/'+comp.id) #{group.name} - #{comp.name}
+  if ccase.name.length > 1
+    | (#{ccase.name})
+
+form(id="insert"+index method="post" action="/bom/"+loc.id+"/insert")
+  label(for="qty" style="width: 10ch;") Quant.
+  input#qty(type="text" name="qty" value=entry.qty)
+  input(type="hidden" name="comp_id" value=comp.id)
+  input(type='hidden' name="loc_id" value=loc.id)
+  input(type="hidden" name="index" value=index)
+  p
+    label(for="pn" style="width: 10ch;") Partnumber
+    input#pn(type="text" name="pn" value=entry.pn)
+  if entry.ordercode.length > 1
+    if sc.ordercode.length > 1
+      if sc.ordercode !== entry.ordercode
+        p Ordercode do BOM (#{entry.ordercode}) difere do DB (#{sc.ordercode}): usando DB
+      label(for="order" style="width: 10ch;") Ordercode
+      input#order(type="text" name="ordercode" value=sc.ordercode)
+    else
+      label(for="order" style="width: 10ch;") Ordercode
+      input#order(type="text" name="ordercode" value=entry.ordercode)
+  else
+    label(for="order" style="width: 10ch;") Ordercode
+    input#order(type="text" name="ordercode" value=sc.ordercode)
+
+  p
+    label(for="supplier") Fornecedor:
+    select#man(name="supplier")
+      each val in suppliers
+        option(value=val.id selected=(val.id == supplier_default_id) ? "selected" : false) #{val.name}
+
+  p
+    label.fwidth(for="labels" style="width: 10ch;") Labels
+    input#labels(type="text" name="labels" value=entry.labels)
+  button.btn.btn-primary(type="button" onclick="return insertWithPartnumber("+index+");") Inserir
+
+hr

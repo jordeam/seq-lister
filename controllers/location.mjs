@@ -71,35 +71,7 @@ controller.home = asyncHandler(async (req, res, next) => {
   });
 });
 
-// List all components of a location
-controller.bom = asyncHandler(async (req, res, next) => {
-  // Get details of supergroup and all associated pets (in parallel)
-  const [entries, loc, allLocations] =
-        await Promise.all([
-          seqlz.query("SELECT location_entry.id, components.name AS cname,groups.name AS gname, component_id, quant, quant_unit, box,labels, cs.name AS csname FROM location_entry, components, groups, cases AS cs WHERE component_id = components.id AND group_id = groups.id AND case_id = cs.id AND location_id = ? ORDER BY groups.name, components.name", {
-            replacements: [req.params.id],
-            type: QueryTypes.SELECT
-          }),
-          Location.findOne({where: {id: req.params.id}}),
-          Location.findAll(),
-        ]);
-  if (loc === null) {
-    // No results.
-    const err = new Error("Localização não encontrada");
-    err.status = 404;
-    return next(err);
-  }
-
-  res.render("location_bom", {
-    user: req.user,
-    location: loc,
-    entries,
-    allLocations,
-    usingTable: /table$/.test(req.originalUrl),
-  });
-});
-
-// List all components of a location
+// Update a component of a location
 controller.update = asyncHandler(async (req, res, next) => {
     const loc = await Location.findOne({ where: {id: req.params.id}});
 
@@ -120,16 +92,14 @@ controller.update = asyncHandler(async (req, res, next) => {
     res.redirect(loc.url+(/table$/.test(req.originalUrl) ? "/table" : ""));
 });
 
-// List all components of a location
+// Create a location
 controller.create = asyncHandler(async (req, res, next) => {
     const loc = await Location.create({name: req.body.locname});
-
     res.redirect(loc.url);
 });
 
 controller.delete = asyncHandler(async (req, res, next) => {
     const location = await Location.findOne({where: {id: req.params.id}});
-
     if (location === null) {
         // No results.
         const err = new Error("Localização não encontrada.");
@@ -147,7 +117,6 @@ controller.labels_post = asyncHandler(async (req, res, next) => {
   const template_dir = __dirname + '/../public/templates/';
   const component_template = fs.readFileSync(template_dir + 'label-comp.tex', 'utf-8');
   const location_template = fs.readFileSync(template_dir + 'label-loc.tex', 'utf-8');
-
   //
   // Labels and page lengths
   //
@@ -325,7 +294,7 @@ controller.csv = asyncHandler(async (req, res, next) => {
   for (let i = 0; i < entries.length; i++) {
     const supcode = await Suppliercode.findOne({where: {component_id: entries[i].compid, supplier_id: mouser_id}});
     if (supcode) {
-      entries[i].supcode = supcode.code;
+      entries[i].supcode = supcode.ordercode;
       entries[i].partnumber = supcode.partnumber;
     }
     else {
@@ -363,5 +332,13 @@ controller.insert_from = asyncHandler(async (req, res, next) => {
   }
     res.redirect("/location/"+req.params.id);
 });
+
+function csv_remove_quotes(str) {
+  const regex = /,(?=(?:(?:[^"]*"){2})*[^"]*$)/;
+  let lst = str.split(regex);
+  for (let i in lst) {
+    lst[i] = lst[i].replace(/\"/g, '');
+  }
+}
 
 export default controller;

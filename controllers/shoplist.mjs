@@ -17,7 +17,7 @@ controller.home = asyncHandler(async (req, res, next) => {
       type: QueryTypes.SELECT
     });
   else
-    shoplist = await seqlz.query("SELECT c.id AS comp_id, c.name AS cname, g.name AS gname, sc.partnumber as pn, sc.code as code, SUM(le.quant) AS stock, SUM(l.quant * le.quant_unit) AS needed, SUM(l.quant * le.quant_unit - le.quant) AS to_buy, cs.name AS case_name FROM locations AS l, groups AS g, components AS c, location_entry AS le, cases AS cs, suppliercodes AS sc WHERE sc.supplier_id = $1 AND sc.component_id = c.id AND g.id = c.group_id AND l.id = le.location_id AND l.quant > 0 AND c.id = le.component_id AND c.case_id = cs.id AND sc.active = true GROUP BY c.id, c.name, g.name, cs.name, sc.partnumber, sc.code ORDER BY gname, cname, case_name",
+    shoplist = await seqlz.query("SELECT c.id AS comp_id, c.name AS cname, g.name AS gname, sc.partnumber as pn, sc.ordercode as ordercode, SUM(le.quant) AS stock, SUM(l.quant * le.quant_unit) AS needed, SUM(l.quant * le.quant_unit - le.quant) AS to_buy, cs.name AS case_name FROM locations AS l, groups AS g, components AS c, location_entry AS le, cases AS cs, suppliercodes AS sc WHERE sc.supplier_id = $1 AND sc.component_id = c.id AND g.id = c.group_id AND l.id = le.location_id AND l.quant > 0 AND c.id = le.component_id AND c.case_id = cs.id AND sc.active = true GROUP BY c.id, c.name, g.name, cs.name, sc.partnumber, sc.ordercode ORDER BY gname, cname, case_name",
     {
       bind: [id],
       type: QueryTypes.SELECT
@@ -78,7 +78,7 @@ controller.csv = asyncHandler(async (req, res, next) => {
   for (let i = 0; i < shoplist.length; i++) {
     const supcode = await Suppliercode.findOne({where: {component_id: shoplist[i].compid, supplier_id: mouser_id}});
     if (supcode) {
-      shoplist[i].supcode = supcode.code;
+      shoplist[i].supcode = supcode.ordercode;
       shoplist[i].partnumber = supcode.partnumber;
     }
     else {

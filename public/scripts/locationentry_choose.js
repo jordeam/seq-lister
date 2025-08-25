@@ -75,3 +75,12 @@ function on_name_changed(obj) {
     });
   console.log(`name=${name}`);
 }
+
+function fill_hidden() {
+   for (const name of ['box', 'quant', 'quant_unit', 'labels']) {
+    let e = document.getElementsByName(name);
+    e[1].setAttribute("value", e[0].value);
+    e[2].setAttribute("value", e[0].value);
+  }
+  return true;
+}
