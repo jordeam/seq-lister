@@ -1,38 +1,49 @@
 h4 Inserindo com Partnumber existente
 
-
 p Componente encontrado: &nbsp;
   a(href='/component/'+comp.id) #{group.name} - #{comp.name}
   if ccase.name.length > 1
     | (#{ccase.name})
 
 form(id="insert"+index method="post" action="/bom/"+loc.id+"/insert")
-  label(for="qty" style="width: 10ch;") Quant.
-  input#qty(type="text" name="qty" value=entry.qty)
   input(type="hidden" name="comp_id" value=comp.id)
   input(type='hidden' name="loc_id" value=loc.id)
   input(type="hidden" name="index" value=index)
+  input(type="hidden" name="sc_id" value=sc.id)
+  p
+    label(for="qty" style="width: 14ch;") Quant.
+    input#qty(type="text" name="qty" value=entry.qty)
+  p
+    label(for="round" style="width: 14ch;") Arredondamento
+    input#round(type="text" name="rounding" value=sc.rounding)
   p
     label(for="pn" style="width: 10ch;") Partnumber
-    input#pn(type="text" name="pn" value=entry.pn)
-  if entry.ordercode.length > 1
-    if sc.ordercode.length > 1
-      if sc.ordercode !== entry.ordercode
-        p Ordercode do BOM (#{entry.ordercode}) difere do DB (#{sc.ordercode}): usando DB
-      label(for="order" style="width: 10ch;") Ordercode
-      input#order(type="text" name="ordercode" value=sc.ordercode)
-    else
-      label(for="order" style="width: 10ch;") Ordercode
-      input#order(type="text" name="ordercode" value=entry.ordercode)
-  else
-    label(for="order" style="width: 10ch;") Ordercode
-    input#order(type="text" name="ordercode" value=sc.ordercode)
+    input#pn(type="text" name="pn" value=entry.pn readonly)
 
   p
-    label(for="supplier") Fornecedor:
-    select#man(name="supplier")
+    label(for="manufact" style="width: 10ch;") Fabricante:
+    select#manufact(name="manufact_id")
+      each val in manufacts
+        option(value=val.id) #{val.name}
+
+  if sc.ordercode.length > 1
+    if sc.ordercode !== entry.ordercode
+      p Ordercode do BOM (#{entry.ordercode}) difere do DB (#{sc.ordercode}): usando DB
+    label(for="order" style="width: 10ch;") Ordercode
+    input#order(type="text" name="ordercode" value=sc.ordercode)
+  else
+    label(for="order" style="width: 10ch;") Ordercode
+    input#order(type="text" name="ordercode" value=entry.ordercode)
+
+  p
+    label(for="supplier" style="width: 10ch;") Fornecedor:
+    select#supplier(name="supplier_id")
       each val in suppliers
         option(value=val.id selected=(val.id == supplier_default_id) ? "selected" : false) #{val.name}
+
+  p
+    label(for="active" style="width: 10ch;") Ativo:
+    input#active(name="active" type="checkbox" checked)
 
   p
     label.fwidth(for="labels" style="width: 10ch;") Labels
