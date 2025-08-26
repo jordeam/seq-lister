@@ -22,4 +22,7 @@ router.get('/:id/query', bomController.query);
 // Insert an entry in location
 router.post('/:id/insert', bomController.insert);
 
+// Create a component
+router.get('/:id/create', bomController.create);
+
 export default router;

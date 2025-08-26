@@ -1,0 +1,60 @@
+h4 Criando Novo Componente ou Partnumber
+
+form(id="insert"+index method="post" action="/bom/"+loc.id+"/insert" onsubmit="return false;")
+  input#locid(type='hidden' name="loc_id" value=loc.id)
+  input#index(type="hidden" name="index" value=index)
+  p
+    label.labelbom(for="qty") Quant.
+    input#qty(type="text" name="qty" value=entry.qty)
+  p
+    label.labelbom(for="round") Arredondamento
+    input#round(type="text" name="rounding" value="1")
+  p
+    label.labelbom(for="pn") Partnumber
+    input#pn(type="text" name="pn" value=entry.pn)
+
+  p
+    label.labelbom(for="manufact") Fabricante:
+    select#manufact(name="manufact_id")
+      each val in manufacts
+        option(value=val.id) #{val.name}
+  p
+    label.labelbom(for="order") Ordercode
+    input#order(type="text" name="ordercode" value=entry.ordercode)
+  p
+    label.labelbom(for="supplier") Fornecedor:
+    select#supplier(name="supplier_id")
+      each val in suppliers
+        option(value=val.id selected=(val.id == supplier_default_id) ? "selected" : false) #{val.name}
+  p
+    label.labelbom(for="active") Ativo:
+    input#active(name="active" type="checkbox" checked)
+  p
+    label.labelbom(for="labels") Labels
+    input#labels(type="text" name="labels" value=entry.labels)
+  p
+    label.labelbom(for="compname") Nome/valor
+    input#compname(type="text" name="compname" data-index=index value=entry.compname oninput="on_name_changed("+index+",this);")
+  p
+    label.labelbom(for="sg") Supergrupo
+    select#sg(onchange="on_supergroup_changed(this);")
+      each sg in supergroups
+        option(value=sg.id selected=(sg.id === default_supergroup) ? "selected" : false) #{sg.name}
+  p
+    label.labelbom(for="group") Grupo
+    select#group(name="group_id")
+      each group in groups
+        option(value=group.id selected=(group.id === default_group) ? "selected" : false) #{group.name}
+  p
+    label.labelbom(for="case") Encapsulamento
+    select#case(name="case_id")
+      each elt in allCases
+        option(value=elt.id) #{elt.name}
+          if elt.descr.length > 0
+            | &nbsp; &mdash; #[i #{elt.descr}]
+
+  button.btn.btn-primary(type="button" data-index=index value="0" onclick="return insertWithComp(this);") Inserir
+
+  div#choices
+
+hr

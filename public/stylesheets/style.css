@@ -1,5 +1,5 @@
 .fwidth{
-    display:inline-block;
+    display: inline-block;
     vertical-align: bottom;
     width: 4ch;
     white-space: nowrap;
@@ -23,4 +23,7 @@
 }
 .btnC:hover {
     background-color: yellow;
+}
+.labelbom {
+    width: 15ch;
 }

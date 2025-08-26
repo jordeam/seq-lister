@@ -9,8 +9,74 @@ import asyncHandler from "express-async-handler";
 import Suppliercode from '../models/suppliercode.mjs';
 import Supplier from '../models/supplier.mjs';
 import Manufacturer from '../models/manufacturer.mjs';
+import SuperGroup from '../models/supergroup.mjs';
 
 const controller = {};
+
+/**
+ * Scan a line index+1 in BOM string to fill entry fields: qty, labels, pn,
+ * order, compname, descr;
+ */
+function makeEntries(bom_str, index) {
+  const regex = /,(?=(?:(?:[^"]*"){2})*[^"]*$)/;
+  const bom_lst = bom_str.split(/\r?\n/);
+  const header = bom_lst[0].split(regex);
+  let qty, labels, pn, order, compname, descr;
+  console.log(`header=%j`, header);
+  for (const i in header) {
+    if (/Qty/i.test(header[i]))
+      qty = +i;
+    else if (/Reference/i.test(header[i]))
+      labels = +i;
+    else if (/(Part *Number)|(mfg#)/i.test(header[i]))
+      pn = +i;
+    else if (/Mouser/i.test(header[i]))
+     order = +i;
+    else if (/Value/i.test(header[i]))
+      compname = +i;
+    else if (/Descr.*/i.test(header[i]))
+      descr = +i;
+  }
+
+  // console.log(`qty=${qty} ref=${ref} pn=${pn} compname=${compname} order=${order}`);
+
+
+  const line = bom_lst[index + 1];
+  const lst = line.split(regex);
+  console.log(`line=${line}`);
+  let entry = {};
+  if (lst.length > 6) {
+    entry.status = lst[0];
+    entry.compId = lst[1];
+    entry.leId = lst[2];
+    if (qty)
+      entry.qty = lst[qty] === undefined ? 0 : parseInt(lst[qty].replace(/\"/g, ''));
+    else
+      entry.qty = 0;
+    if (pn)
+      entry.pn = lst[pn].replace(/\"/g, '');
+    else
+      entry.pn = "";
+    if (order)
+      entry.ordercode = lst[order] ? lst[order].replace(/\"/g, '') : "";
+    else
+      entry.ordercode = "";
+    if (labels)
+      entry.labels = lst[labels].replace(/\"/g, '');
+    else
+      entry.labels = "";
+    if (compname)
+      entry.compname = lst[compname].replace(/\"/g, '');
+    else
+      entry.compname = "";
+    if (descr)
+      entry.descr = lst[descr].replace(/\"/g, '');
+    else
+      entry.descr = "";
+  }
+  console.log(`compname=${compname}\nentry=%j`, entry);
+  return entry;
+}
 
 // Redirect to list of Locations
 controller.list = asyncHandler(async (req, res, next) => {
@@ -40,7 +106,7 @@ controller.home = asyncHandler(async (req, res, next) => {
 
   console.log(`Header=${bom_lst[0]}`);
   const header = bom_lst[0].split(/ *, */);
-  let qty, ref, pn, value, ordercode;
+  let qty, ref, pn, compname, ordercode;
   for (const i in header) {
     if (/Qty/i.test(header[i]))
       qty = +i;
@@ -49,12 +115,12 @@ controller.home = asyncHandler(async (req, res, next) => {
     else if (/(Part *Number)|(mfg#)/i.test(header[i]))
       pn = +i;
     else if (/Value/i.test(header[i]))
-     value = +i;
+     compname = +i;
     else if (/Mouser/i.test(header[i]))
      ordercode = +i;
   }
 
-  console.log(`qty=${qty} ref=${ref} pn=${pn} value=${value} ordercode=${ordercode}`);
+  console.log(`qty=${qty} ref=${ref} pn=${pn} compname=${compname} ordercode=${ordercode}`);
 
   let bom = [];
 
@@ -74,8 +140,8 @@ controller.home = asyncHandler(async (req, res, next) => {
         entry.ref = lst[ref].replace(/\"/g, '');
       if (pn)
         entry.pn = lst[pn].replace(/\"/g, '');
-      if (value)
-        entry.value = lst[value].replace(/\"/g, '');
+      if (compname)
+        entry.compname = lst[compname].replace(/\"/g, '');
       if (ordercode)
         entry.ordercode = lst[ordercode] ? lst[ordercode].replace(/\"/g, '') : "";
       console.log("entry=%j", entry);
@@ -124,7 +190,6 @@ controller.upload = asyncHandler(async (req, res) => {
   res.redirect("/bom/" + loc.id);
 });
 
-
 controller.query = asyncHandler(async (req, res) => {
   const locId = +req.params.id;
   const index = +req.query.line;
@@ -134,56 +199,7 @@ controller.query = asyncHandler(async (req, res) => {
   const sup = await Supplier.findOne({where: {name: {[Op.regexp]: 'Mouser'}}});
   const manufacts = await Manufacturer.findAll();
 
-  const bom_lst = loc.bom.split(/\r?\n/);
-
-  const header = bom_lst[0].split(/ *, */);
-  let qty, labels, pn, value, order;
-  for (const i in header) {
-    if (/Qty/i.test(header[i]))
-      qty = +i;
-    else if (/Reference/i.test(header[i]))
-      labels = +i;
-    else if (/(Part *Number)|(mfg#)/i.test(header[i]))
-      pn = +i;
-    else if (/Value/i.test(header[i]))
-     value = +i;
-    else if (/Mouser/i.test(header[i]))
-     order = +i;
-  }
-
-  // console.log(`qty=${qty} ref=${ref} pn=${pn} value=${value} order=${order}`);
-
-  const regex = /,(?=(?:(?:[^"]*"){2})*[^"]*$)/;
-
-  const line = bom_lst[index + 1];
-  const lst = line.split(regex);
-  console.log(`line=${line}`);
-  let entry = {};
-  if (lst.length > 6) {
-    entry.status = lst[0];
-    entry.compId = lst[1];
-    entry.leId = lst[2];
-    if (qty)
-      entry.qty = lst[qty] === undefined ? 0 : parseInt(lst[qty].replace(/\"/g, ''));
-    else
-      entry.qty = 0;
-    if (value)
-      entry.value = lst[value].replace(/\"/g, '');
-    else
-      entry.value = "";
-    if (pn)
-      entry.pn = lst[pn].replace(/\"/g, '');
-    else
-      entry.pn = "";
-    if (order)
-      entry.ordercode = lst[order] ? lst[order].replace(/\"/g, '') : "";
-    else
-      entry.ordercode = "";
-    if (labels)
-      entry.labels = lst[labels].replace(/\"/g, '');
-    else
-      entry.labels = "";
-  }
+  const entry = makeEntries(loc.bom, index);
 
   let sc, comp, group, ccase;
 
@@ -244,6 +260,50 @@ controller.insert = asyncHandler(async (req, res) => {
                         type: QueryTypes.UPDATE,
                       });
   res.send("<p>Componente inserido!\n<hr>");
+});
+
+//** Create component, references, partnumber, etc. and insert it into location.
+controller.create = asyncHandler(async (req, res) => {
+  const locId = +req.params.id;
+  const index = +req.query.line;
+  // get location
+  const [loc, suppliers, sup, manufacts, allCases, groups, supergroups] =
+        await Promise.all([
+          Location.findOne({where: {id: locId}}),
+          Supplier.findAll({order: seqlz.col('name')}),
+          Supplier.findOne({where: {name: {[Op.regexp]: 'Mouser'}}}),
+          Manufacturer.findAll({order: seqlz.col('name')}),
+          Case.findAll({order: seqlz.col('name')}),
+          Group.findAll({order: seqlz.col('name')}),
+          SuperGroup.findAll({order: seqlz.col('name')}),
+        ]);
+
+  const entry = makeEntries(loc.bom, index);
+
+  let sc_pn, sc_oc;
+
+  sc_pn = await Suppliercode.findOne({where: {partnumber: entry.pn}});
+  sc_oc = await Suppliercode.findOne({where: {ordercode: entry.ordercode}});
+  let err_str = "";
+  if (sc_pn)
+    err_str += "<p>Erro: Partnumber encontrado, user criar por Partnumber\n";
+  if (sc_oc)
+    err_str += "<p>Erro: Ordercode encontrado, user criar por Ordercode\n";
+
+  if (err_str.length > 0)
+    return res.send(err_str);
+
+  res.render("bom_create_comp", {
+    loc,
+    entry,
+    index,
+    suppliers,
+    supplier_default_id: sup.id,
+    manufacts,
+    allCases,
+    groups,
+    supergroups,
+  });
 });
 
 export default controller;
