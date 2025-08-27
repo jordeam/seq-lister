@@ -33,6 +33,12 @@ form(id="insert"+index method="post" action="/bom/"+loc.id+"/insert" onsubmit="r
     label.labelbom(for="labels") Labels
     input#labels(type="text" name="labels" value=entry.labels)
   p
+    label.labelbom(for="box") Caixa
+    input#box(type="text" name="box" value="1")
+  p
+    label.labelbom(for="descr") Descrição:
+    input#descr(type="text" name="descr" value=entry.descr)
+  p
     label.labelbom(for="compname") Nome/valor
     input#compname(type="text" name="compname" data-index=index value=entry.compname oninput="on_name_changed("+index+",this);")
   p

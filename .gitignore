@@ -132,3 +132,4 @@ dist
 /sequelize-conf.yaml
 /sessions/
 /public/temp/
+/auth-keys.yaml

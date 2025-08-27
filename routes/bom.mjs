@@ -25,4 +25,7 @@ router.post('/:id/insert', bomController.insert);
 // Create a component
 router.get('/:id/create', bomController.create);
 
+// Insert a locationentry in location with component name or id
+router.post('/:id/insert_comp', bomController.insertComp);
+
 export default router;

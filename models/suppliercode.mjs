@@ -10,6 +10,7 @@ const Suppliercode = seqlz.define("suppliercode", {
   manufact_id: {type: DataTypes.INTEGER, defaultValue: 0},
   partnumber: { type: DataTypes.TEXT, defaultValue: ''},
   ordercode: { type: DataTypes.TEXT, defaultValue: ''},
+  descr: { type: DataTypes.TEXT, defaultValue: ''},
   rounding: { type: DataTypes.INTEGER, defaultValue: 1},
   active: { type: DataTypes.BOOLEAN, defaultValue: false},
   price: { type: DataTypes.DOUBLE, defaultValue: 0.0},

@@ -306,4 +306,40 @@ controller.create = asyncHandler(async (req, res) => {
   });
 });
 
+controller.insertComp = asyncHandler(async (req, res) => {
+  const comp_id = req.body.comp_id;
+  let comp;
+  if (comp_id == 0) {
+    // if component id is zero, let's create a new component with compname and group id;
+    comp = await Component.create({
+      name: req.body.compname,
+      group_id: req.body.group_id,
+      case_id: req.body.case_id,});
+  }
+  else {
+    comp = await Component.findOne({where: {id: comp_id}});
+  }
+  // Here, component is defined
+  // Now need to create a suppliercode and link it to this component
+  const supcode = await Suppliercode.create({
+    supplier_id: req.body.supplier_id,
+    component_id: comp.id,
+    manufact_id: req.body.manufact_id,
+    partnumber: req.body.pn,
+    ordercode: req.body.ordercode,
+    rounding: req.body.round,
+    active: req.body.active,
+  });
+  // Finally, insert a location entry:
+  const locentry = await LocationEntry.create({
+    location_id: req.body.loc_id,
+    labels: req.body.labels,
+    component_id: comp.id,
+    quant_unit: req.body.qty,
+    box: req.body.box,
+  })
+
+  res.send('<p> Componente inserido');
+});
+
 export default controller;

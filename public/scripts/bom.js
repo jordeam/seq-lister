@@ -149,8 +149,42 @@ function insertWithComp(wdg) {
   const supplier_id = +form.elements.supplier_id.value;
   const active = form.elements.active.value;
   const labels = form.elements.labels.value;
+  const descr = form.elements.descr.value;
+  const compname = form.elements.compname.value;
   const group_id = +form.elements.group_id.value;
   const case_id = +form.elements.case_id.value;
+  const box = +form.elements.box.value;
+
+  requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({
+      comp_id,
+      index,
+      loc_id,
+      qty,
+      round,
+      pn,
+      manufact_id,
+      ordercode,
+      supplier_id,
+      active,
+      labels,
+      descr,
+      compname,
+      group_id,
+      case_id,
+      box,
+    }).toString(),
+  };
+  const request = new Request('/bom/'+loc_id+'/insert_comp', requestOptions);
+  fetch(request)
+    .then(res => res.text())
+    .then(data => {
+      const divbom = document.getElementById('bom'+index);
+      divbom.innerHTML = data;
+    })
+    .catch(error => console.error(error));
 
   return false;
 }
