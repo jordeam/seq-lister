@@ -54,23 +54,23 @@ function makeEntries(bom_str, index) {
     else
       entry.qty = 0;
     if (pn)
-      entry.pn = lst[pn].replace(/\"/g, '');
+      entry.pn = lst[pn].replace(/\"/g, '').trim();
     else
       entry.pn = "";
     if (order)
-      entry.ordercode = lst[order] ? lst[order].replace(/\"/g, '') : "";
+      entry.ordercode = lst[order] ? lst[order].replace(/\"/g, '').trim() : "";
     else
       entry.ordercode = "";
     if (labels)
-      entry.labels = lst[labels].replace(/\"/g, '');
+      entry.labels = lst[labels].replace(/\"/g, '').trim();
     else
       entry.labels = "";
     if (compname)
-      entry.compname = lst[compname].replace(/\"/g, '');
+      entry.compname = lst[compname].replace(/\"/g, '').trim();
     else
       entry.compname = "";
     if (descr)
-      entry.descr = lst[descr].replace(/\"/g, '');
+      entry.descr = lst[descr].replace(/\"/g, '').trim();
     else
       entry.descr = "";
   }
@@ -281,9 +281,10 @@ controller.create = asyncHandler(async (req, res) => {
   const entry = makeEntries(loc.bom, index);
 
   let sc_pn, sc_oc;
-
-  sc_pn = await Suppliercode.findOne({where: {partnumber: entry.pn}});
-  sc_oc = await Suppliercode.findOne({where: {ordercode: entry.ordercode}});
+  if (entry.pn.length > 1)
+    sc_pn = await Suppliercode.findOne({where: {partnumber: entry.pn}});
+  if (entry.ordercode.length > 1)
+    sc_oc = await Suppliercode.findOne({where: {ordercode: entry.ordercode}});
   let err_str = "";
   if (sc_pn)
     err_str += "<p>Erro: Partnumber encontrado, user criar por Partnumber\n";
@@ -321,23 +322,26 @@ controller.insertComp = asyncHandler(async (req, res) => {
   }
   // Here, component is defined
   // Now need to create a suppliercode and link it to this component
-  const supcode = await Suppliercode.create({
-    supplier_id: req.body.supplier_id,
-    component_id: comp.id,
-    manufact_id: req.body.manufact_id,
-    partnumber: req.body.pn,
-    ordercode: req.body.ordercode,
-    rounding: req.body.round,
-    active: req.body.active,
-  });
+  const pn = req.body.pn.trim();
+  const ordercode = req.body.ordercode.trim();
+  if (pn.length > 0 || ordercode.length > 0)
+    await Suppliercode.create({
+      supplier_id: req.body.supplier_id,
+      component_id: comp.id,
+      manufact_id: req.body.manufact_id,
+      partnumber: pn,
+      ordercode,
+      rounding: req.body.round,
+      active: req.body.active,
+    });
   // Finally, insert a location entry:
-  const locentry = await LocationEntry.create({
+  await LocationEntry.create({
     location_id: req.body.loc_id,
     labels: req.body.labels,
     component_id: comp.id,
     quant_unit: req.body.qty,
     box: req.body.box,
-  })
+  });
 
   res.send('<p> Componente inserido');
 });
