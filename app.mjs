@@ -43,6 +43,17 @@ import fileUpload from 'express-fileupload';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+//
+// Database deafults
+//
+import {create_defaults} from './create_defaults.mjs';
+
+await create_defaults();
+
+//
+// Express initialization
+//
+
 const app = express();
 
 // app.configure('development', function(){

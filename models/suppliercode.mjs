@@ -5,7 +5,7 @@ import Suppliers from "./supplier.mjs";
 
 const Suppliercode = seqlz.define("suppliercode", {
   id: {type: DataTypes.INTEGER, autoIncrement: true, allowNull: false, primaryKey: true, unique: true},
-  supplier_id: {type: DataTypes.INTEGER, defaultValue: 1},
+  supplier_id: {type: DataTypes.INTEGER, defaultValue: 0},
   component_id: {type: DataTypes.INTEGER, defaultValue: 0},
   manufact_id: {type: DataTypes.INTEGER, defaultValue: 0},
   partnumber: { type: DataTypes.TEXT, defaultValue: ''},

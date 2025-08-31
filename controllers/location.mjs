@@ -48,7 +48,7 @@ controller.home = asyncHandler(async (req, res, next) => {
   // Get details of supergroup and all associated pets (in parallel)
   const [entries, loc, allLocations] =
         await Promise.all([
-          seqlz.query("SELECT location_entry.id, components.name AS cname,groups.name AS gname, component_id, quant, quant_unit, box,labels, cs.name AS csname FROM location_entry, components, groups, cases AS cs WHERE component_id = components.id AND group_id = groups.id AND case_id = cs.id AND location_id = ? ORDER BY groups.name, components.name", {
+          seqlz.query("SELECT location_entry.id, components.name AS cname,groups.name AS gname, component_id, quant, quant_unit, box,labels, cs.name AS csname, supcode_id FROM location_entry, components, groups, cases AS cs WHERE component_id = components.id AND group_id = groups.id AND case_id = cs.id AND location_id = ? ORDER BY groups.name, components.name", {
             replacements: [req.params.id],
             type: QueryTypes.SELECT
           }),
@@ -62,10 +62,57 @@ controller.home = asyncHandler(async (req, res, next) => {
     return next(err);
   }
 
+  let gotOne = false;
+  console.log("seaching entries");
+  for (let entry of entries) {
+    if (entry.supcode_id === -1) {
+      console.log(`id ${entry.id} supplier code id ${entry.supcode_id} being precessed`);
+      gotOne = true;
+      const supcodes = await Suppliercode.findAll({where: {component_id: entry.component_id}});
+      // set the first supcode, after looks for the active and overwrites it
+      console.log(`supcodes.length=${supcodes.length}`);
+      if (supcodes.length > 0) {
+        console.log(`updating supcodes[0].id=${supcodes[0].id} in entry id ${entry.id}`);
+        // TODO: explain why it does not work:
+        // await LocationEntry.update({supcode_id: supcodes[0].id}, {where: {id: entry.id}});
+        await seqlz.query("UPDATE location_entry SET supcode_id = $1 WHERE id = $2", {
+            bind: [supcodes[0].id, entry.id],
+            type: QueryTypes.UPDATE,
+        });
+        for (const supcode of supcodes) {
+          if (supcode.active == true) {
+            console.log(`updating supcode.id=${supcode.id} in entry id ${entry.id}`);
+            // TODO: explain why it does not work:
+            // await LocationEntry.update({supcode_id: supcode.id}, {where: {id: entry.id}});
+            await seqlz.query("UPDATE location_entry SET supcode_id = $1 WHERE id = $2", {
+              bind: [supcode.id, entry.id],
+              type: QueryTypes.UPDATE,
+            });
+          }
+        }
+      }
+      else {
+        // Got no one, just set the supcode_id to 0, so it will not be processed anymore
+        // TODO: explain why it does not work:
+        // await LocationEntry.update({supcode_id: 0}, {where: {id: entry.id}});
+        await seqlz.query("UPDATE location_entry SET supcode_id = 0 WHERE id = $1", {
+          bind: [entry.id],
+          type: QueryTypes.UPDATE,
+        });
+      }
+    }
+  }
+  if (gotOne) {
+    console.log(`Location has at least one entry with partnumber not analised`);
+  }
+  const entries_w_supcodes = await seqlz.query("SELECT le.id, components.name AS cname,groups.name AS gname, le.component_id, quant, quant_unit, box,labels, cs.name AS csname, supcode_id, partnumber, ordercode FROM location_entry AS le, components, groups, cases AS cs, suppliercodes AS sc WHERE le.component_id = components.id AND group_id = groups.id AND case_id = cs.id AND location_id = ? AND sc.id = supcode_id ORDER BY groups.name, components.name", {
+            replacements: [req.params.id],
+            type: QueryTypes.SELECT
+          });
   res.render(/labels$/.test(req.originalUrl) ? "location_labels" : "location_home", {
     user: req.user,
     location: loc,
-    entries,
+    entries: entries_w_supcodes,
     allLocations,
     usingTable: /table$/.test(req.originalUrl),
   });

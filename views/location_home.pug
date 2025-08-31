@@ -75,6 +75,8 @@ block content
           th Grupo
           th Componente
           th Case
+          th Partnumber
+          td Ordercode
           th Cx.
           th Qt.
           th P/P
@@ -90,6 +92,10 @@ block content
             td
               a(href='/component/' + val.component_id) #[Strong #{val.cname}]
             td &nbsp; #{val.csname}
+            td
+              a(href='/suppliercode/' + val.supcode_id) #[Strong #{val.partnumber}]
+            td
+              a(href='/suppliercode/' + val.supcode_id) #[Strong #{val.ordercode}]
             td(align="center") #{val.box}
             td(align="right")
               a.btn(style="background: #0bb;" href="/locationentry/"+val.id+"/table") #{val.quant}

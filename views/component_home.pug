@@ -41,32 +41,6 @@ block content
 
   hr
 
-  h2 Localizado em:
-
-  dl
-  each val in locations
-    dd
-      a(href="/location/"+val.id class='btn btn-primary')
-        img(src="/image/loc-icon.svg" alt="Ir" width="20pt" height="24pt")
-      | &nbsp;
-      a(href="/location/"+val.id+"/table" class='btn btn-primary')
-        img(src="/image/table-icon.svg" alt="Ir" width="20pt" height="24pt")
-      | &nbsp; #{val.name}/#{val.box}: #{val.quant}
-
-  hr
-
-  h2 Inserir em:
-
-  form(name="location_insert" method="post" action="/locationentry/insert/"+component.id.toString())
-    div.form-group
-      select.form-control(name="location_id")
-        each loc in allLocations
-          option(value=loc.id ) #{loc.name}
-
-    button.btn.btn-primary(type="submit") Inserir
-
-  hr
-
   h2 Códigos de Compra
 
   if suppliercodes.length === 0
@@ -98,5 +72,29 @@ block content
       input(type="hidden" name="partnumber" value="")
       button.btn.btn-primary(type="submit")
         img(src="/image/add-icon.svg" alt="Adicionar" width="20pt" height="24pt")
+
+  h2 Localizado em:
+
+  dl
+  each val in locations
+    dd
+      a(href="/location/"+val.id class='btn btn-primary')
+        img(src="/image/loc-icon.svg" alt="Ir" width="20pt" height="24pt")
+      | &nbsp;
+      a(href="/location/"+val.id+"/table" class='btn btn-primary')
+        img(src="/image/table-icon.svg" alt="Ir" width="20pt" height="24pt")
+      | &nbsp; #{val.name}/#{val.box}: #{val.quant}
+
+  hr
+
+  h2 Inserir em:
+
+  form(name="location_insert" method="post" action="/locationentry/insert/"+component.id.toString())
+    div.form-group
+      select.form-control(name="location_id")
+        each loc in allLocations
+          option(value=loc.id ) #{loc.name}
+
+    button.btn.btn-primary(type="submit") Inserir
 
   script(src="/script/component_new.js")

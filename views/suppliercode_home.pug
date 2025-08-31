@@ -16,28 +16,29 @@ block content
   form(method='POST' action=suppliercode.url)
     div.form-group
       label(for='partnumber') Partnumber:
-      input#name.form-control(placeholder='Partnumber' name='partnumber' value=suppliercode.partnumber)
+      input#partnumber.form-control(placeholder='Partnumber' name='partnumber' value=suppliercode.partnumber)
 
       label(for="manufact") Fabricante:
-      select#man.form-control(name="manufact")
+      select#manufact.form-control(name="manufact")
         each val in manufacturers
           option(value=val.id selected=(val.id === suppliercode.manufact_id) ? "selected" : false) #{val.name}
 
+      label(for='ordercode') Código no fornecedor:
+      input#ordercode.form-control(placeholder='Código do fornecedor' name='ordercode' value=suppliercode.ordercode)
+
       label(for="supplier") Fornecedor:
-      select#man.form-control(name="supplier")
+      select#suppliers.form-control(name="supplier")
         each val in suppliers
           option(value=val.id selected=(val.id === suppliercode.supplier_id) ? "selected" : false) #{val.name}
 
-      label(for='ordercode') Código no fornecedor:
-      input#legalname.form-control(placeholder='Código do fornecedor' name='ordercode' value=suppliercode.ordercode)
-
       label(for='rounding') Arredondamento:
-      input#legalname.form-control(placeholder='Arredondamento' name='rounding' value=suppliercode.rounding)
+      input#rounding.form-control(placeholder='Arredondamento' name='rounding' value=suppliercode.rounding)
 
-      label(for="active") Ativo:
-      input#active.form-control(name="active" type="checkbox" checked=(suppliercode.active ? "checked" : false))
+      //- label(for="active") Ativo:
+      //- input#active.form-control(name="active" type="checkbox" checked=(suppliercode.active ? "checked" : false))
+
+      label(for='descr') Descrição:
+      textarea#descr.form-control(rows="2" placeholder='Descrição' name='descr') #{suppliercode.descr}
 
     button.btn.btn-primary(type='submit')
       img(src='/image/ok-icon.svg' alt="Atualizar" width="20pt" height="24pt")
-
-  hr

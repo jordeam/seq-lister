@@ -60,7 +60,7 @@ controller.update = asyncHandler(async (req, res, next) => {
     supplier_id: req.body.supplier,
     manufact_id: req.body.manufact,
     partnumber: req.body.partnumber,
-    active,
+    descr: req.body.descr,
     rounding: req.body.rounding,
   }, {where: {id: req.params.id}});
 
