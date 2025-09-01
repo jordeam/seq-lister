@@ -143,7 +143,7 @@ controller.home = asyncHandler(async (req, res, next) => {
       if (compname)
         entry.compname = lst[compname].replace(/\"/g, '');
       if (ordercode)
-        entry.ordercode = lst[ordercode] ? lst[ordercode].replace(/\"/g, '') : "";
+        entry.ordercode = lst[ordercode] ? lst[ordercode].replace(/\"/g, '').trim() : "";
       console.log("entry=%j", entry);
       bom.push(entry);
     }
@@ -235,7 +235,7 @@ controller.insert = asyncHandler(async (req, res) => {
 
   const component_id = req.body.comp_id;
 
-  const locEntry = await LocationEntry.create({
+  await LocationEntry.create({
     location_id: req.params.id,
     labels: req.body.labels,
     component_id: component_id,
@@ -244,7 +244,7 @@ controller.insert = asyncHandler(async (req, res) => {
   });
 
   await Suppliercode.update({
-    ordercode: req.body.ordercode,
+    ordercode: req.body.ordercode.trim(),
     rounding: req.body.rounding,
     manufact_id: req.body.manufact_id,
     supplier_id: req.body.supplier_id,

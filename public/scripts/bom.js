@@ -52,14 +52,12 @@ function insertWithPartnumber(index) {
       qty: form.elements.qty.value,
       comp_id: form.elements.comp_id.value,
       sc_id: form.elements.sc_id.value,
-      pn: form.elements.pn.value,
-      ordercode: form.elements.ordercode.value,
+      pn: form.elements.pn.value.trim(),
+      ordercode: form.elements.ordercode.value.trim(),
       rounding: form.elements.rounding.value,
-      labels: form.elements.labels.value,
+      labels: form.elements.labels.value.trim(),
       supplier_id: form.elements.supplier_id.value,
-      rounding: form.elements.rounding.value,
       manufact_id: form.elements.manufact_id.value,
-      checked: form.elements.active.value,
     }).toString(),
   };
 
