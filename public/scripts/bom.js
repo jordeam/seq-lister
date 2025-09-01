@@ -151,7 +151,6 @@ function insertWithComp(wdg) {
   const manufact_id = +form.elements.manufact_id.value;
   const ordercode = form.elements.ordercode.value;
   const supplier_id = +form.elements.supplier_id.value;
-  const active = form.elements.active.value;
   const labels = form.elements.labels.value;
   const descr = form.elements.descr.value;
   const compname = form.elements.compname.value;
@@ -172,7 +171,6 @@ function insertWithComp(wdg) {
       manufact_id,
       ordercode,
       supplier_id,
-      active,
       labels,
       descr,
       compname,
@@ -187,6 +185,7 @@ function insertWithComp(wdg) {
     .then(data => {
       const divbom = document.getElementById('bom'+index);
       divbom.innerHTML = data;
+      close_dialog();
     })
     .catch(error => console.error(error));
 

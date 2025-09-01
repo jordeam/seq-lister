@@ -205,7 +205,7 @@ controller.query = asyncHandler(async (req, res) => {
   let sc, comp, group, ccase;
 
   if (entry.pn.length > 1)
-    sc = await Suppliercode.findOne({where: {partnumber: {[Op.regexp]: ` *${escapeStringRegexp(entry.pn)} *`}}});
+    sc = await Suppliercode.findOne({where: {partnumber: {[Op.regexp]: `^ *${escapeStringRegexp(entry.pn)} *$`}}});
   if (sc)
     comp = await Component.findOne({where: {id: sc.component_id}});
   if (comp)
@@ -275,9 +275,9 @@ controller.create = asyncHandler(async (req, res) => {
 
   let sc_pn, sc_oc;
   if (entry.pn.length > 1)
-    sc_pn = await Suppliercode.findOne({where: {partnumber: {[Op.regexp]: ` *${escapeStringRegexp(entry.pn)} *`}}});
+    sc_pn = await Suppliercode.findOne({where: {partnumber: {[Op.regexp]: `^ *${escapeStringRegexp(entry.pn)} *$`}}});
   if (entry.ordercode.length > 1)
-    sc_oc = await Suppliercode.findOne({where: {ordercode: {[Op.regexp]: ` *${escapeStringRegexp(entry.ordercode)} *`}}});
+    sc_oc = await Suppliercode.findOne({where: {ordercode: {[Op.regexp]: `^ *${escapeStringRegexp(entry.ordercode)} *$`}}});
   let err_str = "";
   if (sc_pn)
     err_str += "<p>Erro: Partnumber encontrado, use criar por Partnumber\n";
