@@ -6,7 +6,7 @@ function statusClicked(wdg) {
 
 function byPNClicked(wdg) {
   const id = wdg.getAttribute("name");
-  const div = document.getElementById(id);
+  const div = document.getElementById("dialog-content");
   const params = wdg.getAttribute("value");
   const lst = params.split(",");
   const locId = lst[0];
@@ -16,12 +16,13 @@ function byPNClicked(wdg) {
     .then(res => {return res.text();})
     .then(res => {
       div.innerHTML = res.toString();
+      document.getElementById('dialog').style="display: block";
+      document.getElementById('back').style='pointer-events: none; opacity: 70%;';
     });
 }
 
 function createCompClicked(wdg) {
-  const id = wdg.getAttribute("name");
-  const div = document.getElementById(id);
+  const div = document.getElementById("dialog-content");
   const params = wdg.getAttribute("value");
   const lst = params.split(",");
   const locId = lst[0];
@@ -31,14 +32,16 @@ function createCompClicked(wdg) {
     .then(res => {return res.text();})
     .then(res => {
       div.innerHTML = res.toString();
-      const form = document.getElementById('insert'+index);
+      document.getElementById('dialog').style="display: block";
+      document.getElementById('back').style='pointer-events: none; opacity: 70%;';
+      const form = document.getElementById('insert-comp');
       const obj = {value: form.elements.compname.value, dataset: {index: index}};
       on_name_changed(obj);
     });
 }
 
 function insertWithPartnumber(index) {
-  const form = document.getElementById('insert'+index);
+  const form = document.getElementById('insert-comp');
 
   const loc_id = form.elements.loc_id.value;
 
@@ -67,6 +70,9 @@ function insertWithPartnumber(index) {
     .then(data => {
       const divbom = document.getElementById('bom'+index);
       divbom.innerHTML = data;
+      // hide dialog
+      document.getElementById('dialog').style='display: none';
+      document.getElementById('back').style = 'display: block';
     })
     .catch(error => console.error(error));
 }
@@ -139,7 +145,7 @@ function insertWithComp(wdg) {
   const comp_id = +wdg.getAttribute("value");
   const index = +wdg.dataset.index;
   console.log(`index=${index} comp_id=${comp_id}`);
-  const form = document.getElementById('insert'+index);
+  const form = document.getElementById('insert-comp');
   const loc_id = form.elements.loc_id.value;
   const qty = +form.elements.qty.value;
   const round= +form.elements.round.value;
@@ -187,4 +193,9 @@ function insertWithComp(wdg) {
     .catch(error => console.error(error));
 
   return false;
+}
+
+function close_dialog() {
+  document.getElementById('dialog').style = 'display: none;';
+  document.getElementById('back').style = 'display: block;';
 }

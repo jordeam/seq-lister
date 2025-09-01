@@ -17,7 +17,7 @@ controller.home = asyncHandler(async (req, res, next) => {
       type: QueryTypes.SELECT
     });
   else
-    shoplist = await seqlz.query("SELECT c.id AS comp_id, c.name AS cname, g.name AS gname, sc.partnumber as pn, sc.ordercode as ordercode, SUM(le.quant) AS stock, SUM(l.quant * le.quant_unit) AS needed, SUM(l.quant * le.quant_unit - le.quant) AS to_buy, cs.name AS case_name FROM locations AS l, groups AS g, components AS c, location_entry AS le, cases AS cs, suppliercodes AS sc WHERE sc.supplier_id = $1 AND sc.component_id = c.id AND g.id = c.group_id AND l.id = le.location_id AND l.quant > 0 AND c.id = le.component_id AND c.case_id = cs.id AND sc.active = true GROUP BY c.id, c.name, g.name, cs.name, sc.partnumber, sc.ordercode ORDER BY gname, cname, case_name",
+    shoplist = await seqlz.query("SELECT c.id AS comp_id, c.name AS cname, g.name AS gname, sc.partnumber as pn, sc.ordercode as ordercode, SUM(le.quant) AS stock, SUM(l.quant * le.quant_unit) AS needed, SUM(l.quant * le.quant_unit - le.quant) AS to_buy, cs.name AS case_name FROM locations AS l, groups AS g, components AS c, location_entry AS le, cases AS cs, suppliercodes AS sc WHERE sc.supplier_id = $1 AND sc.id = le.supcode_id AND g.id = c.group_id AND l.id = le.location_id AND l.quant > 0 AND c.id = le.component_id AND c.case_id = cs.id GROUP BY c.id, c.name, g.name, cs.name, sc.partnumber, sc.ordercode ORDER BY gname, cname, case_name",
     {
       bind: [id],
       type: QueryTypes.SELECT
@@ -31,12 +31,12 @@ controller.home = asyncHandler(async (req, res, next) => {
   // List all suppliers
   if (id == 0 ||  id == 1) {
     for (let i = 0; i < shoplist.length; i++) {
-      const supcodes_active = await seqlz.query("SELECT s.name, s.id FROM suppliercodes as sc, suppliers as s WHERE sc.component_id = $1 AND s.id = sc.supplier_id AND sc.active = TRUE AND s.id > 1 GROUP BY s.name, s.id ORDER BY s.name",
+      const supcodes_active = await seqlz.query("SELECT s.name, s.id FROM suppliercodes as sc, suppliers as s, location_entry AS le WHERE sc.component_id = $1 AND s.id = sc.supplier_id AND le.supcode_id = sc.id AND s.id > 1 GROUP BY s.name, s.id ORDER BY s.name",
                                         {
                                           bind: [shoplist[i].comp_id],
                                           type: QueryTypes.SELECT,
                                         });
-      const supcodes_inactive = await seqlz.query("SELECT s.name, s.id FROM suppliercodes as sc, suppliers as s WHERE sc.component_id = $1 AND s.id = sc.supplier_id AND sc.active = FALSE AND s.id > 1 GROUP BY s.name, s.id ORDER BY s.name",
+      const supcodes_inactive = await seqlz.query("SELECT c.name, s.name, s.id, sc.id, le.supcode_id FROM components AS c LEFT JOIN suppliercodes AS sc ON c.id = sc.component_id LEFT JOIN suppliers AS s ON s.id = sc.supplier_id LEFT JOIN location_entry AS le ON le.component_id = c.id WHERE c.id = $1 AND s.id > 1 AND le.supcode_id > 0 AND le.supcode_id <> sc.id",
                                         {
                                           bind: [shoplist[i].comp_id],
                                           type: QueryTypes.SELECT,

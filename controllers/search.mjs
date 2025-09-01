@@ -52,7 +52,7 @@ controller.post = asyncHandler(async (req, res, next) => {
 });
 
 controller.searchComp = asyncHandler(async (req, res, next) => {
-  const components = await seqlz.query("SELECT c.id, c.name, g.name AS g_name, cs.name as c_name FROM components AS c, groups AS g, cases as cs WHERE g.id = c.group_id AND cs.id = c.case_id AND (LOWER(c.name) LIKE LOWER($1)) ORDER BY g.name, c.name, cs.name",
+  const components = await seqlz.query("SELECT c.id, c.name, g.name AS g_name, cs.name as c_name, sc.id AS sc_id, sc.partnumber, sc.ordercode FROM components AS c LEFT JOIN groups AS g ON g.id = c.group_id LEFT JOIN cases as cs ON cs.id = c.case_id LEFT JOIN suppliercodes AS sc ON sc.component_id = c.id WHERE (LOWER(c.name) LIKE LOWER($1)) ORDER BY g.name, c.name, cs.name",
     {
       bind: [req.query.expr + '%'],
       type: QueryTypes.SELECT,

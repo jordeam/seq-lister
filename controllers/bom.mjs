@@ -239,6 +239,7 @@ controller.insert = asyncHandler(async (req, res) => {
     location_id: req.params.id,
     labels: req.body.labels,
     component_id: component_id,
+    supcode_id: req.body.sc_id,
     quant_unit: req.body.qty,
   });
 
@@ -246,19 +247,10 @@ controller.insert = asyncHandler(async (req, res) => {
     ordercode: req.body.ordercode,
     rounding: req.body.rounding,
     manufact_id: req.body.manufact_id,
-    active: req.body.active,
     supplier_id: req.body.supplier_id,
   }, {
     where: {id: req.body.sc_id}
   });
-
-  // will set all other suppliercodes active flags to false
-  if (req.body.active)
-    await seqlz.query("UPDATE suppliercodes SET active = false WHERE component_id = $1 AND id <> $2",
-                      {
-                        bind: [component_id, supCode.id],
-                        type: QueryTypes.UPDATE,
-                      });
   res.send("<p>Componente inserido!\n<hr>");
 });
 
@@ -324,21 +316,24 @@ controller.insertComp = asyncHandler(async (req, res) => {
   // Now need to create a suppliercode and link it to this component
   const pn = req.body.pn.trim();
   const ordercode = req.body.ordercode.trim();
+  let supcode;
   if (pn.length > 0 || ordercode.length > 0)
-    await Suppliercode.create({
+    supcode = await Suppliercode.create({
       supplier_id: req.body.supplier_id,
       component_id: comp.id,
       manufact_id: req.body.manufact_id,
       partnumber: pn,
+      descr:req.body.descr,
       ordercode,
       rounding: req.body.round,
-      active: req.body.active,
     });
   // Finally, insert a location entry:
+  console.log(`Finally, insert a location entry`);
   await LocationEntry.create({
     location_id: req.body.loc_id,
     labels: req.body.labels,
     component_id: comp.id,
+    supcode_id: supcode.id,
     quant_unit: req.body.qty,
     box: req.body.box,
   });

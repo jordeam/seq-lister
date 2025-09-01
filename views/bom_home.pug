@@ -1,48 +1,53 @@
 extends base
 
 block content
-  h1
-    a.btn.btn-primary(href="/location")
-      img(src="/image/locs-icon.svg" alt="Localizações" width="20pt" height="24pt")
-    | &nbsp;
-    a.btn.btn-primary(href=location.url)
-      img(src="/image/loc-icon.svg" alt="Normal" width="20pt" height="24pt")
-    | &nbsp;
-    a.btn.btn-primary(href=location.url+"/table")
-      img(src="/image/table-icon.svg" alt="Tabela" width="20pt" height="24pt")
-    | &nbsp;
-    | &nbsp; #[Strong BOM - Localização:] #{location.name}
-
-  p #[Strong Quantidade a fabricar:] #{location.quant}
-
-  p #[Strong Quantidade de caixas:] #{location.nbox}
-
-  if location.note.length > 0
-    p #[Strong Obs.:] #{location.note}
-
-  h2 Listagem do esquemático (SCH BOM)
-
-  h3 Upload de arquivo CSV
-
-  form#form_upload(action="/bom/"+location.id+"/upload" method="post" enctype="multipart/form-data")
-    label(for="file") Arquivo CSV
-    input#file(type="file" name="file1" accept="text/csv" capture="environment")
-    button.btn.btn-primary Enviar
-  p Ao fazer uploar de novo arquivo, os componentes já inseridos na localização permanecerão.
-
-  h2 Listagem dos componentes
-
-  each elt, i in bom
-    p
-      span.btn2.fwidth(style="text-align: center; width: 2em;" onclick="return statusClicked(this);" name="bom"+i value=location.id+","+i) #{elt.status}
-      span.btnC.fwidth(style="text-align: center; width: 4em;" onclick="return byPNClicked(this);" name="bom"+i value=location.id+","+i) by PN
-      span.btnC.fwidth(style="text-align: center; width: 8ch;" onclick="return createCompClicked(this);" name="bom"+i value=location.id+","+i) + Comp
-      span.fwidth(style="text-align: right; width: 5ch;") #{elt.qty} &times;
+  div#back
+    h1
+      a.btn.btn-primary(href="/location")
+        img(src="/image/locs-icon.svg" alt="Localizações" width="20pt" height="24pt")
       | &nbsp;
-      span.fwidth(style="width: 20ch;") #{elt.compname}
+      a.btn.btn-primary(href=location.url)
+        img(src="/image/loc-icon.svg" alt="Normal" width="20pt" height="24pt")
       | &nbsp;
-      | ( PN:#{elt.pn} - Mouser:#{elt.ordercode}) #{elt.ref}
-      span &nbsp; Desc.: #{elt.descr}
-    div(id="bom"+i)
+      a.btn.btn-primary(href=location.url+"/table")
+        img(src="/image/table-icon.svg" alt="Tabela" width="20pt" height="24pt")
+      | &nbsp;
+      | &nbsp; #[Strong BOM - Localização:] #{location.name}
 
+    p #[Strong Quantidade a fabricar:] #{location.quant}
+
+    p #[Strong Quantidade de caixas:] #{location.nbox}
+
+    if location.note.length > 0
+      p #[Strong Obs.:] #{location.note}
+
+    h2 Listagem do esquemático (SCH BOM)
+
+    h3 Upload de arquivo CSV
+
+    form#form_upload(action="/bom/"+location.id+"/upload" method="post" enctype="multipart/form-data")
+      label(for="file") Arquivo CSV
+      input#file(type="file" name="file1" accept="text/csv" capture="environment")
+      button.btn.btn-primary Enviar
+    p Ao fazer uploar de novo arquivo, os componentes já inseridos na localização permanecerão.
+
+    h2 Listagem dos componentes
+
+    each elt, i in bom
+      p
+        span.btn2.fwidth(style="text-align: center; width: 2em;" onclick="return statusClicked(this);" name="bom"+i value=location.id+","+i) #{elt.status}
+        span.btnC.fwidth(style="text-align: center; width: 4em;" onclick="return byPNClicked(this);" name="bom"+i value=location.id+","+i) by PN
+        span.btnC.fwidth(style="text-align: center; width: 8ch;" onclick="return createCompClicked(this);" name="bom"+i value=location.id+","+i) + Comp
+        span.fwidth(style="text-align: right; width: 5ch;") #{elt.qty} &times;
+        | &nbsp;
+        span.fwidth(style="width: 20ch;") #{elt.compname}
+        | &nbsp;
+        | ( PN:#{elt.pn} - Mouser:#{elt.ordercode}) #{elt.ref}
+        span &nbsp; Desc.: #{elt.descr}
+      div(id="bom"+i)
+
+  div#dialog.fixed-dialog(style="display: none;")
+    h2 Inserir/Criar Componente
+    div#dialog-content
+    button.btn.btn-primary(type="button" onclick="close_dialog();") Fechar
   script(src="/script/bom.js")

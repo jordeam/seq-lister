@@ -51,10 +51,6 @@ controller.update = asyncHandler(async (req, res, next) => {
     return next(err);
   }
 
-  const active = req.body.active === 'on';
-
-  console.log(`UPDATE id = ${req.params.id} active=${active}`);
-
   await Suppliercode.update({
     ordercode: req.body.ordercode,
     supplier_id: req.body.supplier,
@@ -64,13 +60,6 @@ controller.update = asyncHandler(async (req, res, next) => {
     rounding: req.body.rounding,
   }, {where: {id: req.params.id}});
 
-  // if active is set to TRUE, then it must set all others to false
-  if (active)
-    await seqlz.query("UPDATE suppliercodes SET active = false WHERE component_id = $1 AND id <> $2",
-                      {
-                        bind: [suppliercode.component_id, req.params.id],
-                        type: QueryTypes.UPDATE,
-                      });
   res.redirect("/component/"+suppliercode.component_id);
 });
 

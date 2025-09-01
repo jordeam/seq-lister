@@ -5,49 +5,45 @@ p Componente encontrado: &nbsp;
   if ccase.name.length > 1
     | (#{ccase.name})
 
-form(id="insert"+index method="post" action="/bom/"+loc.id+"/insert")
+form#insert-comp(method="post" action="/bom/"+loc.id+"/insert")
   input(type="hidden" name="comp_id" value=comp.id)
   input(type='hidden' name="loc_id" value=loc.id)
   input(type="hidden" name="index" value=index)
   input(type="hidden" name="sc_id" value=sc.id)
   p
-    label(for="qty" style="width: 14ch;") Quant.
+    label.labelbom(for="qty") Quant.
     input#qty(type="text" name="qty" value=entry.qty)
   p
-    label(for="round" style="width: 14ch;") Arredondamento
+    label.labelbom(for="round") Arredondamento
     input#round(type="text" name="rounding" value=sc.rounding)
   p
-    label(for="pn" style="width: 10ch;") Partnumber
+    label.labelbom(for="pn") Partnumber
     input#pn(type="text" name="pn" value=entry.pn readonly)
-
   p
-    label(for="manufact" style="width: 10ch;") Fabricante:
+    label.labelbom(for="manufact") Fabricante:
     select#manufact(name="manufact_id")
       each val in manufacts
         option(value=val.id) #{val.name}
-
   if sc.ordercode.length > 1
     if sc.ordercode !== entry.ordercode
       p Ordercode do BOM (#{entry.ordercode}) difere do DB (#{sc.ordercode}): usando DB
-    label(for="order" style="width: 10ch;") Ordercode
+    label.labelbom(for="order") Ordercode
     input#order(type="text" name="ordercode" value=sc.ordercode)
   else
-    label(for="order" style="width: 10ch;") Ordercode
+    label.labelbom(for="order") Ordercode
     input#order(type="text" name="ordercode" value=entry.ordercode)
-
   p
-    label(for="supplier" style="width: 10ch;") Fornecedor:
+    label.labelbom(for="supplier") Fornecedor:
     select#supplier(name="supplier_id")
       each val in suppliers
         option(value=val.id selected=(val.id == supplier_default_id) ? "selected" : false) #{val.name}
-
   p
-    label(for="active" style="width: 10ch;") Ativo:
-    input#active(name="active" type="checkbox" checked)
-
-  p
-    label.fwidth(for="labels" style="width: 10ch;") Labels
+    label.labelbom.fwidth(for="labels") Labels
     input#labels(type="text" name="labels" value=entry.labels)
+  p
+    label.labelbom(for="box") Caixa
+    input#box(type="text" name="box" value="1")
+
   button.btn.btn-primary(type="button" onclick="return insertWithPartnumber("+index+");") Inserir
 
 hr

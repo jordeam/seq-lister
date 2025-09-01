@@ -1,6 +1,6 @@
 h4 Criando Novo Componente ou Partnumber
 
-form(id="insert"+index method="post" action="/bom/"+loc.id+"/insert" onsubmit="return false;")
+form#insert-comp(method="post" action="/bom/"+loc.id+"/insert" onsubmit="return false;")
   input#locid(type='hidden' name="loc_id" value=loc.id)
   input#index(type="hidden" name="index" value=index)
   p
@@ -26,9 +26,6 @@ form(id="insert"+index method="post" action="/bom/"+loc.id+"/insert" onsubmit="r
     select#supplier(name="supplier_id")
       each val in suppliers
         option(value=val.id selected=(val.id == supplier_default_id) ? "selected" : false) #{val.name}
-  p
-    label.labelbom(for="active") Ativo:
-    input#active(name="active" type="checkbox" checked)
   p
     label.labelbom(for="labels") Labels
     textarea#labels(rows="2" type="text" name="labels") #{entry.labels}

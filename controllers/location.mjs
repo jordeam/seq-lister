@@ -105,10 +105,10 @@ controller.home = asyncHandler(async (req, res, next) => {
   if (gotOne) {
     console.log(`Location has at least one entry with partnumber not analised`);
   }
-  const entries_w_supcodes = await seqlz.query("SELECT le.id, components.name AS cname,groups.name AS gname, le.component_id, quant, quant_unit, box,labels, cs.name AS csname, supcode_id, partnumber, ordercode FROM location_entry AS le, components, groups, cases AS cs, suppliercodes AS sc WHERE le.component_id = components.id AND group_id = groups.id AND case_id = cs.id AND location_id = ? AND sc.id = supcode_id ORDER BY groups.name, components.name", {
-            replacements: [req.params.id],
-            type: QueryTypes.SELECT
-          });
+  const entries_w_supcodes = await seqlz.query("SELECT le.id, c.name AS cname, g.name AS gname, le.component_id, le.quant, le.quant_unit, le.box, le.labels, cs.name AS csname, le.supcode_id, sc.partnumber, sc.ordercode FROM location_entry as le LEFT JOIN components as c ON c.id = le.component_id LEFT JOIN cases AS cs ON cs.id = c.case_id LEFT JOIN groups as g ON g.id = c.group_id LEFT JOIN suppliercodes as sc ON sc.id = le.supcode_id WHERE le.location_id = ? ORDER BY g.name, c.name", {
+    replacements: [req.params.id],
+    type: QueryTypes.SELECT
+  });
   res.render(/labels$/.test(req.originalUrl) ? "location_labels" : "location_home", {
     user: req.user,
     location: loc,

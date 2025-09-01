@@ -6,6 +6,7 @@ const LocationEntry = seqlz.define("location_entry", {
   labels: { type: DataTypes.TEXT, allowNull: false, defaultValue: '' },
   location_id: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0 },
   component_id: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0 },
+  supcode_id: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0 },
   quant_unit: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0 },
   quant_min: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0 },
   quant: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0 },
