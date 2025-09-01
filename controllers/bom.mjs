@@ -10,6 +10,7 @@ import Suppliercode from '../models/suppliercode.mjs';
 import Supplier from '../models/supplier.mjs';
 import Manufacturer from '../models/manufacturer.mjs';
 import SuperGroup from '../models/supergroup.mjs';
+import escapeStringRegexp from 'escape-string-regexp';
 
 const controller = {};
 
@@ -204,7 +205,7 @@ controller.query = asyncHandler(async (req, res) => {
   let sc, comp, group, ccase;
 
   if (entry.pn.length > 1)
-    sc = await Suppliercode.findOne({where: {partnumber: entry.pn}});
+    sc = await Suppliercode.findOne({where: {partnumber: {[Op.regexp]: ` *${escapeStringRegexp(entry.pn)} *`}}});
   if (sc)
     comp = await Component.findOne({where: {id: sc.component_id}});
   if (comp)
@@ -226,7 +227,7 @@ controller.query = asyncHandler(async (req, res) => {
       manufacts,
     });
   else
-    res.send("<h3> Partnumber not found: click create Component");
+    res.send("<h3> Partnumber não encontrado: use Criar Component");
 });
 
 controller.insert = asyncHandler(async (req, res) => {
@@ -274,14 +275,14 @@ controller.create = asyncHandler(async (req, res) => {
 
   let sc_pn, sc_oc;
   if (entry.pn.length > 1)
-    sc_pn = await Suppliercode.findOne({where: {partnumber: entry.pn}});
+    sc_pn = await Suppliercode.findOne({where: {partnumber: {[Op.regexp]: ` *${escapeStringRegexp(entry.pn)} *`}}});
   if (entry.ordercode.length > 1)
-    sc_oc = await Suppliercode.findOne({where: {ordercode: entry.ordercode}});
+    sc_oc = await Suppliercode.findOne({where: {ordercode: {[Op.regexp]: ` *${escapeStringRegexp(entry.ordercode)} *`}}});
   let err_str = "";
   if (sc_pn)
-    err_str += "<p>Erro: Partnumber encontrado, user criar por Partnumber\n";
+    err_str += "<p>Erro: Partnumber encontrado, use criar por Partnumber\n";
   if (sc_oc)
-    err_str += "<p>Erro: Ordercode encontrado, user criar por Ordercode\n";
+    err_str += "<p>Erro: Ordercode encontrado, use criar por Ordercode\n";
 
   if (err_str.length > 0)
     return res.send(err_str);
