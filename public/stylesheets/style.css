@@ -6,6 +6,14 @@
     text-overflow: ellipsis;
     overflow: hidden;
 }
+.fwidth20{
+    display: inline-block;
+    vertical-align: bottom;
+    width: 20ch;
+    white-space: normal;
+    text-overflow: scroll;
+    overflow: hidden;
+}
 .btn2{
     border: 0px solid green;
     border-radius: 5px;

@@ -22,16 +22,6 @@ const controller = {};
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-function deleteAllFilesInDir(dirPath) {
-  try {
-    fs.readdirSync(dirPath).forEach(file => {
-      fs.rmSync(path.join(dirPath, file));
-    });
-  } catch (error) {
-    console.log(error);
-  }
-}
-
 // List all locations
 controller.list = asyncHandler(async (req, res, next) => {
   const otherLocations = await Location.findAll({where: {quant: 0}, order: seqlz.col('name')});
@@ -45,13 +35,8 @@ controller.list = asyncHandler(async (req, res, next) => {
 
 // List all components of a location
 controller.home = asyncHandler(async (req, res, next) => {
-  // Get details of supergroup and all associated pets (in parallel)
-  const [entries, loc, allLocations] =
+  const [loc, allLocations] =
         await Promise.all([
-          seqlz.query("SELECT location_entry.id, components.name AS cname,groups.name AS gname, component_id, quant, quant_unit, box,labels, cs.name AS csname, supcode_id FROM location_entry, components, groups, cases AS cs WHERE component_id = components.id AND group_id = groups.id AND case_id = cs.id AND location_id = ? ORDER BY groups.name, components.name", {
-            replacements: [req.params.id],
-            type: QueryTypes.SELECT
-          }),
           Location.findOne({where: {id: req.params.id}}),
           Location.findAll(),
         ]);
@@ -62,50 +47,7 @@ controller.home = asyncHandler(async (req, res, next) => {
     return next(err);
   }
 
-  let gotOne = false;
-  console.log("seaching entries");
-  for (let entry of entries) {
-    if (entry.supcode_id === -1) {
-      console.log(`id ${entry.id} supplier code id ${entry.supcode_id} being precessed`);
-      gotOne = true;
-      const supcodes = await Suppliercode.findAll({where: {component_id: entry.component_id}});
-      // set the first supcode, after looks for the active and overwrites it
-      console.log(`supcodes.length=${supcodes.length}`);
-      if (supcodes.length > 0) {
-        console.log(`updating supcodes[0].id=${supcodes[0].id} in entry id ${entry.id}`);
-        // TODO: explain why it does not work:
-        // await LocationEntry.update({supcode_id: supcodes[0].id}, {where: {id: entry.id}});
-        await seqlz.query("UPDATE location_entry SET supcode_id = $1 WHERE id = $2", {
-            bind: [supcodes[0].id, entry.id],
-            type: QueryTypes.UPDATE,
-        });
-        for (const supcode of supcodes) {
-          if (supcode.active == true) {
-            console.log(`updating supcode.id=${supcode.id} in entry id ${entry.id}`);
-            // TODO: explain why it does not work:
-            // await LocationEntry.update({supcode_id: supcode.id}, {where: {id: entry.id}});
-            await seqlz.query("UPDATE location_entry SET supcode_id = $1 WHERE id = $2", {
-              bind: [supcode.id, entry.id],
-              type: QueryTypes.UPDATE,
-            });
-          }
-        }
-      }
-      else {
-        // Got no one, just set the supcode_id to 0, so it will not be processed anymore
-        // TODO: explain why it does not work:
-        // await LocationEntry.update({supcode_id: 0}, {where: {id: entry.id}});
-        await seqlz.query("UPDATE location_entry SET supcode_id = 0 WHERE id = $1", {
-          bind: [entry.id],
-          type: QueryTypes.UPDATE,
-        });
-      }
-    }
-  }
-  if (gotOne) {
-    console.log(`Location has at least one entry with partnumber not analised`);
-  }
-  const entries_w_supcodes = await seqlz.query("SELECT le.id, c.name AS cname, g.name AS gname, le.component_id, le.quant, le.quant_unit, le.box, le.labels, cs.name AS csname, le.supcode_id, sc.partnumber, sc.ordercode FROM location_entry as le LEFT JOIN components as c ON c.id = le.component_id LEFT JOIN cases AS cs ON cs.id = c.case_id LEFT JOIN groups as g ON g.id = c.group_id LEFT JOIN suppliercodes as sc ON sc.id = le.supcode_id WHERE le.location_id = ? ORDER BY g.name, c.name", {
+  const entries_w_supcodes = await seqlz.query("SELECT le.id, c.name AS cname, g.name AS gname, sc.component_id, le.quant, le.quant_unit, le.box, le.labels, cs.name AS csname, le.supcode_id, sc.partnumber, sc.ordercode FROM location_entry AS le LEFT JOIN suppliercodes AS sc ON sc.id = le.supcode_id LEFT JOIN components AS c ON c.id = sc.component_id LEFT JOIN cases AS cs ON cs.id = c.case_id LEFT JOIN groups AS g ON g.id = c.group_id WHERE le.location_id = ? ORDER BY g.name, c.name", {
     replacements: [req.params.id],
     type: QueryTypes.SELECT
   });
@@ -160,7 +102,8 @@ controller.delete = asyncHandler(async (req, res, next) => {
 
 // List all components of a location to print labels
 controller.labels_post = asyncHandler(async (req, res, next) => {
-  console.log(`location_id=${req.params.id}`);
+  const loc_id = req.params.id; // location id
+  console.log(`location_id=${loc_id}`);
   const template_dir = __dirname + '/../public/templates/';
   const component_template = fs.readFileSync(template_dir + 'label-comp.tex', 'utf-8');
   const location_template = fs.readFileSync(template_dir + 'label-loc.tex', 'utf-8');
@@ -185,7 +128,7 @@ controller.labels_post = asyncHandler(async (req, res, next) => {
   let row = 1;
   let col = 1;
   let out_str = "";
-  const location = await Location.findOne({where: {id: req.params.id}});
+  const location = await Location.findOne({where: {id: loc_id}});
   // Initial position
   for (let _ in [...Array(initPos)]) {
     out_str += "\\begin{tikzpicture}\n\\useasboundingbox (0,0) rectangle (\\labelWidth,\\labelHeight);\n\\\end{tikzpicture}%\n";
@@ -320,7 +263,7 @@ controller.labels_post = asyncHandler(async (req, res, next) => {
 controller.csv = asyncHandler(async (req, res, next) => {
   const [entries, loc] =
         await Promise.all([
-          seqlz.query("SELECT le.id, c.name AS cname, g.name AS gname, le.component_id AS compid, quant, quant_unit, box,labels, cs.name AS case_name FROM location_entry AS le, components AS c, groups AS g, cases AS cs WHERE le.component_id = c.id AND group_id = g.id AND case_id = cs.id AND location_id = ? ORDER BY g.name, c.name", {
+          seqlz.query("SELECT le.id, c.name AS cname, g.name AS gname, sc.component_id AS compid, quant, quant_unit, box,labels, cs.name AS case_name FROM location_entry AS le LEFT JOIN suppliercodes AS sc ON sc.id = le.supcode_id LEFT JOIN components AS c ON c.id = sc.component_id LEFT JOIN  groups AS g ON g.id = c.group_id LEFT JOIN cases AS cs ON cs.id = c.case_id WHERE location_id = ? ORDER BY g.name, c.name", {
             replacements: [req.params.id],
             type: QueryTypes.SELECT
           }),
@@ -369,23 +312,20 @@ controller.csv = asyncHandler(async (req, res, next) => {
     .send(csvData);
 });
 
-// List all components of a location
+// Insert component in location: deprecated: must insert by partnumber
 controller.insert_from = asyncHandler(async (req, res, next) => {
   // get entries from source location id:
     const entries = await LocationEntry.findAll({where: {location_id: req.body.location_id}});
 
   for (const entry of entries) {
-    await LocationEntry.create({labels: entry.labels, location_id: req.params.id, component_id: entry.component_id, quant_unit: entry.quant_unit, box: entry.box});
+    await LocationEntry.create({
+      labels: entry.labels,
+      location_id: req.params.id,
+      component_id: entry.component_id, // must use partnumber
+      quant_unit: entry.quant_unit,
+      box: entry.box});
   }
     res.redirect("/location/"+req.params.id);
 });
-
-function csv_remove_quotes(str) {
-  const regex = /,(?=(?:(?:[^"]*"){2})*[^"]*$)/;
-  let lst = str.split(regex);
-  for (let i in lst) {
-    lst[i] = lst[i].replace(/\"/g, '');
-  }
-}
 
 export default controller;

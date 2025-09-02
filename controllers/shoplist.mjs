@@ -12,35 +12,32 @@ controller.home = asyncHandler(async (req, res, next) => {
   let shoplist;
   const id = +req.params.id;
   if (id == 0 || id == 1)
-    shoplist = await seqlz.query("SELECT c.id AS comp_id, c.name AS cname, g.name AS gname, SUM(le.quant) AS stock, SUM(l.quant * le.quant_unit) AS needed, SUM(l.quant * le.quant_unit - le.quant) AS to_buy, cs.name AS case_name FROM locations AS l, groups AS g, components AS c, location_entry AS le, cases AS cs WHERE g.id = c.group_id AND l.id = le.location_id AND l.quant > 0 AND c.id = le.component_id AND c.case_id = cs.id GROUP BY c.id, c.name, g.name, cs.name ORDER BY gname, cname, case_name",
+    shoplist = await seqlz.query("SELECT c.id AS comp_id, c.name AS cname, g.name AS gname, SUM(le.quant) AS stock, SUM(l.quant * le.quant_unit) AS needed, SUM(l.quant * le.quant_unit - le.quant) AS to_buy, cs.name AS case_name FROM location_entry AS le LEFT JOIN suppliercodes AS sc ON sc.id = le.supcode_id LEFT JOIN components AS c ON c.id = sc.component_id LEFT JOIN groups AS g ON g.id = c.group_id LEFT JOIN cases AS cs ON cs.id = c.case_id LEFT JOIN locations AS l ON l.id = le.location_id WHERE l.quant > 0 GROUP BY c.id, c.name, g.name, cs.name ORDER BY gname, cname, case_name",
     {
       type: QueryTypes.SELECT
     });
   else
-    shoplist = await seqlz.query("SELECT c.id AS comp_id, c.name AS cname, g.name AS gname, sc.partnumber as pn, sc.ordercode as ordercode, SUM(le.quant) AS stock, SUM(l.quant * le.quant_unit) AS needed, SUM(l.quant * le.quant_unit - le.quant) AS to_buy, cs.name AS case_name FROM locations AS l, groups AS g, components AS c, location_entry AS le, cases AS cs, suppliercodes AS sc WHERE sc.supplier_id = $1 AND sc.id = le.supcode_id AND g.id = c.group_id AND l.id = le.location_id AND l.quant > 0 AND c.id = le.component_id AND c.case_id = cs.id GROUP BY c.id, c.name, g.name, cs.name, sc.partnumber, sc.ordercode ORDER BY gname, cname, case_name",
+    shoplist = await seqlz.query("SELECT c.id AS comp_id, c.name AS cname, g.name AS gname, sc.partnumber as pn, sc.ordercode as ordercode, SUM(le.quant) AS stock, SUM(l.quant * le.quant_unit) AS needed, SUM(l.quant * le.quant_unit - le.quant) AS to_buy, cs.name AS case_name FROM location_entry AS le LEFT JOIN suppliercodes AS sc ON sc.id = le.supcode_id LEFT JOIN components AS c ON c.id = sc.component_id LEFT JOIN groups AS g ON g.id = c.group_id LEFT JOIN cases AS cs ON cs.id = c.case_id LEFT JOIN locations AS l ON l.id = le.location_id WHERE sc.supplier_id = $1 AND l.quant > 0 GROUP BY c.id, c.name, g.name, cs.name, sc.partnumber, sc.ordercode ORDER BY gname, cname, case_name",
     {
       bind: [id],
       type: QueryTypes.SELECT
     });
 
-  const suppliers = await seqlz.query("SELECT s.id, s.name FROM suppliers AS s, locations AS l, components AS c, location_entry AS le, suppliercodes as sc WHERE l.id = le.location_id AND l.quant > 0 AND c.id = le.component_id AND sc.supplier_id = s.id AND sc.component_id = c.id GROUP BY s.name, s.id ORDER BY s.name",
-                                     {
-                                       type: QueryTypes.SELECT,
-                                     });
+  const suppliers = await seqlz.query("select s.id, s.name from suppliercodes AS sc LEFT JOIN suppliers AS s ON s.id = sc.supplier_id where component_id IN (select c.id FROM location_entry as le INNER JOIN suppliercodes AS sc ON le.supcode_id = sc.id INNER JOIN components AS c ON c.id = sc.component_id INNER JOIN locations as l ON l.id = le.location_id WHERE l.quant >0 GROUP BY c.id) GROUP BY s.id, s.name", {
+    type: QueryTypes.SELECT,
+  });
 
   // List all suppliers
   if (id == 0 ||  id == 1) {
     for (let i = 0; i < shoplist.length; i++) {
-      const supcodes_active = await seqlz.query("SELECT s.name, s.id FROM suppliercodes as sc, suppliers as s, location_entry AS le WHERE sc.component_id = $1 AND s.id = sc.supplier_id AND le.supcode_id = sc.id AND s.id > 1 GROUP BY s.name, s.id ORDER BY s.name",
-                                        {
-                                          bind: [shoplist[i].comp_id],
-                                          type: QueryTypes.SELECT,
-                                        });
-      const supcodes_inactive = await seqlz.query("SELECT c.name, s.name, s.id, sc.id, le.supcode_id FROM components AS c LEFT JOIN suppliercodes AS sc ON c.id = sc.component_id LEFT JOIN suppliers AS s ON s.id = sc.supplier_id LEFT JOIN location_entry AS le ON le.component_id = c.id WHERE c.id = $1 AND s.id > 1 AND le.supcode_id > 0 AND le.supcode_id <> sc.id",
-                                        {
-                                          bind: [shoplist[i].comp_id],
-                                          type: QueryTypes.SELECT,
-                                        });
+      const supcodes_active = await seqlz.query("SELECT s.name, s.id FROM suppliercodes as sc, suppliers as s, location_entry AS le WHERE sc.component_id = $1 AND s.id = sc.supplier_id AND le.supcode_id = sc.id AND s.id > 1 GROUP BY s.name, s.id ORDER BY s.name", {
+        bind: [shoplist[i].comp_id],
+        type: QueryTypes.SELECT,
+      });
+      const supcodes_inactive = await seqlz.query("select s.id, s.name from suppliercodes AS sc LEFT JOIN suppliers AS s ON s.id = sc.supplier_id WHERE component_id = $1 AND s.id NOT IN (select s.id FROM components AS c INNER JOIN suppliercodes AS sc ON sc.component_id = c.id INNER JOIN suppliers AS s ON s.id = sc.supplier_id INNER JOIN location_entry AS le ON le.supcode_id = sc.id WHERE c.id = $1 GROUP BY s.id) GROUP BY s.id, s.name", {
+        bind: [shoplist[i].comp_id],
+        type: QueryTypes.SELECT,
+      });
       if (supcodes_active.length > 0) {
         let lst = supcodes_active.map(elt => elt.name);
         shoplist[i].suppliers_a = lst.join(", ");

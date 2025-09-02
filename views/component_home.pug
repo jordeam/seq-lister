@@ -67,7 +67,7 @@ block content
           td #{val.rounding}
           td
             each elt in val.locs
-              a.btn.btn-primary(href="/location/"+elt.id)
+              a.btn.btn-primary(href="/location/"+elt.id+"/table")
                 img(src="/image/loc-icon.svg" alt="Ir" width="20pt" height="24pt")
               | &nbsp; #{elt.name} &nbsp;&nbsp;
 
@@ -79,17 +79,17 @@ block content
 
   hr
 
-  h2 Localizado em:
+  //- h2 Localizado em:
 
-  dl
-  each val in locations
-    dd
-      a(href="/location/"+val.id class='btn btn-primary')
-        img(src="/image/loc-icon.svg" alt="Ir" width="20pt" height="24pt")
-      | &nbsp;
-      a(href="/location/"+val.id+"/table" class='btn btn-primary')
-        img(src="/image/table-icon.svg" alt="Ir" width="20pt" height="24pt")
-      | &nbsp; #{val.name}/#{val.box}: #{val.quant}
+  //- dl
+  //- each val in locations
+  //-   dd
+  //-     a(href="/location/"+val.id class='btn btn-primary')
+  //-       img(src="/image/loc-icon.svg" alt="Ir" width="20pt" height="24pt")
+  //-     | &nbsp;
+  //-     a(href="/location/"+val.id+"/table" class='btn btn-primary')
+  //-       img(src="/image/table-icon.svg" alt="Ir" width="20pt" height="24pt")
+  //-     | &nbsp; #{val.name}/#{val.box}: #{val.quant}
 
   //- hr
 

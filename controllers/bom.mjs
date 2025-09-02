@@ -86,10 +86,9 @@ controller.list = asyncHandler(async (req, res, next) => {
 
 // Main page for BOM manipulating
 controller.home = asyncHandler(async (req, res, next) => {
-  // Get details of supergroup and all associated pets (in parallel)
   const [entries, loc, allLocations] =
         await Promise.all([
-          seqlz.query("SELECT location_entry.id, components.name AS cname,groups.name AS gname, component_id, quant, quant_unit, box,labels, cs.name AS csname FROM location_entry, components, groups, cases AS cs WHERE component_id = components.id AND group_id = groups.id AND case_id = cs.id AND location_id = ? ORDER BY groups.name, components.name", {
+          seqlz.query("SELECT le.id, c.name AS cname, g.name AS gname, sc.component_id, le.quant, le.quant_unit, le.box, le.labels, cs.name AS csname, le.supcode_id, sc.partnumber, sc.ordercode FROM location_entry AS le LEFT JOIN suppliercodes AS sc ON sc.id = le.supcode_id LEFT JOIN components AS c ON c.id = sc.component_id LEFT JOIN cases AS cs ON cs.id = c.case_id LEFT JOIN groups AS g ON g.id = c.group_id WHERE le.location_id = ? ORDER BY g.name, c.name", {
             replacements: [req.params.id],
             type: QueryTypes.SELECT
           }),
@@ -242,7 +241,7 @@ controller.insert = asyncHandler(async (req, res) => {
   await LocationEntry.create({
     location_id: req.params.id,
     labels: req.body.labels,
-    component_id: component_id,
+//    component_id: component_id,
     supcode_id: req.body.sc_id,
     quant_unit: req.body.qty,
   });
@@ -336,7 +335,7 @@ controller.insertComp = asyncHandler(async (req, res) => {
   await LocationEntry.create({
     location_id: req.body.loc_id,
     labels: req.body.labels,
-    component_id: comp.id,
+//    component_id: comp.id,
     supcode_id: supcode.id,
     quant_unit: req.body.qty,
     box: req.body.box,

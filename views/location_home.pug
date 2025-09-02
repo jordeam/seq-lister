@@ -108,7 +108,7 @@ block content
         dd
           a.btn.btn-primary(href='/locationentry/'+val.id+'/delete' onclick="return confirm('Tem certeza que quer excluir a entrada?');")
             img(src="/image/trash-icon.svg" alt="Excluir" width="20pt" height="24pt")
-          | &nbsp; #{val.gname}: &nbsp;
+          span.fwidth20 &nbsp; #{val.gname}: &nbsp;
           a(href='/component/' + val.component_id) #[Strong #{val.cname}]
           | &nbsp;
           if val.csname && val.csname.length > 0
