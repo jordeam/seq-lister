@@ -111,7 +111,7 @@ block content
           | &nbsp; #{val.gname}: &nbsp;
           a(href='/component/' + val.component_id) #[Strong #{val.cname}]
           | &nbsp;
-          if val.csname.length > 0
+          if val.csname && val.csname.length > 0
             | &mdash; #{val.csname}
           | &nbsp;
           a.btn(style="background: #0bb; padding: 2pt;" href="/locationentry/"+val.id) &times;#{val.quant} &nbsp; &middot;#{val.quant_unit} #[Strong cx:]#{val.box}

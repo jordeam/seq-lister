@@ -1,0 +1,5 @@
+dbname: lister
+username: jrm
+password: usx-pos2
+hostname: localhost
+dialect: postgres

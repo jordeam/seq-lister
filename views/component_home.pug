@@ -54,7 +54,7 @@ block content
         th Cód. Fornecedor
         th Fabricante
         th Arred.
-        th Ativo
+        th Localizações
       each val in suppliercodes
         tr
           td
@@ -65,13 +65,19 @@ block content
           td #{val.ordercode}
           td #{val.m_name}
           td #{val.rounding}
-          td #{val.active}
+          td
+            each elt in val.locs
+              a.btn.btn-primary(href="/location/"+elt.id)
+                img(src="/image/loc-icon.svg" alt="Ir" width="20pt" height="24pt")
+              | &nbsp; #{elt.name} &nbsp;&nbsp;
 
   p
     form(method="post" action="/suppliercode/create/"+component.id onsubmit="return insert_with_msg('Partnumber:', this.partnumber);")
       input(type="hidden" name="partnumber" value="")
       button.btn.btn-primary(type="submit")
         img(src="/image/add-icon.svg" alt="Adicionar" width="20pt" height="24pt")
+
+  hr
 
   h2 Localizado em:
 
@@ -85,16 +91,16 @@ block content
         img(src="/image/table-icon.svg" alt="Ir" width="20pt" height="24pt")
       | &nbsp; #{val.name}/#{val.box}: #{val.quant}
 
-  hr
+  //- hr
 
-  h2 Inserir em:
+  //- h2 Inserir em:
 
-  form(name="location_insert" method="post" action="/locationentry/insert/"+component.id.toString())
-    div.form-group
-      select.form-control(name="location_id")
-        each loc in allLocations
-          option(value=loc.id ) #{loc.name}
+  //- form(name="location_insert" method="post" action="/locationentry/insert/"+component.id.toString())
+  //-   div.form-group
+  //-     select.form-control(name="location_id")
+  //-       each loc in allLocations
+  //-         option(value=loc.id ) #{loc.name}
 
-    button.btn.btn-primary(type="submit") Inserir
+  //-   button.btn.btn-primary(type="submit") Inserir
 
   script(src="/script/component_new.js")

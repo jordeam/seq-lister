@@ -27,7 +27,7 @@ block content
 
       each val, i in shoplist
         tr
-          td #{i}
+          td #{i+1}
           td #{val.gname}
           td
             a(href='/component/' + val.comp_id) #[Strong #{val.cname}]
@@ -56,7 +56,7 @@ block content
 
       each val, i in shoplist
         tr
-          td #{i}
+          td #{i+1}
           td #{val.gname}
           td
             a(href='/component/' + val.comp_id) #[Strong #{val.cname}]

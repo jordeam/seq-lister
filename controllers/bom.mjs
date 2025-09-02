@@ -213,7 +213,9 @@ controller.query = asyncHandler(async (req, res) => {
   if (comp)
     ccase = await Case.findOne({where: {id: comp.case_id}});
 
-  if (sc)
+  if (sc) {
+    sc.ordercode = sc.ordercode.trim();
+    sc.partnumber = sc.partnumber.trim();
     res.render("bom_by_partnumber", {
       loc,
       entry,
@@ -226,6 +228,7 @@ controller.query = asyncHandler(async (req, res) => {
       supplier_default_id: sup.id,
       manufacts,
     });
+  }
   else
     res.send("<h3> Partnumber não encontrado: use Criar Component");
 });

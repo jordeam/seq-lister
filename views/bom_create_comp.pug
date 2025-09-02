@@ -3,61 +3,59 @@ h4 Criando Novo Componente ou Partnumber
 form#insert-comp(method="post" action="/bom/"+loc.id+"/insert" onsubmit="return false;")
   input#locid(type='hidden' name="loc_id" value=loc.id)
   input#index(type="hidden" name="index" value=index)
-  p
-    label.labelbom(for="qty") Quant.
-    input#qty(type="text" name="qty" value=entry.qty)
-  p
-    label.labelbom(for="round") Arredondamento
-    input#round(type="text" name="rounding" value="1")
-  p
-    label.labelbom(for="pn") Partnumber
-    input#pn(type="text" name="pn" value=entry.pn)
-
-  p
-    label.labelbom(for="manufact") Fabricante:
-    select#manufact(name="manufact_id")
-      each val in manufacts
-        option(value=val.id) #{val.name}
-  p
-    label.labelbom(for="order") Ordercode
-    input#order(type="text" name="ordercode" value=entry.ordercode)
-  p
-    label.labelbom(for="supplier") Fornecedor:
-    select#supplier(name="supplier_id")
-      each val in suppliers
-        option(value=val.id selected=(val.id == supplier_default_id) ? "selected" : false) #{val.name}
-  p
-    label.labelbom(for="labels") Labels
-    textarea#labels(rows="2" type="text" name="labels") #{entry.labels}
-  p
-    label.labelbom(for="box") Caixa
-    input#box(type="text" name="box" value="1")
-  p
-    label.labelbom(for="descr") Descrição:
-    textarea#descr(rows="2" name="descr") #{entry.descr}
-  p
-    label.labelbom(for="compname") Nome/valor
-    input#compname(type="text" name="compname" data-index=index value=entry.compname oninput="on_name_changed("+index+",this);")
-  p
-    label.labelbom(for="sg") Supergrupo
-    select#sg(onchange="on_supergroup_changed(this);")
-      each sg in supergroups
-        option(value=sg.id selected=(sg.id === default_supergroup) ? "selected" : false) #{sg.name}
-  p
-    label.labelbom(for="group") Grupo
-    select#group(name="group_id")
-      each group in groups
-        option(value=group.id selected=(group.id === default_group) ? "selected" : false) #{group.name}
-  p
-    label.labelbom(for="case") Encapsulamento
-    select#case(name="case_id")
-      each elt in allCases
-        option(value=elt.id) #{elt.name}
-          if elt.descr.length > 0
-            | &nbsp; &mdash; #[i #{elt.descr}]
-
+  br
+  label.labelbom(for="qty") Quant.
+  input#qty(type="text" name="qty" value=entry.qty)
+  br
+  label.labelbom(for="round") Arredondamento
+  input#round(type="text" name="rounding" value="1")
+  br
+  label.labelbom(for="pn") Partnumber
+  input#pn(type="text" name="pn" value=entry.pn)
+  br
+  label.labelbom(for="manufact") Fabricante:
+  select#manufact(name="manufact_id")
+    each val in manufacts
+      option(value=val.id) #{val.name}
+  br
+  label.labelbom(for="order") Ordercode
+  input#order(type="text" name="ordercode" value=entry.ordercode)
+  br
+  label.labelbom(for="supplier") Fornecedor:
+  select#supplier(name="supplier_id")
+    each val in suppliers
+      option(value=val.id selected=(val.id == supplier_default_id) ? "selected" : false) #{val.name}
+  br
+  label.labelbom(for="labels") Labels
+  textarea#labels(rows="2" type="text" name="labels") #{entry.labels}
+  br
+  label.labelbom(for="box") Caixa
+  input#box(type="text" name="box" value="1")
+  br
+  label.labelbom(for="descr") Descrição:
+  textarea#descr(rows="2" name="descr") #{entry.descr}
+  br
+  label.labelbom(for="compname") Nome/valor
+  input#compname(type="text" name="compname" data-index=index value=entry.compname oninput="on_name_changed("+index+",this);")
+  br
+  label.labelbom(for="sg") Supergrupo
+  select#sg(onchange="on_supergroup_changed(this);")
+    each sg in supergroups
+      option(value=sg.id selected=(sg.id === default_supergroup) ? "selected" : false) #{sg.name}
+  br
+  label.labelbom(for="group") Grupo
+  select#group(name="group_id")
+    each group in groups
+      option(value=group.id selected=(group.id === default_group) ? "selected" : false) #{group.name}
+  br
+  label.labelbom(for="case") Encapsulamento
+  select#case(name="case_id")
+    each elt in allCases
+      option(value=elt.id) #{elt.name}
+        if elt.descr.length > 0
+          | &nbsp; &mdash; #[i #{elt.descr}]
+  br
   button.btn.btn-primary(type="button" data-index=index value="0" onclick="return insertWithComp(this);") Inserir
 
   div#choices
 
-hr
