@@ -1,17 +1,16 @@
 extends base
 
 block content
-  h1 Código do Componente (#[em Partnumber])
-  h2 #[strong Componente:] #{component.name}
-  h2 #[strong Grupo:] #{group.name}
-  p
+  h1
     if suppliercode.partnumber !== undefined && suppliercode.partnumber.length > 0
       a.btn.btn-primary(href="/component/"+component.id.toString())
         img(src='/image/back-icon.svg' alt="Voltar" width="20pt" height="24pt")
-    a.btn.btn-primary(href="/suppliercode/"+suppliercode.id.toString()+'/delete')
-      img(src='/image/trash-icon.svg' alt="Excluir" width="20pt" height="24pt" onclick="return confirm('Tem certeza que quer excluir o código?');")
-
-  p Dados do Código de Componente
+    if locs.length == 0
+      a.btn.btn-primary(href="/suppliercode/"+suppliercode.id.toString()+'/delete')
+        img(src='/image/trash-icon.svg' alt="Excluir" width="20pt" height="24pt" onclick="return confirm('Tem certeza que quer excluir o código?');")
+    | &nbsp; Código do Componente #{component.name}
+  h2 #[strong Grupo:] #{group.name}
+  p
 
   form(method='POST' action=suppliercode.url)
     div.form-group
@@ -42,3 +41,15 @@ block content
 
     button.btn.btn-primary(type='submit')
       img(src='/image/ok-icon.svg' alt="Atualizar" width="20pt" height="24pt")
+
+  h2 Localizado em:
+
+  dl
+    each val in locs
+      dd
+        a(href="/location/"+val.id class='btn btn-primary')
+          img(src="/image/loc-icon.svg" alt="Ir" width="20pt" height="24pt")
+        | &nbsp;
+        a(href="/location/"+val.id+"/table" class='btn btn-primary')
+          img(src="/image/table-icon.svg" alt="Ir" width="20pt" height="24pt")
+        | &nbsp; #{val.name}/#{val.box}: #{val.quant}

@@ -40,6 +40,11 @@ function on_name_changed(obj) {
         // has some data
         const locid = +document.getElementById("locid").getAttribute('value');
         const utable = document.getElementById("utable").getAttribute('value');
+        const box = document.getElementById('box').value;
+        const quant = document.getElementById('quant').value;
+        const quant_unit = document.getElementById('quant-unit').value;
+        const labels = document.getElementById('labels').value;
+
         console.log(`locid = ${locid} table=${utable}`);
         const choices = document.getElementById("choices");
         table = document.createElement('table');
@@ -50,19 +55,31 @@ function on_name_changed(obj) {
           td1.textContent = elt.gname;
           tr.appendChild(td1);
           const td2 = document.createElement('td');
-          td2.textContent = elt.name;
+          td2.textContent = elt.compname;
           tr.appendChild(td2);
           const td3 = document.createElement('td');
           td3.textContent = elt.case;
           tr.appendChild(td3);
+          let tdx = document.createElement('td');
+          tdx.textContent = elt.partnumber;
+          tr.appendChild(tdx);
+          tdx = document.createElement('td');
+          tdx.textContent = elt.manufact;
+          tr.appendChild(tdx);
+          tdx = document.createElement('td');
+          tdx.textContent = elt.ordercode;
+          tr.appendChild(tdx);
+          tdx = document.createElement('td');
+          tdx.textContent = elt.supplier;
+          tr.appendChild(tdx);
           const td4 = document.createElement('td');
-          td4.innerHTML = '<a class="btn btn-primary" href="/component/' + elt.id +'"><img src="/image/edit-icon.svg" alt="Editar" width="20pt" height="24pt"></a>';
+          td4.innerHTML = '<a class="btn btn-primary" href="/component/' + elt.comp_id +'"><img src="/image/component-icon.svg" alt="Editar" width="20pt" height="24pt"></a>';
           tr.appendChild(td4);
           const td5 = document.createElement('td');
           const form = document.createElement('form');
           form.setAttribute('method', 'POST');
           form.setAttribute('action', '/locationentry/insert/'+locid+utable);
-          form.innerHTML = '<input type="hidden" name="component_id" value='+elt.id+'> <button class="btn btn-primary" type="submit">Inserir</button>';
+          form.innerHTML = '<input type="hidden" name="supcode_id" value=' + elt.id + '> <input type="hidden" name="box" value="' + box + '"> <input type="hidden" name="quant" value="' + quant + '"> <input type="hidden" name="quant-unit" value="' + quant_unit +'"> <input type="hidden" name="labels" value="' + labels +'"> <button class="btn btn-primary" type="submit">Inserir</button>';
 
           td5.appendChild(form);
           tr.appendChild(td5);

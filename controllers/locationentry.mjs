@@ -117,13 +117,20 @@ controller.choose = asyncHandler(async (req, res, next) => {
 
 controller.insert = asyncHandler(async (req, res, next) => {
   const location_id = (undefined === req.body.location_id) ? req.params.id : req.body.location_id;
-  const component_id = (undefined === req.body.component_id) ? req.params.id : req.body.component_id;
+  const supcode_id = +req.body.supcode_id;
 
-  const locationEntry = await LocationEntry.create({ location_id: location_id, component_id: component_id, quant: 0, quant_unit: 1, box: 1, labels: '' });
+  const locationEntry = await LocationEntry.create({
+    location_id: location_id,
+    supcode_id: supcode_id,
+    quant: req.body.quant,
+    quant_unit: req.body.quant_unit,
+    box: req.body.box,
+    labels: req.body.labels,
+  });
   if (/table$/.test(req.originalUrl))
-    res.redirect("/locationentry/" + locationEntry.id +"/table");
+    res.redirect("/location/" + location_id +"/table");
   else
-    res.redirect("/locationentry/" + locationEntry.id);
+    res.redirect("/location/" + location_id);
 });
 
 controller.createComp = asyncHandler(async (req, res, next) => {

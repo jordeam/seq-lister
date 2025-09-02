@@ -10,77 +10,25 @@ block content
 
   div.form-group
     label(for='box') Caixa:
-    input#name.form-control(type='text', placeholder='1' name='box' required='true' value="1")
+    input#box.form-control(type='text', placeholder='1' name='box' required='true' value="1")
 
     label(for='quant') Quantidade atual em estoque:
-    input#name.form-control(type='text', placeholder='0' name='quant' value="0")
+    input#quant.form-control(type='text', placeholder='0' name='quant' value="0")
 
-    label(for='quant_unit') Utilizados por montagem (por placa):
-    input#name.form-control(type='text', placeholder='1' name='quant_unit' required='true' value="1")
+    label(for='quant-unit') Utilizados por montagem (por placa):
+    input#quant-unit.form-control(type='text', placeholder='1' name='quant_unit' required='true' value="1")
 
     label(for='labels') #[Italic Label(s)] no esquemático:
-    input#name.form-control(type='text', placeholder='Labels dos componentes' name='labels' value="")
+    input#labels.form-control(type='text', placeholder='Labels dos componentes' name='labels' value="")
 
   h2 Entre com o nome do componente (ou parte)
   input#locid(type="hidden" value=location.id)
   input#utable(type="hidden" value=(usingTable ? "/table" : ""))
-
-  form(method='POST' action='/locationentry/create_comp/'+location.id+(usingTable ? "/table" : ""))
-    input(type="hidden" name="location_id" value=location.id)
-    input(type="hidden" name="box")
-    input(type="hidden" name="quant_unit")
-    input(type="hidden" name="labels")
-    input(type="hidden" name="quant")
-    p
-      input#compname(name="compname" oninput="on_name_changed(this);")
-    p
-      select#sg(onchange="on_supergroup_changed(this);")
-        each sg in supergroups
-          option(value=sg.id selected=(sg.id === default_supergroup) ? "selected" : false) #{sg.name}
-    p
-      div#group
-        select(name="group_id")
-          each group in groups
-            option(value=group.id selected=(group.id === default_group) ? "selected" : false) #{group.name}
-
-    p #[Strong Encapsulamento:] &nbsp;
-      select(name="case_id")
-        each elt in allCases
-          option(value=elt.id) #{elt.name}
-            if elt.descr.length > 0
-              | &nbsp; &mdash; #[i #{elt.descr}]
-    p
-      button.btn.btn-primary(type='submit' onclick="return fill_hidden();") Criar
+  p
+    input#compname(name="compname" oninput="on_name_changed(this);")
 
   h2 Componentes Existentes
 
   div#choices
-
-  h2 ou Escolha um componente
-
-  form(method='POST' action='/locationentry/insert/'+location.id+(usingTable ? "/table" : ""))
-    input(type="hidden" name="box")
-    input(type="hidden" name="quant_unit")
-    input(type="hidden" name="labels")
-    input(type="hidden" name="quant")
-    p
-      select#sg(onchange="on_supergroup_changed(this);")
-        each sg in supergroups
-          option(value=sg.id selected=(sg.id === default_supergroup) ? "selected" : false) #{sg.name}
-    p
-      div#group
-        select(onchange="on_group_changed(this);")
-          each group in groups
-            option(value=group.id selected=(group.id === default_group) ? "selected" : false) #{group.name}
-    p
-      div#comp
-        select(name="component_id")
-          each comp in components
-            option(value=comp.id)
-              | #{comp.name}
-              if comp.csname.length > 0
-                | &nbsp; &mdash; #{comp.csname}
-    p
-      button.btn.btn-primary(type='submit' onclick="return fill_hidden();") Escolher
 
   script(src='/script/locationentry_choose.js')

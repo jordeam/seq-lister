@@ -52,17 +52,17 @@ controller.post = asyncHandler(async (req, res, next) => {
 });
 
 controller.searchComp = asyncHandler(async (req, res, next) => {
-  const components = await seqlz.query("SELECT c.id, c.name, g.name AS g_name, cs.name as c_name, sc.id AS sc_id, sc.partnumber, sc.ordercode FROM components AS c LEFT JOIN groups AS g ON g.id = c.group_id LEFT JOIN cases as cs ON cs.id = c.case_id LEFT JOIN suppliercodes AS sc ON sc.component_id = c.id WHERE (LOWER(c.name) LIKE LOWER($1)) ORDER BY g.name, c.name, cs.name",
+  const components = await seqlz.query("select sc.id, c.id AS comp_id, c.name AS compname, g.name AS gname, cs.name AS csname, sc.partnumber,sc.ordercode, s.name AS supplier, m.name AS manufact FROM suppliercodes AS sc LEFT JOIN  components as C ON sc.component_id = c.id LEFT JOIN cases AS cs ON cs.id = c.case_id LEFT JOIN groups AS g ON g.id = c.group_id LEFT JOIN suppliers AS s ON s.id = sc.supplier_id LEFT JOIN manufacturers AS m ON m.id = sc.manufact_id WHERE (LOWER(c.name) LIKE LOWER($1)) ORDER BY g.name, c.name, cs.name, sc.partnumber",
     {
       bind: [req.query.expr + '%'],
       type: QueryTypes.SELECT,
     });
-  let ans = [];
-  for(let elt of components) {
-    ans.push({id: elt.id, name: elt.name, gname: elt.g_name, case: elt.c_name});
-  }
+  // let ans = [];
+  // for(let elt of components) {
+  //   ans.push({id: elt.id, name: elt.name, gname: elt.g_name, case: elt.c_name});
+  // }
 
-  res.json(ans);
+  res.json(components);
 });
 
 export default controller;

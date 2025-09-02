@@ -30,6 +30,12 @@ controller.home = asyncHandler(async (req, res, next) => {
     Manufacturer.findAll({order: seqlz.col('name')}),
   ]);
 
+  const locs = await seqlz.query("SELECT l.id, l.name FROM location_entry AS le LEFT JOIN locations AS l ON l.id = le.location_id WHERE le.supcode_id = $1", {
+    bind: [suppliercode.id],
+    type: QueryTypes.SELECT,
+  });
+  console.log(locs);
+
   res.render("suppliercode_home", {
     user: req.user,
     suppliercode,
@@ -37,6 +43,7 @@ controller.home = asyncHandler(async (req, res, next) => {
     group,
     suppliers,
     manufacturers,
+    locs,
   });
 });
 

@@ -102,12 +102,12 @@ controller.create = asyncHandler(async (req, res, next) => {
 // Paramameters:
 // id: is the id of component
 controller.delete = asyncHandler(async (req, res, next) => {
-    const comp = await Component.findOne({where: {id: req.params.id}});
-    const group_id = comp.group_id;
-    // must destroy all location entries
-    await LocationEntry.destroy({where: {component_id: comp.id}});
-    await comp.destroy();
-    res.redirect('/group/'+group_id.toString());
+  const comp = await Component.findOne({where: {id: req.params.id}});
+  const group_id = comp.group_id;
+  // must destroy all location entries
+  // await LocationEntry.destroy({where: {component_id: comp.id}});
+  await comp.destroy();
+  res.redirect('/group/' + group_id.toString());
 });
 
 export default controller;
