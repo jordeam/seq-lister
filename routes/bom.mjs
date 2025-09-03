@@ -14,18 +14,18 @@ router.get("/", bomController.list);
 router.get('/:id', bomController.home);
 
 // Upload a BOM list
-router.post('/:id/upload', bomController.upload);
+router.post('/:id/upload', ensureAuthenticated, bomController.upload);
 
 // Query a line of a BOM list
 router.get('/:id/query', bomController.query);
 
 // Insert an entry in location
-router.post('/:id/insert', bomController.insert);
+router.post('/:id/insert', ensureAuthenticated, bomController.insert);
 
 // Create a component
-router.get('/:id/create', bomController.create);
+router.get('/:id/create', ensureAuthenticated, bomController.create);
 
 // Insert a locationentry in location with component name or id
-router.post('/:id/insert_comp', bomController.insertComp);
+router.post('/:id/insert_comp', ensureAuthenticated, bomController.insertComp);
 
 export default router;
