@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   id="svg4847"
+   sodipodi:docname="factory-icon.svg"
+   viewBox="-20 0 600.00002 749.99998"
+   version="1.1"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   width="600"
+   height="750"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <defs
+     id="defs8590" />
+  <sodipodi:namedview
+     id="base"
+     bordercolor="#666666"
+     inkscape:pageshadow="2"
+     inkscape:window-y="32"
+     fit-margin-left="0"
+     pagecolor="#ffffff"
+     inkscape:window-height="1011"
+     inkscape:window-maximized="1"
+     inkscape:zoom="0.76124842"
+     inkscape:window-x="0"
+     showgrid="false"
+     borderopacity="1.0"
+     inkscape:current-layer="layer1"
+     inkscape:cx="227.91509"
+     inkscape:cy="254.84454"
+     fit-margin-top="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:window-width="1920"
+     inkscape:pageopacity="0.0"
+     inkscape:document-units="px"
+     inkscape:showpageshadow="0"
+     inkscape:pagecheckerboard="true"
+     inkscape:deskcolor="#d1d1d1"
+     showborder="true" />
+  <g
+     id="layer1"
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     transform="translate(-105.03,-121.31)">
+    <path
+       id="path479-6"
+       style="fill:#010101;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.755906;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+       d="M 470.41334,595.36232 V 697.21816 H 574.70465 V 593.6624 Z m -137.529,0 V 697.21816 H 437.17565 V 593.6624 Z m -137.52899,0 V 697.21816 H 299.64666 V 593.6624 Z M 145.34799,191.97156 v 600.4004 H 624.712 V 386.93742 L 471.50738,530.88474 V 386.93742 L 322.74678,528.35083 V 386.93742 l -146.266,141.82199 v -5.29451 l 47.99081,-47.99081 V 191.97156 Z"
+       sodipodi:nodetypes="cccccccccccccccccccccccccccc" />
+  </g>
+  <metadata
+     id="metadata8587">
+    <rdf:RDF>
+      <cc:Work>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <cc:license
+           rdf:resource="http://creativecommons.org/publicdomain/zero/1.0/" />
+        <dc:publisher>
+          <cc:Agent
+             rdf:about="http://openclipart.org/">
+            <dc:title>Openclipart</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/publicdomain/zero/1.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+</svg>

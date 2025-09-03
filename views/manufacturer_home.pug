@@ -1,0 +1,28 @@
+extends base
+
+block content
+  h1 #[Strong Fornecedor:] #{manufacturer.name}
+
+  p
+    if manufacturer.name !== undefined && manufacturer.name.length > 0
+      a.btn.btn-primary(href="/manufacturer/")
+        img(src='/image/back-icon.svg' alt="Voltar" width="20pt" height="24pt")
+      a.btn.btn-primary(href="/manufacturer/"+manufacturer.id.toString()+'/delete')
+        img(src='/image/trash-icon.svg' alt="Excluir" width="20pt" height="24pt" onclick="return confirm('Tem certeza que quer excluir o fornecedor?');")
+
+  p Dados do fornecedor
+
+  form(method='POST' action=manufacturer.url)
+    div.form-group
+      label(for='name') Nome:
+      input#name.form-control(placeholder='Nome fantasia' name='name' value=manufacturer.name)
+
+      label(for='descr') Descrição:
+      input#descr.form-control(placeholder='Descrição' name='descr' value=manufacturer.descr)
+
+      label(for='web') Endereço WEB:
+      input#web.form-control(placeholder='Endereço WEB' name='web' value=manufacturer.web)
+
+    button.btn.btn-primary(type='submit')
+      img(src='/image/ok-icon.svg' alt="Atualizar" width="20pt" height="24pt")
+  hr
