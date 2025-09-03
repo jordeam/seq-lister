@@ -27,8 +27,41 @@ block content
   p
     input#compname(name="compname" oninput="on_name_changed(this);")
 
-  h2 Componentes Existentes
+  h3
+    a#expand.btn.btn-primary(onclick="toogleCreate();")
+      img#exp-img(src="/image/exp-icon.svg" alt="Criar" width="20pt" height="24pt")
+      img#shr-img(style="display: none;" src="/image/shrink-icon.svg" alt="Criar" width="20pt" height="24pt")
+    | &nbsp; Criar Novo Componente
+  div#create(style="display: none;")
+    form(method='POST')
+      label(for='partnumber') Partnumber:
+      input#partnumber.form-control(placeholder='Partnumber' name='partnumber')
 
-  div#choices
+      label(for="manufact") Fabricante:
+      select#manufact.form-control(name="manufact")
+        each val in allManufacts
+          option(value=val.id) #{val.name}
+
+      label(for='ordercode') Código no fornecedor:
+      input#ordercode.form-control(placeholder='Código do fornecedor' name='ordercode')
+
+      label(for="supplier") Fornecedor:
+      select#suppliers.form-control(name="supplier")
+        each val in allSuppliers
+          option(value=val.id) #{val.name}
+
+      label(for='rounding') Arredondamento:
+      input#rounding.form-control(placeholder='Arredondamento' name='rounding')
+
+      label(for='descr') Descrição:
+      textarea#descr.form-control(rows="2" placeholder='Descrição' name='descr')
+
+    button.btn.btn-primary(type='submit')
+      img(src='/image/ok-icon.svg' alt="Criar" width="20pt" height="24pt")
+
+  div#insert
+    h3 Componentes Existentes
+
+    div#choices
 
   script(src='/script/locationentry_choose.js')

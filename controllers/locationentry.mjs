@@ -7,6 +7,8 @@ import Case from "../models/case.mjs";
 import asyncHandler from "express-async-handler";
 import Group from '../models/group.mjs';
 import SuperGroup from '../models/supergroup.mjs';
+import Manufacturer from '../models/manufacturer.mjs';
+import Supplier from '../models/supplier.mjs';
 
 const controller = {};
 
@@ -87,7 +89,7 @@ controller.choose = asyncHandler(async (req, res, next) => {
   const default_supergroup = 1;
   const default_group = 6;
 
-  const [location, allSuperGroups, allGroups, allComponents, allCases] =
+  const [location, allSuperGroups, allGroups, allComponents, allCases, allManufacts, allSuppliers] =
         await Promise.all([
           Location.findOne({ where: { id: req.params.location_id } }),
           SuperGroup.findAll({ order: [['name']] }),
@@ -99,6 +101,8 @@ controller.choose = asyncHandler(async (req, res, next) => {
                       }
                      ),
           Case.findAll({ order: [['name']]}),
+          Manufacturer.findAll({order: [['name']]}),
+          Supplier.findAll({order: [['name']]}),
         ]);
 
   const usingTable = /table$/.test(req.originalUrl) ? true : false;
@@ -112,6 +116,8 @@ controller.choose = asyncHandler(async (req, res, next) => {
     components: allComponents,
     usingTable,
     allCases,
+    allManufacts,
+    allSuppliers,
   });
 });
 
@@ -119,13 +125,19 @@ controller.insert = asyncHandler(async (req, res, next) => {
   const location_id = (undefined === req.body.location_id) ? req.params.id : req.body.location_id;
   const supcode_id = +req.body.supcode_id;
 
+  // console.log(`box=${req.body.box} quant=${req.body.quant} quant_unit=${req.body.quant_unit} labels=${req.body.labels}`);
+  let box = parseInt(req.body.box);
+  let quant = parseInt(req.body.quant);
+  let quant_unit = parseInt(req.body.quantunit);
+  let labels = req.body.labels.trim();
+
   const locationEntry = await LocationEntry.create({
     location_id: location_id,
     supcode_id: supcode_id,
-    quant: req.body.quant,
-    quant_unit: req.body.quant_unit,
-    box: req.body.box,
-    labels: req.body.labels,
+    quant,
+    quant_unit,
+    box,
+    labels,
   });
   if (/table$/.test(req.originalUrl))
     res.redirect("/location/" + location_id +"/table");

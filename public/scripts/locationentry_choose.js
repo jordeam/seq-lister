@@ -44,7 +44,7 @@ function on_name_changed(obj) {
         const quant = document.getElementById('quant').value;
         const quant_unit = document.getElementById('quant-unit').value;
         const labels = document.getElementById('labels').value;
-
+        console.log(`quant=${quant} quant_unit=${quant_unit} labels=${labels}`);
         console.log(`locid = ${locid} table=${utable}`);
         const choices = document.getElementById("choices");
         table = document.createElement('table');
@@ -79,7 +79,8 @@ function on_name_changed(obj) {
           const form = document.createElement('form');
           form.setAttribute('method', 'POST');
           form.setAttribute('action', '/locationentry/insert/'+locid+utable);
-          form.innerHTML = '<input type="hidden" name="supcode_id" value=' + elt.id + '> <input type="hidden" name="box" value="' + box + '"> <input type="hidden" name="quant" value="' + quant + '"> <input type="hidden" name="quant-unit" value="' + quant_unit +'"> <input type="hidden" name="labels" value="' + labels +'"> <button class="btn btn-primary" type="submit">Inserir</button>';
+          form.setAttribute('id', 'form'+elt.id);
+          form.innerHTML = '<input type="hidden" name="supcode_id" value=' + elt.id + '> <input type="hidden" name="box"> <input type="hidden" name="quant" value=""> <input type="hidden" name="quantunit"> <input type="hidden" name="labels"> <button class="btn btn-primary" type="submit" name="form'+elt.id+'"onclick="return setFormData(this);">Inserir</button>';
 
           td5.appendChild(form);
           tr.appendChild(td5);
@@ -93,6 +94,17 @@ function on_name_changed(obj) {
   console.log(`name=${name}`);
 }
 
+function setFormData(obj) {
+  const formId = obj.name;
+  const form = document.getElementById(formId);
+  form.elements.box.value = document.getElementById('box').value;
+  form.elements.quant.value = document.getElementById('quant').value;
+  form.elements.quantunit.value = document.getElementById('quant-unit').value;
+  form.elements.labels.value = document.getElementById('labels').value;
+  //console.log(form.elements);
+  return true;
+}
+
 function fill_hidden() {
    for (const name of ['box', 'quant', 'quant_unit', 'labels']) {
     let e = document.getElementsByName(name);
@@ -100,4 +112,22 @@ function fill_hidden() {
     e[2].setAttribute("value", e[0].value);
   }
   return true;
+}
+
+let createHidden = true;
+function toogleCreate() {
+  if (createHidden) {
+    document.getElementById("create").style.display="block";
+    document.getElementById("insert").style.display = "none";
+    document.getElementById("exp-img").style.display = "none";
+    document.getElementById("shr-img").style.display = "block";
+    createHidden = false;
+    }
+  else {
+    document.getElementById("create").style.display = "none";
+    document.getElementById("insert").style.display = "block";
+    document.getElementById("exp-img").style.display = "block";
+    document.getElementById("shr-img").style.display = "none";
+    createHidden = true;
+  }
 }
