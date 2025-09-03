@@ -36,7 +36,7 @@ form#insert-comp(method="post" action="/bom/"+loc.id+"/insert" onsubmit="return 
   textarea#descr(rows="2" name="descr") #{entry.descr}
   br
   label.labelbom(for="compname") Nome/valor
-  input#compname(type="text" name="compname" data-index=index value=entry.compname oninput="on_name_changed("+index+",this);")
+  input#compname(type="text" name="compname" data-index=index value=entry.compname oninput="on_name_changed(this);")
   br
   label.labelbom(for="sg") Supergrupo
   select#sg(onchange="on_supergroup_changed(this);")

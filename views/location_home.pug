@@ -63,7 +63,7 @@ block content
 
   h3 Componentes
 
-  a.btn.btn-primary(href='/locationentry/create/'+location.id+(usingTable? "/table" : ""))
+  a.btn.btn-primary(href='/locationentry/choose/'+location.id+(usingTable? "/table" : ""))
     img(src="/image/add-icon.svg" alt="Adicionar" width="20pt" height="24pt")
 
   if entries.length > 0
@@ -75,6 +75,7 @@ block content
           th Grupo
           th Componente
           th Case
+          th
           th Partnumber
           th Ordercode
           th Cx.
@@ -93,9 +94,10 @@ block content
               a(href='/component/' + val.component_id) #[Strong #{val.cname}]
             td &nbsp; #{val.csname}
             td
-              a(href='/suppliercode/' + val.supcode_id) #[Strong #{val.partnumber}]
-            td
-              a(href='/suppliercode/' + val.supcode_id) #[Strong #{val.ordercode}]
+              a.btn.btn-primary(href='/suppliercode/' + val.supcode_id)
+                span(style="font-size: 0.8em;") PN
+            td #[Strong #{val.partnumber}]
+            td #[Strong #{val.ordercode}]
             td(align="center") #{val.box}
             td(align="right")
               a.btn(style="background: #0bb;" href="/locationentry/"+val.id+"/table") #{val.quant}

@@ -9,36 +9,36 @@ import Group from '../models/group.mjs';
 import SuperGroup from '../models/supergroup.mjs';
 import Manufacturer from '../models/manufacturer.mjs';
 import Supplier from '../models/supplier.mjs';
+import Suppliercode from '../models/suppliercode.mjs';
 
 const controller = {};
 
 // Edit a location entry
 // need to pass locationentry, component, and location
 controller.home = asyncHandler(async (req, res, next) => {
-  const locationEntry = await LocationEntry.findOne({ where: { id: req.params.id } });
-
-  if (locationEntry === null) {
+  const le = await LocationEntry.findOne({ where: { id: req.params.id } });
+  if (le === null) {
     // No results.
     const err = new Error("Entrada na Localização não encontrada.");
     err.status = 404;
     return next(err);
   }
-
-  const [component, location] =
-    await Promise.all(
-      [Component.findOne({ where: { id: locationEntry.component_id }}),
-      Location.findOne({ where: { id: locationEntry.location_id } })]);
-
-  const ccase = await Case.findOne({ where: { id: component.case_id }});
-  const group = await Group.findOne({ where: { id: component.group_id }});
-
+  const [sc, location] =
+    await Promise.all([
+      Suppliercode.findOne({ where: { id: le.supcode_id }}),
+      Location.findOne({ where: { id: le.location_id } })
+    ]);
+  const comp = await Component.findOne({where: {id: sc.component_id}});
+  const [ccase, group] = await Promise.all([
+    Case.findOne({ where: { id: comp.case_id }}),
+    Group.findOne({ where: { id: comp.group_id }}),
+  ]);
   const from_table = /table$/.test(req.originalUrl);
-
   res.render("locationentry_home", {
     user: req.user,
-    locationentry: locationEntry,
+    locationentry: le,
     location,
-    component,
+    component: comp,
     ccase,
     group,
     from_table,
@@ -145,21 +145,43 @@ controller.insert = asyncHandler(async (req, res, next) => {
     res.redirect("/location/" + location_id);
 });
 
-controller.createComp = asyncHandler(async (req, res, next) => {
+/**
+ * Create a new component with name given by form, setting partnumber,
+ * ordercode, etc. given by form.
+ */
+controller.insertNewComp = asyncHandler(async (req, res, next) => {
   const uTable = /table$/.test(req.originalUrl) ? '/table' : '';
+  
   const component = await Component.create({group_id: req.body.group_id, name: req.body.compname, case_id: req.body.case_id});
+
+  const sc = await Suppliercode.create({
+    component_id: component.id,
+    partnumber: req.body.partnumber,
+    ordercode: req.body.ordercode,
+    manufact_id: req.body.manufact,
+    supplier_id: req.body.supplier,
+    descr: req.body.desrc,
+    rounding: req.body.rounding,
+  });
+
+  console.log(`box=${req.body.box}`);
+  console.log(`quant_unit=${req.body.quant_unit}`);
+  console.log(`quant=${req.body.quant}`);
+  console.log(`labels=${req.body.labels}`);
 
   let box = parseInt(req.body.box);
   let quant = parseInt(req.body.quant);
-  let quant_unit = parseInt(req.body.quant_unit);
+  let quant_unit = parseInt(req.body.quantunit);
   let labels = req.body.labels.trim();
 
-  console.log(`box=${box}`);
-  console.log(`quant_unit=${quant_unit}`);
-  console.log(`quant=${quant}`);
-  console.log(`labels=${labels}`);
-
-  await LocationEntry.create({ location_id: req.params.id, component_id: component.getDataValue('id'), quant: quant, quant_unit: quant_unit, box: box, labels: labels });
+  await LocationEntry.create({
+    location_id: req.params.id,
+    supcode_id: sc.id,
+    quant: quant,
+    quant_unit: quant_unit,
+    box: box,
+    labels: labels
+  });
 
   res.redirect('/location/' + req.params.id + uTable);
 });

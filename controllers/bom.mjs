@@ -281,8 +281,10 @@ controller.create = asyncHandler(async (req, res) => {
   if (entry.ordercode.length > 1)
     sc_oc = await Suppliercode.findOne({where: {ordercode: {[Op.regexp]: `^ *${escapeStringRegexp(entry.ordercode)} *$`}}});
   let err_str = "";
-  if (sc_pn)
+  if (sc_pn) {
     err_str += "<p>Erro: Partnumber encontrado, use criar por Partnumber\n";
+    console.log(sc_pn);
+  }
   if (sc_oc)
     err_str += "<p>Erro: Ordercode encontrado, use criar por Ordercode\n";
 

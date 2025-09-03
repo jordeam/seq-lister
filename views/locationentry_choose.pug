@@ -15,8 +15,8 @@ block content
     label(for='quant') Quantidade atual em estoque:
     input#quant.form-control(type='text', placeholder='0' name='quant' value="0")
 
-    label(for='quant-unit') Utilizados por montagem (por placa):
-    input#quant-unit.form-control(type='text', placeholder='1' name='quant_unit' required='true' value="1")
+    label(for='quantunit') Utilizados por montagem (por placa):
+    input#quantunit.form-control(type='text', placeholder='1' name='quantunit' required='true' value="1")
 
     label(for='labels') #[Italic Label(s)] no esquemático:
     input#labels.form-control(type='text', placeholder='Labels dos componentes' name='labels' value="")
@@ -26,41 +26,64 @@ block content
   input#utable(type="hidden" value=(usingTable ? "/table" : ""))
   p
     input#compname(name="compname" oninput="on_name_changed(this);")
-
   h3
     a#expand.btn.btn-primary(onclick="toogleCreate();")
       img#exp-img(src="/image/exp-icon.svg" alt="Criar" width="20pt" height="24pt")
       img#shr-img(style="display: none;" src="/image/shrink-icon.svg" alt="Criar" width="20pt" height="24pt")
-    | &nbsp; Criar Novo Componente
+    | &nbsp; Criar Novo Componente com Partnumber
   div#create(style="display: none;")
-    form(method='POST')
+    form#formonlycomp(method='POST' action='/locationentry/insertnewcomp/'+location.id+(usingTable ? "/table" : ""))
+      input(type="hidden" name="compname")
+      input(type="hidden" name="box")
+      input(type="hidden" name="quant")
+      input(type="hidden" name="quantunit")
+      input(type="hidden" name="labels")
+
+      label.labelbom(for="sg") Supergrupo
+      select#sg(onchange="on_supergroup_changed(this);")
+        each sg in supergroups
+          option(value=sg.id selected=(sg.id === default_supergroup) ? "selected" : false) #{sg.name}
+      br
+      label.labelbom(for="group") Grupo
+      select#group(name="group_id")
+        each group in groups
+          option(value=group.id selected=(group.id === default_group) ? "selected" : false) #{group.name}
+      br
+      label.labelbom(for="case") Encapsulamento
+      select#case(name="case_id")
+        each elt in allCases
+          option(value=elt.id) #{elt.name}
+            if elt.descr.length > 0
+              | &nbsp; &mdash; #[i #{elt.descr}]
+      br
       label(for='partnumber') Partnumber:
       input#partnumber.form-control(placeholder='Partnumber' name='partnumber')
-
+      br
       label(for="manufact") Fabricante:
       select#manufact.form-control(name="manufact")
         each val in allManufacts
           option(value=val.id) #{val.name}
-
+      br
       label(for='ordercode') Código no fornecedor:
       input#ordercode.form-control(placeholder='Código do fornecedor' name='ordercode')
-
+      br
       label(for="supplier") Fornecedor:
       select#suppliers.form-control(name="supplier")
         each val in allSuppliers
           option(value=val.id) #{val.name}
-
+      br
       label(for='rounding') Arredondamento:
       input#rounding.form-control(placeholder='Arredondamento' name='rounding')
-
+      br
       label(for='descr') Descrição:
       textarea#descr.form-control(rows="2" placeholder='Descrição' name='descr')
-
-    button.btn.btn-primary(type='submit')
-      img(src='/image/ok-icon.svg' alt="Criar" width="20pt" height="24pt")
+      div#onlycomp
+      br
+      button.btn.btn-primary(type="submit" onclick="copyFormOnlyData('formonlycomp')")
+        img(src='/image/ok-icon.svg' alt="Criar" width="20pt" height="24pt")
 
   div#insert
-    h3 Componentes Existentes
+    h3 Componentes com Partnumbers Existentes
 
     div#choices
 

@@ -6,10 +6,10 @@ import locationEntryController from "../controllers/locationentry.mjs";
 import { ensureAuthenticated } from "../controllers/users.mjs";
 
 // GET location entries
-router.post("/create_comp/:id", ensureAuthenticated, locationEntryController.createComp);
-router.post("/create_comp/:id/table", ensureAuthenticated, locationEntryController.createComp);
-router.get("/create/:location_id", ensureAuthenticated, locationEntryController.choose);
-router.get("/create/:location_id/table", ensureAuthenticated, locationEntryController.choose);
+router.post("/insertnewcomp/:id", ensureAuthenticated, locationEntryController.insertNewComp);
+router.post("/insertnewcomp/:id/table", ensureAuthenticated, locationEntryController.insertNewComp);
+router.get("/choose/:location_id", ensureAuthenticated, locationEntryController.choose);
+router.get("/choose/:location_id/table", ensureAuthenticated, locationEntryController.choose);
 router.post("/insert/:id", ensureAuthenticated, locationEntryController.insert);
 router.post("/insert/:id/table", ensureAuthenticated, locationEntryController.insert);
 router.get("/:id", locationEntryController.home);

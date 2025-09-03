@@ -35,8 +35,10 @@ function createCompClicked(wdg) {
       document.getElementById('dialog').style="display: block";
       document.getElementById('back').style='pointer-events: none; opacity: 70%;';
       const form = document.getElementById('insert-comp');
-      const obj = {value: form.elements.compname.value, dataset: {index: index}};
-      on_name_changed(obj);
+      if (form) {
+        const obj = {value: form.elements.compname.value, dataset: {index: index}};
+        on_name_changed(obj);
+      }
     });
 }
 
@@ -95,7 +97,7 @@ function on_name_changed(obj) {
     choices.innerHTML = '';
     return;
   }
-  const req = new Request('/search/comp?expr=' + encodeURIComponent(name));
+  const req = new Request('/search/onlycomp?expr=' + encodeURIComponent(name));
   fetch(req)
     .then(res => res.json())
     .then(data => {
@@ -112,26 +114,27 @@ function on_name_changed(obj) {
         choices.appendChild(msgTag);
         table = document.createElement('table');
         tbody = document.createElement('tbody');
+        const theaders = ['Grupo', 'Valor', 'Case'];
+        const tr = document.createElement('tr');
+        for (const e of theaders) {
+          const th = document.createElement('th');
+          th.innerHTML = `${e}`;
+          tr.appendChild(th);
+        }
+        tbody.appendChild(tr);
         for (let elt of data) {
+          const row_data = [elt.gname, elt.compname, elt.csname];
           const tr = document.createElement('tr');
-          const td1 = document.createElement('td');
-          td1.textContent = elt.gname;
-          tr.appendChild(td1);
-          const td2 = document.createElement('td');
-          td2.textContent = elt.compname;
-          tr.appendChild(td2);
-          const td3 = document.createElement('td');
-          td3.textContent = elt.csname;
-          tr.appendChild(td3);
-          tr.appendChild(document.createElement('td').textContent = elt.partnumber);
-          tr.appendChild(document.createElement('td').textContent = elt.manufact);
-          tr.appendChild(document.createElement('td').textContent = elt.ordercode);
-          tr.appendChild(document.createElement('td').textContent = elt.supplier);
+          for (const e of row_data) {
+            const td = document.createElement('td');
+            td.textContent = e;
+            tr.appendChild(td);
+          }
           const td4 = document.createElement('td');
           td4.innerHTML = '<a class="btn btn-primary" href="/component/' + elt.comp_id +'"><img src="/image/component-icon.svg" alt="Editar" width="20pt" height="24pt"></a>';
           tr.appendChild(td4);
           const td5 = document.createElement('td');
-          td5.innerHTML = '<button class="btn btn-primary" type="button" data-index="'+index+'" value="'+elt.id+'" onclick="return insertWithComp(this);">Inserir</button>';
+          td5.innerHTML = '<button class="btn btn-primary" type="button" data-index="'+index+'" value="'+elt.comp_id+'" onclick="return insertWithComp(this);">Inserir</button>';
           tr.appendChild(td5);
           tbody.appendChild(tr);
         }

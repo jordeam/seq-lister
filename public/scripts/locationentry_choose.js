@@ -1,3 +1,5 @@
+let createHidden = true;
+
 function on_supergroup_changed(obj) {
     const req = new Request('/group/select/'+obj.value);
     fetch(req)
@@ -29,7 +31,13 @@ function on_name_changed(obj) {
     choices.innerHTML = '';
     return;
   }
-  const req = new Request('/search/comp?expr=' + encodeURIComponent(name));
+  let req;
+  if (createHidden)
+    req = new Request('/search/comp?expr=' + encodeURIComponent(name));
+  else {
+    return;
+//    req = new Request('/search/onlycomp?expr=' + encodeURIComponent(name));
+  }
   fetch(req)
     .then(res => res.json())
     .then(data => {
@@ -40,38 +48,30 @@ function on_name_changed(obj) {
         // has some data
         const locid = +document.getElementById("locid").getAttribute('value');
         const utable = document.getElementById("utable").getAttribute('value');
-        const box = document.getElementById('box').value;
-        const quant = document.getElementById('quant').value;
-        const quant_unit = document.getElementById('quant-unit').value;
-        const labels = document.getElementById('labels').value;
-        console.log(`quant=${quant} quant_unit=${quant_unit} labels=${labels}`);
         console.log(`locid = ${locid} table=${utable}`);
         const choices = document.getElementById("choices");
         table = document.createElement('table');
         tbody = document.createElement('tbody');
+        const theaders = ['Grupo', 'Valor', 'Case'];
+        if (createHidden)
+          theaders.push('Partnumber', 'Fab.', 'Ordercode', 'Fornec.');
+        const tr = document.createElement('tr');
+        for (const e of theaders) {
+          const td = document.createElement('td');
+          td.innerHTML = `<strong>${e}</strong>`;
+          tr.appendChild(td);
+        }
+        tbody.appendChild(tr);
         for (let elt of data) {
+          const row_data = [elt.gname, elt.compname, elt.case];
+          if (createHidden)
+            row_data.push(elt.partnumber, elt.manufact, elt.ordercode, elt.supplier);
           const tr = document.createElement('tr');
-          const td1 = document.createElement('td');
-          td1.textContent = elt.gname;
-          tr.appendChild(td1);
-          const td2 = document.createElement('td');
-          td2.textContent = elt.compname;
-          tr.appendChild(td2);
-          const td3 = document.createElement('td');
-          td3.textContent = elt.case;
-          tr.appendChild(td3);
-          let tdx = document.createElement('td');
-          tdx.textContent = elt.partnumber;
-          tr.appendChild(tdx);
-          tdx = document.createElement('td');
-          tdx.textContent = elt.manufact;
-          tr.appendChild(tdx);
-          tdx = document.createElement('td');
-          tdx.textContent = elt.ordercode;
-          tr.appendChild(tdx);
-          tdx = document.createElement('td');
-          tdx.textContent = elt.supplier;
-          tr.appendChild(tdx);
+          for (const e of row_data) {
+            const td = document.createElement('td');
+            td.textContent = e;
+            tr.appendChild(td);
+          }
           const td4 = document.createElement('td');
           td4.innerHTML = '<a class="btn btn-primary" href="/component/' + elt.comp_id +'"><img src="/image/component-icon.svg" alt="Editar" width="20pt" height="24pt"></a>';
           tr.appendChild(td4);
@@ -89,7 +89,6 @@ function on_name_changed(obj) {
         table.appendChild(tbody);
         choices.appendChild(table);
       }
-
     });
   console.log(`name=${name}`);
 }
@@ -99,7 +98,7 @@ function setFormData(obj) {
   const form = document.getElementById(formId);
   form.elements.box.value = document.getElementById('box').value;
   form.elements.quant.value = document.getElementById('quant').value;
-  form.elements.quantunit.value = document.getElementById('quant-unit').value;
+  form.elements.quantunit.value = document.getElementById('quantunit').value;
   form.elements.labels.value = document.getElementById('labels').value;
   //console.log(form.elements);
   return true;
@@ -114,7 +113,6 @@ function fill_hidden() {
   return true;
 }
 
-let createHidden = true;
 function toogleCreate() {
   if (createHidden) {
     document.getElementById("create").style.display="block";
@@ -130,4 +128,15 @@ function toogleCreate() {
     document.getElementById("shr-img").style.display = "none";
     createHidden = true;
   }
+}
+
+function copyFormOnlyData(formName) {
+  const form = document.getElementById(formName);
+  const compname = document.getElementById('compname').value;
+  form.elements.compname.value = compname;
+  form.elements.box.value = document.getElementById('box').value;
+  form.elements.quant.value = document.getElementById('quant').value;
+  form.elements.quantunit.value = document.getElementById('quantunit').value;
+  form.elements.labels.value = document.getElementById('labels').value;
+  return true;
 }
