@@ -1,3 +1,4 @@
+import { QueryTypes } from 'sequelize';
 import { seqlz } from '../db.mjs';
 import Manufacturer from "../models/manufacturer.mjs";
 
@@ -25,10 +26,14 @@ controller.home = asyncHandler(async (req, res, next) => {
     err.status = 404;
     return next(err);
   }
-
+  const partnumbers = await seqlz.query("SELECT sc.id, partnumber, s.name AS supname, ordercode, g.name AS gname, c.name AS compname, cs.name AS csname FROM suppliercodes AS sc LEFT JOIN components AS c ON c.id = sc.component_id LEFT JOIN groups AS g ON g.id = c.group_id LEFT JOIN cases AS cs ON cs.id = c.case_id LEFT JOIN suppliers AS s ON s.id = sc.supplier_id WHERE sc.manufact_id = $1 ORDER BY g.name, c.name, cs.name, partnumber", {
+    bind: [req.params.id],
+    type: QueryTypes.SELECT,
+  });
   res.render("manufacturer_home", {
     user: req.user,
     manufacturer,
+    partnumbers,
   });
 });
 

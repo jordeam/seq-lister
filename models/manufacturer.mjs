@@ -1,7 +1,7 @@
 import { seqlz } from "../db.mjs";
 import { DataTypes } from "sequelize";
 
-const Manufacturers = seqlz.define("manufacturers", {
+const Manufacturer = seqlz.define("manufacturers", {
   id: {type: DataTypes.INTEGER, autoIncrement: true, allowNull: false, primaryKey: true, unique: true},
   name: {type: DataTypes.TEXT, defaultValue: '', allowNull: false},
   descr: { type: DataTypes.TEXT, defaultValue: ''},
@@ -18,4 +18,4 @@ const Manufacturers = seqlz.define("manufacturers", {
                                   raw: true
                                 });
 
-export default Manufacturers;
+export default Manufacturer;

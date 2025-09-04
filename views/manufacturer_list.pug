@@ -9,10 +9,12 @@ block content
       button.btn.btn-primary(type="submit")
         img(src='/image/add-icon.svg' alt="Adicionar" width="20pt" height="24pt")
 
-  ul
+  dl
   each val in manufacturers
-    li
-      a(href='/manufacturer/' + val.id.toString()) #{val.name}
+    dd
+      a.btn.btn-primary(href='/manufacturer/' + val.id.toString())
+        img(src="/image/edit-icon.svg" alt="Editar")
+      | #{val.name}
 
   else
     li Não existem fornecedores.

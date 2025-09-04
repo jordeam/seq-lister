@@ -51,3 +51,8 @@
     overflow-y: scroll;
     /* max-width: 500px; */
 }
+a img {
+  /* Your CSS styles here */
+    width: 16pt;
+    height: 20pt;
+}

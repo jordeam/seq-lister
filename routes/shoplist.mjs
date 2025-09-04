@@ -7,7 +7,7 @@ import shoplistController from "../controllers/shoplist.mjs";
 /// Shop List ///
 
 // GET CSV
-router.get("/:id/csv", shoplistController.csv);
+router.get("/:id/csv", shoplistController.home);
 
 // GET group list
 router.get("/:id", shoplistController.home);

@@ -17,7 +17,7 @@ controller.home = asyncHandler(async (req, res, next) => {
       type: QueryTypes.SELECT
     });
   else
-    shoplist = await seqlz.query("SELECT c.id AS comp_id, c.name AS cname, g.name AS gname, sc.partnumber as pn, sc.ordercode as ordercode, SUM(le.quant) AS stock, SUM(l.quant * le.quant_unit) AS needed, SUM(l.quant * le.quant_unit - le.quant) AS to_buy, cs.name AS case_name FROM location_entry AS le LEFT JOIN suppliercodes AS sc ON sc.id = le.supcode_id LEFT JOIN components AS c ON c.id = sc.component_id LEFT JOIN groups AS g ON g.id = c.group_id LEFT JOIN cases AS cs ON cs.id = c.case_id LEFT JOIN locations AS l ON l.id = le.location_id WHERE sc.supplier_id = $1 AND l.quant > 0 GROUP BY c.id, c.name, g.name, cs.name, sc.partnumber, sc.ordercode ORDER BY gname, cname, case_name",
+    shoplist = await seqlz.query("SELECT c.id AS comp_id, c.name AS cname, g.name AS gname, sc.partnumber, sc.ordercode as ordercode, SUM(le.quant) AS stock, SUM(l.quant * le.quant_unit) AS needed, SUM(l.quant * le.quant_unit - le.quant) AS to_buy, cs.name AS case_name FROM location_entry AS le LEFT JOIN suppliercodes AS sc ON sc.id = le.supcode_id LEFT JOIN components AS c ON c.id = sc.component_id LEFT JOIN groups AS g ON g.id = c.group_id LEFT JOIN cases AS cs ON cs.id = c.case_id LEFT JOIN locations AS l ON l.id = le.location_id WHERE sc.supplier_id = $1 AND l.quant > 0 GROUP BY c.id, c.name, g.name, cs.name, sc.partnumber, sc.ordercode ORDER BY gname, cname, case_name",
     {
       bind: [id],
       type: QueryTypes.SELECT
@@ -49,57 +49,43 @@ controller.home = asyncHandler(async (req, res, next) => {
     }
   }
 
-  let supplier;
-  if (id > 0)
-    supplier = await Supplier.findOne({where: {id: id}});
-  res.render('shoplist_home',
-    {
+  if (/csv/.test(req.originalUrl)) {
+    let csvData;
+    // initializing the CSV string content with the headers
+    if (id === 0 || id === 1) {
+      csvData = ["Item", "Tipo", "Valor ", "Case", "Em Estoque", "Necessário", "A Comprar", "Fornecedor", "Outros fornecedores"].join(",") + "\r\n";
+      let i = 0;
+      shoplist.forEach((elt) => {
+        // populating the CSV content
+        // and converting the null fields to ""
+        csvData += [++i, elt.gname, '"' + elt.cname + '"', '"' + elt.case_name + '"', elt.stock, elt.needed, elt.to_buy, elt.suppliers_a, elt.suppliers_i].join(",") + "\r\n";
+      });
+    }
+    else {
+      csvData = ["Item", "Tipo", "Valor ", "Case", "Em Estoque", "Necessário", "A Comprar", "PN", "OrderCode"].join(",") + "\r\n";
+      let i = 0;
+      shoplist.forEach((elt) => {
+        // populating the CSV content
+        // and converting the null fields to ""
+        csvData += [++i, elt.gname, '"' + elt.cname + '"', '"' + elt.case_name + '"', elt.stock, elt.needed, elt.to_buy, elt.partnumber, elt.ordercode].join(",") + "\r\n";
+      });
+    }
+    res.set({
+      "Content-Type": "text/csv",
+      "Content-Disposition": `attachment; filename="shoplist.csv"`,
+    })
+    .send(csvData);
+  }
+  else {
+    let supplier = await Supplier.findOne({where: {id: id}});
+    res.render('shoplist_home', {
       user: req.user,
       id: req.params.id,
       shoplist,
       suppliers,
       supplier,
     });
-});
-
-controller.csv = asyncHandler(async (req, res, next) => {
-  const shoplist = await seqlz.query("SELECT c.name AS cname, g.name AS gname, sum(le.quant) AS stock, sum(l.quant * le.quant_unit) AS needed, sum(l.quant * le.quant_unit - le.quant) AS to_buy, cs.name AS case_name, c.id AS compid FROM locations AS l, groups AS g, components AS c, location_entry AS le, cases AS cs WHERE g.id = c.group_id AND l.id = le.location_id AND l.quant > 0 AND c.id = le.component_id AND c.case_id = cs.id GROUP BY c.id, c.name, g.name, cs.name ORDER BY gname, cname, case_name",
-    {
-      type: QueryTypes.SELECT
-    });
-
-  // Find Mouser supplier ID
-  const sup = await Supplier.findOne({where: {name: {[Op.regexp]: 'Mouser'}}});
-  const mouser_id = sup.id;
-
-  for (let i = 0; i < shoplist.length; i++) {
-    const supcode = await Suppliercode.findOne({where: {component_id: shoplist[i].compid, supplier_id: mouser_id}});
-    if (supcode) {
-      shoplist[i].supcode = supcode.ordercode;
-      shoplist[i].partnumber = supcode.partnumber;
-    }
-    else {
-      shoplist[i].supcode = "";
-      shoplist[i].partnumber = "";
-    }
   }
-
-  // initializing the CSV string content with the headers
-  let csvData = ["Tipo", "Valor", "Case", "Em Estoque", "Necessário", "A Comprar", "PN", "OrderCode"].join(",") + "\r\n";
-
-  shoplist.forEach((elt) => {
-    // populating the CSV content
-    // and converting the null fields to ""
-    csvData += [elt.gname, '"'+elt.cname+'"', '"'+elt.case_name+'"', elt.stock, elt.needed, elt.to_buy, elt.partnumber, elt.supcode].join(",") + "\r\n";
-  });
-
-  // returning the CSV content via the "users.csv" file
-  res
-    .set({
-      "Content-Type": "text/csv",
-      "Content-Disposition": `attachment; filename="shoplist.csv"`,
-    })
-    .send(csvData);
 });
 
 export default controller;

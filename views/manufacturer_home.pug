@@ -1,14 +1,16 @@
 extends base
 
 block content
-  h1 #[Strong Fornecedor:] #{manufacturer.name}
+  h1 #[Strong Fabricante:] #{manufacturer.name}
 
   p
     if manufacturer.name !== undefined && manufacturer.name.length > 0
       a.btn.btn-primary(href="/manufacturer/")
         img(src='/image/back-icon.svg' alt="Voltar" width="20pt" height="24pt")
-      a.btn.btn-primary(href="/manufacturer/"+manufacturer.id.toString()+'/delete')
-        img(src='/image/trash-icon.svg' alt="Excluir" width="20pt" height="24pt" onclick="return confirm('Tem certeza que quer excluir o fornecedor?');")
+      if partnumbers.length === 0
+        | &nbsp;
+        a.btn.btn-primary(href="/manufacturer/"+manufacturer.id.toString()+'/delete')
+          img(src='/image/trash-icon.svg' alt="Excluir" onclick="return confirm('Tem certeza que quer excluir o fornecedor?');")
 
   p Dados do fornecedor
 
@@ -26,3 +28,27 @@ block content
     button.btn.btn-primary(type='submit')
       img(src='/image/ok-icon.svg' alt="Atualizar" width="20pt" height="24pt")
   hr
+
+  if partnumbers.length > 0
+    h2 Partnumbers do fabricante
+    table
+      tr
+        th
+        th Grupo
+        th Valor
+        th Case
+        th Partnumber
+        th Fabricante
+        th Ordercode
+      each elt in partnumbers
+        tr
+          td
+            a.btn.btn-primary(href="/suppliercode/"+elt.id)
+              img(src="/image/edit-icon.svg" alt="Editar")
+          td #{elt.gname}
+          td #{elt.compname}
+          td #{elt.csname}
+          td #{elt.partnumber}
+          td #{elt.mname}
+          td #{elt.ordercode}
+
