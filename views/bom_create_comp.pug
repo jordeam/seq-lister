@@ -16,7 +16,7 @@ form#insert-comp(method="post" action="/bom/"+loc.id+"/insert" onsubmit="return 
   label.labelbom(for="manufact") Fabricante:
   select#manufact(name="manufact_id")
     each val in manufacts
-      option(value=val.id) #{val.name}
+      option(value=val.id selected=(val.id == entry.mfr) ? "selected" : false) #{val.name}
   br
   label.labelbom(for="order") Ordercode
   input#order(type="text" name="ordercode" value=entry.ordercode)
@@ -24,7 +24,7 @@ form#insert-comp(method="post" action="/bom/"+loc.id+"/insert" onsubmit="return 
   label.labelbom(for="supplier") Fornecedor:
   select#supplier(name="supplier_id")
     each val in suppliers
-      option(value=val.id selected=(val.id == supplier_default_id) ? "selected" : false) #{val.name}
+      option(value=val.id selected=(val.id == entry.sup) ? "selected" : false) #{val.name}
   br
   label.labelbom(for="labels") Labels
   textarea#labels(rows="2" type="text" name="labels") #{entry.labels}

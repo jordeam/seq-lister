@@ -15,67 +15,100 @@ import escapeStringRegexp from 'escape-string-regexp';
 const controller = {};
 
 /**
- * Scan a line index+1 in BOM string to fill entry fields: qty, labels, pn,
- * order, compname, descr;
+ * Return the id of str in name field. Return -1 if not found
+ * lst must be in the form [{id: Number name: String}, ...]
  */
-function makeEntries(bom_str, index) {
+function findInList(str, lst) {
+  let i = -1;
+  for (const elt of lst) {
+    console.log(`id=${elt.id} name=${elt.name} str=${str}`);
+//    if (elt.name.trim().toLowerCase().search(str.trim().toLowerCase()) >= 0) {
+//    if (elt.name.trim().toLowerCase().search(str.trim().toLowerCase()) >= 0) {
+    const reg = new RegExp(`\\b${str}\\b`, 'ig');
+    if (elt.name.match(reg)) {
+      i = elt.id;
+      break;
+    }
+  }
+  console.log(`i=${i}`);
+  return i;
+}
+
+/**
+ * return all indexes of entries in str
+ */
+function makeEntryIndexes(headerStr, mfrList, supList) {
   const regex = /,(?=(?:(?:[^"]*"){2})*[^"]*$)/;
-  const bom_lst = bom_str.split(/\r?\n/);
-  const header = bom_lst[0].split(regex);
-  let qty, labels, pn, order, compname, descr;
+  const header = headerStr.split(regex);
+  let qty, labels, pn, order, compname, descr, mfr, sup;
   console.log(`header=%j`, header);
   for (const i in header) {
     if (/Qty/i.test(header[i]))
       qty = +i;
     else if (/Reference/i.test(header[i]))
       labels = +i;
-    else if (/(Part *Number)|(mfg#)/i.test(header[i]))
+    else if (/(Part *Number)|(mfg#)|(mfr#)/i.test(header[i]))
       pn = +i;
-    else if (/Mouser/i.test(header[i]))
+    else if (/(mfg)|(mfr)|(Manufacturer)/i.test(header[i]))
+      mfr = + i;
+    else if (/(Vendor)|(Sup)|(Supplier)/i.test(header[i]))
+      sup = + i;
+    else if (/(oc)|(oc#)|(Order *Code)/i.test(header[i]))
      order = +i;
     else if (/Value/i.test(header[i]))
       compname = +i;
     else if (/Descr.*/i.test(header[i]))
       descr = +i;
   }
+  console.log({qty, labels, pn, order, compname, descr, mfr, sup});
+  return {qty, labels, pn, order, compname, descr, mfr, sup};
+}
 
-  // console.log(`qty=${qty} ref=${ref} pn=${pn} compname=${compname} order=${order}`);
-
-
-  const line = bom_lst[index + 1];
-  const lst = line.split(regex);
-  console.log(`line=${line}`);
+/**
+ * Scan a line index+1 in BOM string to fill entry fields: qty, labels, pn,
+ * order, compname, descr;
+ */
+function makeEntries(indx, entryLine, mfrList, supList) {
+  const regex = /,(?=(?:(?:[^"]*"){2})*[^"]*$)/;
+  const lst = entryLine.split(regex);
+  console.log(`line=${entryLine}`);
   let entry = {};
   if (lst.length > 6) {
     entry.status = lst[0];
     entry.compId = lst[1];
     entry.leId = lst[2];
-    if (qty)
-      entry.qty = lst[qty] === undefined ? 0 : parseInt(lst[qty].replace(/\"/g, ''));
+    if (indx.qty)
+      entry.qty = lst[indx.qty] === undefined ? 0 : parseInt(lst[indx.qty].replace(/\"/g, ''));
     else
       entry.qty = 0;
-    if (pn)
-      entry.pn = lst[pn].replace(/\"/g, '').trim();
+    if (indx.pn)
+      entry.pn = lst[indx.pn].replace(/\"/g, '').trim();
     else
       entry.pn = "";
-    if (order)
-      entry.ordercode = lst[order] ? lst[order].replace(/\"/g, '').trim() : "";
+    if (indx.order)
+      entry.ordercode = lst[indx.order] ? lst[indx.order].replace(/\"/g, '').trim() : "";
     else
       entry.ordercode = "";
-    if (labels)
-      entry.labels = lst[labels].replace(/\"/g, '').trim();
+    if (indx.labels)
+      entry.labels = lst[indx.labels].replace(/\"/g, '').trim();
     else
       entry.labels = "";
-    if (compname)
-      entry.compname = lst[compname].replace(/\"/g, '').trim();
+    if (indx.compname)
+      entry.compname = lst[indx.compname].replace(/\"/g, '').trim();
     else
       entry.compname = "";
-    if (descr)
-      entry.descr = lst[descr].replace(/\"/g, '').trim();
+    if (indx.descr)
+      entry.descr = lst[indx.descr].replace(/\"/g, '').trim();
     else
       entry.descr = "";
+    if (indx.mfr && indx.mfr >= 0)
+      // -1 if not found else id the manufacturer id
+      entry.mfr = findInList(lst[indx.mfr].replace(/\"/g, '').trim(), mfrList);
+    if (indx.sup && indx.sup >= 0)
+      // -1 if not found else id the manufacturer id
+      entry.sup = findInList(lst[indx.sup].replace(/\"/g, '').trim(), supList);
   }
-  console.log(`compname=${compname}\nentry=%j`, entry);
+  console.log(`compname=${entry.compname}\nentry=%j`, entry);
   return entry;
 }
 
@@ -86,14 +119,16 @@ controller.list = asyncHandler(async (req, res, next) => {
 
 // Main page for BOM manipulating
 controller.home = asyncHandler(async (req, res, next) => {
-  const [entries, loc, allLocations] =
+  const [entries, loc, allLocations, allSuppliers, allManufacturers] =
         await Promise.all([
           seqlz.query("SELECT le.id, c.name AS cname, g.name AS gname, sc.component_id, le.quant, le.quant_unit, le.box, le.labels, cs.name AS csname, le.supcode_id, sc.partnumber, sc.ordercode FROM location_entry AS le LEFT JOIN suppliercodes AS sc ON sc.id = le.supcode_id LEFT JOIN components AS c ON c.id = sc.component_id LEFT JOIN cases AS cs ON cs.id = c.case_id LEFT JOIN groups AS g ON g.id = c.group_id WHERE le.location_id = ? ORDER BY g.name, c.name", {
             replacements: [req.params.id],
             type: QueryTypes.SELECT
           }),
           Location.findOne({where: {id: req.params.id}}),
-          Location.findAll(),
+          Location.findAll({order: seqlz.col('name')}),
+          Supplier.findAll({order: seqlz.col('name')}),
+          Manufacturer.findAll({order: seqlz.col('name')}),
         ]);
   if (loc === null) {
     // No results.
@@ -101,54 +136,14 @@ controller.home = asyncHandler(async (req, res, next) => {
     err.status = 404;
     return next(err);
   }
-
   const bom_lst = loc.get('bom').split(/\r?\n/);
-
   console.log(`Header=${bom_lst[0]}`);
-  const header = bom_lst[0].split(/ *, */);
-  let qty, ref, pn, compname, ordercode;
-  for (const i in header) {
-    if (/Qty/i.test(header[i]))
-      qty = +i;
-    else if (/Reference/i.test(header[i]))
-      ref = +i;
-    else if (/(Part *Number)|(mfg#)/i.test(header[i]))
-      pn = +i;
-    else if (/Value/i.test(header[i]))
-     compname = +i;
-    else if (/Mouser/i.test(header[i]))
-     ordercode = +i;
-  }
-
-  console.log(`qty=${qty} ref=${ref} pn=${pn} compname=${compname} ordercode=${ordercode}`);
-
+  const indx = makeEntryIndexes(bom_lst[0], allManufacturers, allSuppliers);
   let bom = [];
-
-  const regex = /,(?=(?:(?:[^"]*"){2})*[^"]*$)/;
-
   for (const line of bom_lst.slice(1)) {
-    const lst = line.split(regex);
-    //console.log(`lst[0]=${lst[0]} line=${line}`);
-    if (lst.length > 6) {
-      let entry = {};
-      entry.status = lst[0];
-      entry.compId = lst[1];
-      entry.leId = lst[2];
-      if (qty)
-        entry.qty = lst[qty] === undefined ? 0 : parseInt(lst[qty].replace(/\"/g, ''));
-      if (ref)
-        entry.ref = lst[ref].replace(/\"/g, '');
-      if (pn)
-        entry.pn = lst[pn].replace(/\"/g, '');
-      if (compname)
-        entry.compname = lst[compname].replace(/\"/g, '');
-      if (ordercode)
-        entry.ordercode = lst[ordercode] ? lst[ordercode].replace(/\"/g, '').trim() : "";
-      console.log("entry=%j", entry);
-      bom.push(entry);
-    }
+    const entry = makeEntries(indx, line, allManufacturers, allSuppliers);
+    bom.push(entry);
   }
-
   res.render("bom_home", {
     user: req.user,
     location: loc,
@@ -195,11 +190,13 @@ controller.query = asyncHandler(async (req, res) => {
   const index = +req.query.line;
   // get location
   const loc = await Location.findOne({where: {id: locId}});
-  const suppliers = await Supplier.findAll();
-  const sup = await Supplier.findOne({where: {name: {[Op.regexp]: 'Mouser'}}});
-  const manufacts = await Manufacturer.findAll();
+  const suppliers = await Supplier.findAll({order: seqlz.col('name')});
+  const manufacts = await Manufacturer.findAll({order: seqlz.col('name')});
 
-  const entry = makeEntries(loc.bom, index);
+  const bom_lst = loc.get('bom').split(/\r?\n/);
+  //  console.log(`Header=${bom_lst[0]}`);
+  const indx = makeEntryIndexes(bom_lst[0], manufacts, suppliers);
+  const entry = makeEntries(indx, bom_lst[index + 1], manufacts, suppliers);
 
   let sc, comp, group, ccase;
 
@@ -224,7 +221,6 @@ controller.query = asyncHandler(async (req, res) => {
       comp,
       group,
       suppliers,
-      supplier_default_id: sup.id,
       manufacts,
     });
   }
@@ -261,19 +257,22 @@ controller.insert = asyncHandler(async (req, res) => {
 controller.create = asyncHandler(async (req, res) => {
   const locId = +req.params.id;
   const index = +req.query.line;
+  console.log(`index=${index}`);
   // get location
-  const [loc, suppliers, sup, manufacts, allCases, groups, supergroups] =
+  const [loc, suppliers, manufacts, allCases, groups, supergroups] =
         await Promise.all([
           Location.findOne({where: {id: locId}}),
           Supplier.findAll({order: seqlz.col('name')}),
-          Supplier.findOne({where: {name: {[Op.regexp]: 'Mouser'}}}),
           Manufacturer.findAll({order: seqlz.col('name')}),
           Case.findAll({order: seqlz.col('name')}),
           Group.findAll({order: seqlz.col('name')}),
           SuperGroup.findAll({order: seqlz.col('name')}),
         ]);
 
-  const entry = makeEntries(loc.bom, index);
+  const bom_lst = loc.get('bom').split(/\r?\n/);
+  //  console.log(`Header=${bom_lst[0]}`);
+  const indx = makeEntryIndexes(bom_lst[0], manufacts, suppliers);
+  const entry = makeEntries(indx, bom_lst[index + 1], manufacts, suppliers);
 
   let sc_pn, sc_oc;
   if (entry.pn.length > 1)
@@ -296,7 +295,6 @@ controller.create = asyncHandler(async (req, res) => {
     entry,
     index,
     suppliers,
-    supplier_default_id: sup.id,
     manufacts,
     allCases,
     groups,
