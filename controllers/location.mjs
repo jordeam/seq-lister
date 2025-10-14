@@ -56,29 +56,24 @@ controller.home = asyncHandler(async (req, res, next) => {
     location: loc,
     entries: entries_w_supcodes,
     allLocations,
-    usingTable: /table$/.test(req.originalUrl),
   });
 });
 
 // Update a component of a location
 controller.update = asyncHandler(async (req, res, next) => {
     const loc = await Location.findOne({ where: {id: req.params.id}});
-
     if (loc === null) {
         // No results.
         const err = new Error("Localização não encontrada");
         err.status = 404;
         return next(err);
     }
-
-    loc.name = req.body.name;
+    loc.name = req.body.name.trim();
     loc.quant = req.body.quant;
-    loc.note = req.body.note;
+    loc.note = req.body.note.trim();
     loc.nbox = req.body.nbox;
-
     await loc.save();
-
-    res.redirect(loc.url+(/table$/.test(req.originalUrl) ? "/table" : ""));
+    res.redirect(loc.url);
 });
 
 // Create a location

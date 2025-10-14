@@ -23,7 +23,7 @@ block content
 
   h2 Entre com o nome do componente (ou parte)
   input#locid(type="hidden" value=location.id)
-  input#utable(type="hidden" value=(usingTable ? "/table" : ""))
+
   p
     input#compname(name="compname" oninput="on_name_changed(this);")
   h3
@@ -32,7 +32,7 @@ block content
       img#shr-img(style="display: none;" src="/image/shrink-icon.svg" alt="Criar" width="20pt" height="24pt")
     | &nbsp; Criar Novo Componente com Partnumber
   div#create(style="display: none;")
-    form#formonlycomp(method='POST' action='/locationentry/insertnewcomp/'+location.id+(usingTable ? "/table" : ""))
+    form#formonlycomp(method='POST' action='/locationentry/insertnewcomp/'+location.id)
       input(type="hidden" name="compname")
       input(type="hidden" name="box")
       input(type="hidden" name="quant")

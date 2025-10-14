@@ -35,7 +35,7 @@ controller.list = asyncHandler(async (req, res, next) => {
 
 // Create a new supergroup
 controller.create = asyncHandler(async (req, res, next) => {
-  const spgrp = await Supergroup.create({name: req.body.name});
+  const spgrp = await Supergroup.create({name: req.body.name.trim()});
 
   return res.redirect(spgrp.url);
 });

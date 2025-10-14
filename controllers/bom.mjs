@@ -149,7 +149,6 @@ controller.home = asyncHandler(async (req, res, next) => {
     location: loc,
     entries,
     allLocations,
-    usingTable: /table$/.test(req.originalUrl),
     bom,
   });
 });
@@ -232,11 +231,9 @@ controller.insert = asyncHandler(async (req, res) => {
   // Find Mouser supplier ID
   console.log(req.body);
 
-  const component_id = req.body.comp_id;
-
   await LocationEntry.create({
     location_id: req.params.id,
-    labels: req.body.labels,
+    labels: req.body.labels.trim(),
 //    component_id: component_id,
     supcode_id: req.body.sc_id,
     quant_unit: req.body.qty,
@@ -308,7 +305,7 @@ controller.insertComp = asyncHandler(async (req, res) => {
   if (comp_id == 0) {
     // if component id is zero, let's create a new component with compname and group id;
     comp = await Component.create({
-      name: req.body.compname,
+      name: req.body.compname.trim(),
       group_id: req.body.group_id,
       case_id: req.body.case_id,});
   }
@@ -326,7 +323,7 @@ controller.insertComp = asyncHandler(async (req, res) => {
       component_id: comp.id,
       manufact_id: req.body.manufact_id,
       partnumber: pn,
-      descr:req.body.descr,
+      descr:req.body.descr.trim(),
       ordercode,
       rounding: req.body.round,
     });
@@ -334,7 +331,7 @@ controller.insertComp = asyncHandler(async (req, res) => {
   console.log(`Finally, insert a location entry`);
   await LocationEntry.create({
     location_id: req.body.loc_id,
-    labels: req.body.labels,
+    labels: req.body.labels.trim(),
 //    component_id: comp.id,
     supcode_id: supcode.id,
     quant_unit: req.body.qty,

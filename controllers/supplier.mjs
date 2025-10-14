@@ -49,13 +49,13 @@ controller.update = asyncHandler(async (req, res, next) => {
   }
 
   await Supplier.update({
-    name: req.body.name,
-    legalname:req.body.legalname,
-    federal_code: req.body.federal_code,
-    state_code: req.body.state_code,
-    city_code: req.body.city_code,
-    phone: req.body.phone,
-    fax: req.body.fax
+    name: req.body.name.trim(),
+    legalname:req.body.legalname.trim(),
+    federal_code: req.body.federal_code.trim(),
+    state_code: req.body.state_code.trim(),
+    city_code: req.body.city_code.trim(),
+    phone: req.body.phone.trim(),
+    fax: req.body.fax.trim(),
   }, {where: {id: req.params.id}});
 
   res.redirect("/supplier/");
@@ -64,7 +64,7 @@ controller.update = asyncHandler(async (req, res, next) => {
 // Display Supplier create form on GET
 controller.create = asyncHandler(async (req, res, next) => {
     const supplier = new Supplier({
-      name: req.body.name,
+      name: req.body.name.trim(),
     });
 
     await supplier.save();

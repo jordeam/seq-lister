@@ -15,9 +15,6 @@ block content
     dd
       a(href=val.url class='btn btn-primary')
         img(src="/image/loc-icon.svg" alt="Ir" width="20pt" height="24pt")
-      | &nbsp;
-      a(href=val.url+"/table" class='btn btn-primary')
-        img(src="/image/table-icon.svg" alt="Ir" width="20pt" height="24pt")
       | &nbsp;  #{val.quant} &times; &nbsp; #{val.name}
       if val.note.length > 0
         | &nbsp; &mdash; #[i #{val.note}]
@@ -28,9 +25,6 @@ block content
     dd
       a(href=val.url class='btn btn-primary')
         img(src="/image/loc-icon.svg" alt="Ir" width="20pt" height="24pt")
-      | &nbsp;
-      a(href=val.url+"/table" class='btn btn-primary')
-        img(src="/image/table-icon.svg" alt="Ir" width="20pt" height="24pt")
       | &nbsp;  #{val.quant} &times; &nbsp; #{val.name}
       if val.note.length > 0
         | &nbsp; &mdash; #[i #{val.note}]
