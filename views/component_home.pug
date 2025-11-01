@@ -69,7 +69,7 @@ block content
             each elt in val.locs
               a.btn.btn-primary(href="/location/"+elt.id)
                 img(src="/image/loc-icon.svg" alt="Ir" width="20pt" height="24pt")
-              | &nbsp; #{elt.name} &nbsp;&nbsp;
+              | &nbsp; #{elt.name} / #{elt.box} &nbsp;&nbsp;
 
   p
     form(method="post" action="/suppliercode/create/"+component.id onsubmit="return insert_with_msg('Partnumber:', this.partnumber);")

@@ -41,7 +41,7 @@ controller.home = asyncHandler(async (req, res, next) => {
     });
 
   for (const i in suppliercodes) {
-    const locs = await seqlz.query("SELECT l.id, l.name FROM location_entry AS le INNER JOIN locations AS l ON l.id = le.location_id INNER JOIN suppliercodes AS sc ON sc.id = le.supcode_id WHERE sc.id = $1 ORDER BY l.name", {
+    const locs = await seqlz.query("SELECT l.id, l.name, le.box FROM location_entry AS le INNER JOIN locations AS l ON l.id = le.location_id INNER JOIN suppliercodes AS sc ON sc.id = le.supcode_id WHERE sc.id = $1 ORDER BY l.name", {
       bind: [suppliercodes[i].id],
       type: QueryTypes.SELECT
     });
