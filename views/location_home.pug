@@ -51,6 +51,11 @@ block content
 
   p #[Strong Quantidade de caixas:] #{location.nbox}
 
+  if location.active
+    p  #[Strong Ativo]
+  else
+    p #[Strong Inativo]
+
   if location.note.length > 0
     p #[Strong Obs.:] #{location.note}
 
