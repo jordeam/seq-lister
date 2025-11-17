@@ -31,8 +31,11 @@ block content
         dd
           a.btn.btn-primary(href='/component/'+val.id)
             img(src="/image/edit-icon.svg" alt="Editar" width="20pt" height="24pt")
-          | &nbsp; #{val.name} &mdash; #{val.g_name}: #{val.partnumber} (#{val.m_name}) &mdash; #{val.ordercode} (#{val.s_name})
-
+          | &nbsp; #{val.name} &mdash; #{val.g_name}: #{val.partnumber} (#{val.m_name}) &mdash; #{val.ordercode} (#{val.s_name}) &mdash;
+          each elt in val.locs
+              a.btn.btn-primary(href="/location/"+elt.id)
+                img(src="/image/loc-icon.svg" alt="Ir" width="20pt" height="24pt")
+              | &nbsp; #{elt.name} / #{elt.box} &nbsp;&nbsp;
   h2 Groups
 
   if groups !== undefined

@@ -67,9 +67,9 @@ block content
           td #{val.rounding}
           td
             each elt in val.locs
-              a.btn.btn-primary(href="/location/"+elt.id+"/table")
+              a.btn.btn-primary(href="/location/"+elt.id)
                 img(src="/image/loc-icon.svg" alt="Ir" width="20pt" height="24pt")
-              | &nbsp; #{elt.name} &nbsp;&nbsp;
+              | &nbsp; #{elt.name} / #{elt.box} &nbsp;&nbsp;
 
   p
     form(method="post" action="/suppliercode/create/"+component.id onsubmit="return insert_with_msg('Partnumber:', this.partnumber);")
@@ -86,9 +86,6 @@ block content
   //-   dd
   //-     a(href="/location/"+val.id class='btn btn-primary')
   //-       img(src="/image/loc-icon.svg" alt="Ir" width="20pt" height="24pt")
-  //-     | &nbsp;
-  //-     a(href="/location/"+val.id+"/table" class='btn btn-primary')
-  //-       img(src="/image/table-icon.svg" alt="Ir" width="20pt" height="24pt")
   //-     | &nbsp; #{val.name}/#{val.box}: #{val.quant}
 
   //- hr

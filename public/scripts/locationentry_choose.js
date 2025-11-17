@@ -47,8 +47,6 @@ function on_name_changed(obj) {
       if (data.length > 0) {
         // has some data
         const locid = +document.getElementById("locid").getAttribute('value');
-        const utable = document.getElementById("utable").getAttribute('value');
-        console.log(`locid = ${locid} table=${utable}`);
         const choices = document.getElementById("choices");
         table = document.createElement('table');
         tbody = document.createElement('tbody');
@@ -78,7 +76,7 @@ function on_name_changed(obj) {
           const td5 = document.createElement('td');
           const form = document.createElement('form');
           form.setAttribute('method', 'POST');
-          form.setAttribute('action', '/locationentry/insert/'+locid+utable);
+          form.setAttribute('action', '/locationentry/insert/'+locid);
           form.setAttribute('id', 'form'+elt.id);
           form.innerHTML = '<input type="hidden" name="supcode_id" value=' + elt.id + '> <input type="hidden" name="box"> <input type="hidden" name="quant" value=""> <input type="hidden" name="quantunit"> <input type="hidden" name="labels"> <button class="btn btn-primary" type="submit" name="form'+elt.id+'"onclick="return setFormData(this);">Inserir</button>';
 

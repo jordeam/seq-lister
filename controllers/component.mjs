@@ -41,7 +41,7 @@ controller.home = asyncHandler(async (req, res, next) => {
     });
 
   for (const i in suppliercodes) {
-    const locs = await seqlz.query("SELECT l.id, l.name FROM location_entry AS le INNER JOIN locations AS l ON l.id = le.location_id INNER JOIN suppliercodes AS sc ON sc.id = le.supcode_id WHERE sc.id = $1 ORDER BY l.name", {
+    const locs = await seqlz.query("SELECT l.id, l.name, le.box FROM location_entry AS le INNER JOIN locations AS l ON l.id = le.location_id INNER JOIN suppliercodes AS sc ON sc.id = le.supcode_id WHERE sc.id = $1 ORDER BY l.name", {
       bind: [suppliercodes[i].id],
       type: QueryTypes.SELECT
     });
@@ -70,7 +70,7 @@ controller.home = asyncHandler(async (req, res, next) => {
 // Paramameters:
 // :id is the id of component, receives case_id and name in body
 controller.update = asyncHandler(async (req, res, next) => {
-    await Component.update({name: req.body.name, case_id: req.body.case_id, group_id: req.body.group_id}, {where: {id: req.params.id}});
+    await Component.update({name: req.body.name.trim(), case_id: req.body.case_id, group_id: req.body.group_id}, {where: {id: req.params.id}});
 
     res.redirect('/component/'+req.params.id.toString());
 });
@@ -95,7 +95,7 @@ controller.select = asyncHandler(async (req, res, next) => {
 // Paramameters:
 // id: is the id of group
 controller.create = asyncHandler(async (req, res, next) => {
-    const component = await Component.create({group_id: req.params.id, name: req.body.name, case_id: 0});
+    const component = await Component.create({group_id: req.params.id, name: req.body.name.trim(), case_id: 0});
     res.redirect('/component/'+component.id);
 });
 

@@ -39,8 +39,8 @@ controller.home = asyncHandler(async (req, res, next) => {
 controller.update = asyncHandler(async (req, res, next) => {
   const ccase = await Case.findOne({where: {id: req.params.id}});
 
-  ccase.name = req.body.name;
-  ccase.descr = req.body.descr;
+  ccase.name = req.body.name.trim();
+  ccase.descr = req.body.descr.trim();
 
   await ccase.save();
 
@@ -58,7 +58,7 @@ controller.create = asyncHandler(async (req, res, next) => {
 // Insert a new case in DB
 controller.create_post = asyncHandler(async (req, res, next) => {
   // Get details of case and all associated pets (in parallel)
-  await Case.create({name: req.body.name, descr: req.body.descr});
+  await Case.create({name: req.body.name.trim(), descr: req.body.descr.trim()});
 
   res.redirect("/case/");
 });

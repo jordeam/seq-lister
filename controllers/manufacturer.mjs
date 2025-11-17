@@ -49,9 +49,9 @@ controller.update = asyncHandler(async (req, res, next) => {
   }
 
   await Manufacturer.update({
-    name: req.body.name,
-    descr: req.body.descr,
-    web: req.body.web,
+    name: req.body.name.trim(),
+    descr: req.body.descr.trim(),
+    web: req.body.web.trim(),
   }, {where: {id: req.params.id}});
 
   res.redirect("/manufacturer/");

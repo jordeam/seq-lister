@@ -33,7 +33,6 @@ controller.home = asyncHandler(async (req, res, next) => {
     Case.findOne({ where: { id: comp.case_id }}),
     Group.findOne({ where: { id: comp.group_id }}),
   ]);
-  const from_table = /table$/.test(req.originalUrl);
   res.render("locationentry_home", {
     user: req.user,
     locationentry: le,
@@ -41,47 +40,38 @@ controller.home = asyncHandler(async (req, res, next) => {
     component: comp,
     ccase,
     group,
-    from_table,
   });
 });
 
 controller.update = asyncHandler(async (req, res, next) => {
   const locationEntry = await LocationEntry.findOne({ where: { id: req.params.id } });
-
   if (locationEntry === null) {
     // No results.
     const err = new Error("Entrada na Localização não encontrada.");
     err.status = 404;
     return next(err);
   }
-
   locationEntry.box = req.body.box;
   locationEntry.quant = req.body.quant;
   locationEntry.quant_unit = req.body.quant_unit;
-  locationEntry.labels = req.body.labels;
+  locationEntry.labels = req.body.labels.trim();
   await locationEntry.save();
-
-  const retURL = "/location/" + locationEntry.location_id + (/table$/.test(req.originalUrl) ? "/table" : "");
+  const retURL = "/location/" + locationEntry.location_id;
   res.redirect(retURL);
 });
 
 controller.delete = asyncHandler(async (req, res, next) => {
   const locationEntry = await LocationEntry.findOne({ where: { id: req.params.id } });
-
   if (locationEntry === null) {
     // No results.
     const err = new Error("Entrada na Localização não encontrada.");
     err.status = 404;
     return next(err);
   }
-
   const id = locationEntry.location_id;
   await locationEntry.destroy();
   await locationEntry.destroy();
-  if (/table$/.test(req.originalUrl))
-      res.redirect('/location/' + id + "/table");
-  else
-      res.redirect('/location/' + id.toString());
+  res.redirect('/location/' + id.toString());
 });
 
 // Insert a new location_entry, i.e., a new component in a location
@@ -105,7 +95,6 @@ controller.choose = asyncHandler(async (req, res, next) => {
           Supplier.findAll({order: [['name']]}),
         ]);
 
-  const usingTable = /table$/.test(req.originalUrl) ? true : false;
   res.render('locationentry_choose', {
     user: req.user,
     location,
@@ -114,7 +103,6 @@ controller.choose = asyncHandler(async (req, res, next) => {
     default_supergroup,
     default_group,
     components: allComponents,
-    usingTable,
     allCases,
     allManufacts,
     allSuppliers,
@@ -139,10 +127,7 @@ controller.insert = asyncHandler(async (req, res, next) => {
     box,
     labels,
   });
-  if (/table$/.test(req.originalUrl))
-    res.redirect("/location/" + location_id +"/table");
-  else
-    res.redirect("/location/" + location_id);
+  res.redirect("/location/" + location_id);
 });
 
 /**
@@ -150,40 +135,29 @@ controller.insert = asyncHandler(async (req, res, next) => {
  * ordercode, etc. given by form.
  */
 controller.insertNewComp = asyncHandler(async (req, res, next) => {
-  const uTable = /table$/.test(req.originalUrl) ? '/table' : '';
-  
-  const component = await Component.create({group_id: req.body.group_id, name: req.body.compname, case_id: req.body.case_id});
-
+  const component = await Component.create({group_id: req.body.group_id, name: req.body.compname.trim(), case_id: req.body.case_id});
   const sc = await Suppliercode.create({
     component_id: component.id,
-    partnumber: req.body.partnumber,
-    ordercode: req.body.ordercode,
+    partnumber: req.body.partnumber.trim(),
+    ordercode: req.body.ordercode.trim(),
     manufact_id: req.body.manufact,
     supplier_id: req.body.supplier,
-    descr: req.body.desrc,
+    descr: req.body.descr.trim(),
     rounding: req.body.rounding,
   });
-
-  console.log(`box=${req.body.box}`);
-  console.log(`quant_unit=${req.body.quant_unit}`);
-  console.log(`quant=${req.body.quant}`);
-  console.log(`labels=${req.body.labels}`);
-
   let box = parseInt(req.body.box);
   let quant = parseInt(req.body.quant);
   let quant_unit = parseInt(req.body.quantunit);
   let labels = req.body.labels.trim();
-
   await LocationEntry.create({
     location_id: req.params.id,
     supcode_id: sc.id,
-    quant: quant,
-    quant_unit: quant_unit,
-    box: box,
-    labels: labels
+    quant,
+    quant_unit,
+    box,
+    labels,
   });
-
-  res.redirect('/location/' + req.params.id + uTable);
+  res.redirect('/location/' + req.params.id);
 });
 
 export default controller;

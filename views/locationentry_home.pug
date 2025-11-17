@@ -4,9 +4,6 @@ block content
   h1
     a.btn.btn-primary(href=location.url)
       img(src="/image/loc-icon.svg" alt="Localização" width="20pt" height="24pt")
-    | &nbsp;
-    a.btn.btn-primary(href=location.url+"/table")
-      img(src="/image/table-icon.svg" alt="Localização" width="20pt" height="24pt")
     | &nbsp; #[Strong Localização:] #{location.name}
 
   h2
@@ -17,7 +14,7 @@ block content
       | &nbsp; &mdash; #{ccase.name} &nbsp;
     | (#{group.name})
 
-  form(method='POST' action=locationentry.url+(from_table?"/table":""))
+  form(method='POST' action=locationentry.url)
     div.form-group
       label(for='box') Caixa:
       input#name.form-control(type='text', placeholder='Número da caixa' name='box' required='true' value=(undefined===locationentry ? '' : locationentry.box) )

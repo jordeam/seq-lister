@@ -5,13 +5,6 @@ block content
     a.btn.btn-primary(href="/location")
       img(src="/image/locs-icon.svg" alt="Localizações" width="20pt" height="24pt")
     | &nbsp;
-    if usingTable
-      a.btn.btn-primary(href=location.url)
-        img(src="/image/loc-icon.svg" alt="Normal" width="20pt" height="24pt")
-    else
-      a.btn.btn-primary(href=location.url+"/table")
-        img(src="/image/table-icon.svg" alt="Tabela" width="20pt" height="24pt")
-    | &nbsp;
     a.btn.btn-primary(href=location.url+"/csv")
       img(src="/image/csv-icon.svg" alt="CSV" width="20pt" height="24pt")
     | &nbsp;
@@ -35,7 +28,7 @@ block content
       a.btn.btn-primary
         img(src="/image/shrink-icon.svg" alt="Cancelar" width="20pt" height="24pt" onclick="document.getElementById('edit').style.display='none'")
       | &nbsp; Editar
-    form(name="alter" method="post" action=location.url+(usingTable ? "/table" : ""))
+    form(name="alter" method="post" action=location.url)
       div.form-group
         label(for='name') Nome:
         input#name.form-control(type="text", placeholder="Nome" name="name" required="true" value=(undefined===location ? '' : location.name))
@@ -78,57 +71,50 @@ block content
     img(src="/image/add-icon.svg" alt="Adicionar" width="20pt" height="24pt")
 
   if entries.length > 0
-    if usingTable
-      table
+    table
+      tr
+        th(align="center") #
+        th
+        th Grupo
+        th Componente
+        th Case
+        th(style="text-align: center;") Partnumber
+        th(style="text-align: center;") Ordercode
+        th(style="text-align: center;")
+          div.tooltipo Cx.
+            spqn.tooltipotext Número da caixa
+        th(style="text-align: center;")
+          div.tooltipo STK
+            span.tooltipotext Quantidade em estoque
+        th(style="text-align: center;")
+          div.tooltipo PU
+            span.tooltipotext Por unidade: quantidade necessária por placa
+        th Saldo
+        th Labels
+      each val, idx in entries
         tr
-          th(align="center") #
-          th
-          th Grupo
-          th Componente
-          th Case
-          th
-          th Partnumber
-          th Ordercode
-          th Cx.
-          th Qt.
-          th P/P
-          th Saldo
-          th Labels
-        each val, idx in entries
-          tr
-            td(align="right") #{idx+1}
-            td
-              a.btn.btn-primary(href='/locationentry/'+val.id+'/delete_table' onclick="return confirm('Tem certeza que quer excluir a entrada?');")
-                img(src="/image/trash-icon.svg" alt="Excluir" width="12pt" height="15pt")
-            td #{val.gname}
-            td
-              a(href='/component/' + val.component_id) #[Strong #{val.cname}]
-            td &nbsp; #{val.csname}
-            td
-              a.btn.btn-primary(href='/suppliercode/' + val.supcode_id)
-                span(style="font-size: 0.8em;") PN
-            td #[Strong #{val.partnumber}]
-            td #[Strong #{val.ordercode}]
-            td(align="center") #{val.box}
-            td(align="right")
-              a.btn(style="background: #0bb;" href="/locationentry/"+val.id+"/table") #{val.quant}
-            td(style="padding-right: 10px; padding-left: 10px" align="right") #{val.quant_unit}
-            td(style="padding-right: 10px;" align="right") #{val.quant - val.quant_unit * location.quant}
-            td #{val.labels}
-    else
-      dl
-      each val in entries
-        dd
-          a.btn.btn-primary(href='/locationentry/'+val.id+'/delete' onclick="return confirm('Tem certeza que quer excluir a entrada?');")
-            img(src="/image/trash-icon.svg" alt="Excluir" width="20pt" height="24pt")
-          span.fwidth20 &nbsp; #{val.gname}: &nbsp;
-          a(href='/component/' + val.component_id) #[Strong #{val.cname}]
-          | &nbsp;
-          if val.csname && val.csname.length > 0
-            | &mdash; #{val.csname}
-          | &nbsp;
-          a.btn(style="background: #0bb; padding: 2pt;" href="/locationentry/"+val.id) &times;#{val.quant} &nbsp; &middot;#{val.quant_unit} #[Strong cx:]#{val.box}
-          | &nbsp; | #{val.labels}
+          td(align="right") #{idx+1}
+          td
+            a.btn.btn-primary(href='/locationentry/'+val.id+'/delete' onclick="return confirm('Tem certeza que quer excluir a entrada?');")
+              img(src="/image/trash-icon.svg" alt="Excluir" width="12pt" height="15pt")
+          td #{val.gname}
+          td
+            a(href='/component/' + val.component_id) #[Strong #{val.cname}]
+          td &nbsp; #{val.csname}
+          td
+            a.btn(style="background: #0ef;" href='/suppliercode/'+val.supcode_id)
+              span(style="font-size: 0.8em;") #[Strong #{val.partnumber}]
+          td
+            a.btn(href='/suppliercode/'+val.supcode_id)
+              span(style="font-size: 0.8em;") #[Strong #{val.ordercode}]
+          td(align="center")
+            a.btn(style="background: #0bb;" href="/locationentry/"+val.id) #{val.box}
+          td(align="right")
+            a.btn(style="background: #0bb;" href="/locationentry/"+val.id) #{val.quant}
+          td(style="padding-right: 10px; padding-left: 10px" align="right")
+            a.btn(style="background: #0bb;" href="/locationentry/"+val.id) #{val.quant_unit}
+          td(style="padding-right: 10px;" align="right") #{val.quant - val.quant_unit * location.quant}
+          td #{val.labels}
   else
     li Não existem componentes nesta localização.
 
