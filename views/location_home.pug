@@ -49,19 +49,30 @@ block content
         label(for='nbox') Quantidade de caixas:
         input#nbox.form-control(type="text", placeholder="1" name="nbox" required="true" value=(undefined===location ? '' : location.nbox))
 
+        label(for="drawBorderline") Ativo:
+        input#drawBorderline(type="checkbox" name="active" checked=(location.active ? "checked" : false))
+        br
+
         button(type="submit" class='btn btn-primary')
           img(src="/image/ok-icon.svg" alt="Alterar" width="20pt" height="24pt")
 
     hr
 
-  p #[Strong Quantidade a fabricar:] #{location.quant}
+  div#not_edit(style="display: block;")
+    p #[Strong Quantidade a fabricar:] #{location.quant}
 
-  p #[Strong Quantidade de caixas:] #{location.nbox}
+    p #[Strong Quantidade de caixas:] #{location.nbox}
 
-  if location.note.length > 0
-    p #[Strong Obs.:] #{location.note}
+    if location.note.length > 0
+      p #[Strong Obs.:] #{location.note}
+
+    if location.active
+      p Ativo
+    else
+      p Inativo
 
   h3 Componentes
+
 
   a.btn.btn-primary(href='/locationentry/choose/'+location.id+(usingTable? "/table" : ""))
     img(src="/image/add-icon.svg" alt="Adicionar" width="20pt" height="24pt")
