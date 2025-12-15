@@ -38,6 +38,10 @@ form#insert-comp(method="post" action="/bom/"+loc.id+"/insert" onsubmit="return 
   label.labelbom(for="compname") Nome/valor
   input#compname(type="text" name="compname" data-index=index value=entry.compname oninput="on_name_changed(this);")
   br
+  label.labelbom(for="footprint") Footprint
+  textarea#footprint(roes="2" type="text" name="footprint" readonly) #{entry.foot}
+  br
+  h3 Defina o nome do Componente, Encapsulamento, Grupo e Supergrupo
   label.labelbom(for="sg") Supergrupo
   select#sg(onchange="on_supergroup_changed(this);")
     each sg in supergroups
@@ -58,4 +62,3 @@ form#insert-comp(method="post" action="/bom/"+loc.id+"/insert" onsubmit="return 
   button.btn.btn-primary(type="button" data-index=index value="0" onclick="return insertWithComp(this);") Inserir
 
   div#choices
-

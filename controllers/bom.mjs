@@ -40,7 +40,7 @@ function findInList(str, lst) {
 function makeEntryIndexes(headerStr, mfrList, supList) {
   const regex = /,(?=(?:(?:[^"]*"){2})*[^"]*$)/;
   const header = headerStr.split(regex);
-  let qty, labels, pn, order, compname, descr, mfr, sup;
+  let qty, labels, pn, order, compname, descr, mfr, sup, foot;
   console.log(`header=%j`, header);
   for (const i in header) {
     if (/Qty/i.test(header[i]))
@@ -59,9 +59,11 @@ function makeEntryIndexes(headerStr, mfrList, supList) {
       compname = +i;
     else if (/Descr.*/i.test(header[i]))
       descr = +i;
+    else if (/Foot.*/i.test(header[i]))
+      foot = +i;
   }
-  console.log({qty, labels, pn, order, compname, descr, mfr, sup});
-  return {qty, labels, pn, order, compname, descr, mfr, sup};
+  console.log({qty, labels, pn, order, compname, descr, mfr, sup, foot});
+  return {qty, labels, pn, order, compname, descr, mfr, sup, foot};
 }
 
 /**
@@ -71,7 +73,7 @@ function makeEntryIndexes(headerStr, mfrList, supList) {
 function makeEntries(indx, entryLine, mfrList, supList) {
   const regex = /,(?=(?:(?:[^"]*"){2})*[^"]*$)/;
   const lst = entryLine.split(regex);
-  console.log(`line=${entryLine}`);
+  // console.log(`line=${entryLine}`);
   let entry = {};
   if (lst.length > 6) {
     entry.status = lst[0];
@@ -107,8 +109,12 @@ function makeEntries(indx, entryLine, mfrList, supList) {
     if (indx.sup && indx.sup >= 0)
       // -1 if not found else id the manufacturer id
       entry.sup = findInList(lst[indx.sup].replace(/\"/g, '').trim(), supList);
+    if (indx.foot && indx.foot >= 0) {
+      // -1 if not found else id the manufacturer id
+      entry.foot = lst[indx.foot].replace(/\"/g, '').trim();
+    }
   }
-  console.log(`compname=${entry.compname}\nentry=%j`, entry);
+  // console.log(`compname=${entry.compname}\nentry=%j`, entry);
   return entry;
 }
 
@@ -199,8 +205,9 @@ controller.query = asyncHandler(async (req, res) => {
 
   let sc, comp, group, ccase;
 
+  console.log(`entry.pn=${entry.pn}`);
   if (entry.pn.length > 1)
-    sc = await Suppliercode.findOne({where: {partnumber: {[Op.regexp]: `^ *${escapeStringRegexp(entry.pn)} *$`}}});
+    sc = await Suppliercode.findOne({where: {partnumber: entry.pn.trim()}});
   if (sc)
     comp = await Component.findOne({where: {id: sc.component_id}});
   if (comp)
@@ -317,16 +324,15 @@ controller.insertComp = asyncHandler(async (req, res) => {
   const pn = req.body.pn.trim();
   const ordercode = req.body.ordercode.trim();
   let supcode;
-  if (pn.length > 0 || ordercode.length > 0)
-    supcode = await Suppliercode.create({
-      supplier_id: req.body.supplier_id,
-      component_id: comp.id,
-      manufact_id: req.body.manufact_id,
-      partnumber: pn,
-      descr:req.body.descr.trim(),
-      ordercode,
-      rounding: req.body.round,
-    });
+  supcode = await Suppliercode.create({
+    supplier_id: req.body.supplier_id,
+    component_id: comp.id,
+    manufact_id: req.body.manufact_id,
+    partnumber: pn,
+    descr: req.body.descr.trim(),
+    ordercode,
+    rounding: req.body.round,
+  });
   // Finally, insert a location entry:
   console.log(`Finally, insert a location entry`);
   await LocationEntry.create({
@@ -337,7 +343,6 @@ controller.insertComp = asyncHandler(async (req, res) => {
     quant_unit: req.body.qty,
     box: req.body.box,
   });
-
   res.send('<p> Componente inserido');
 });
 
