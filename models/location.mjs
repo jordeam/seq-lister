@@ -8,7 +8,7 @@ const Location = seqlz.define("location", {
   nbox: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 1 },
   quant: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0 },
   bom: { type: DataTypes.TEXT, allowNull: false, defaultValue: '' },
-  active: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
+  active: {type: DataTypes.BOOLEAN, allowNull: false, defaultValue: true},
   url: {
     type: DataTypes.VIRTUAL,
     get() {

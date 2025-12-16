@@ -32,7 +32,11 @@ block content
     each elt, i in bom
       p
         span.btn2.fwidth(style="text-align: center; width: 2em;" onclick="return statusClicked(this);" name="bom"+i value=location.id+","+i) #{elt.status}
-        span.btnC.fwidth(style="text-align: center; width: 4em;" onclick="return byPNClicked(this);" name="bom"+i value=location.id+","+i) by PN
+        | &nbsp;
+        span.btnPN.fwidth(style="text-align: center; width: 3em;" onclick="return byPNClicked(this);" name="bom"+i value=location.id+","+i) = PN
+        | &nbsp;
+        span.btnPN.fwidth(style="text-align: center; width: 3em;" onclick="return useExistingPNClicked(this);" name="bom"+i value=location.id+","+i) + PN
+        | &nbsp;
         span.btnC.fwidth(style="text-align: center; width: 8ch;" onclick="return createCompClicked(this);" name="bom"+i value=location.id+","+i) + Comp
         span.fwidth(style="text-align: right; width: 5ch;") #{elt.qty} &times;
         | &nbsp;

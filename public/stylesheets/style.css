@@ -32,6 +32,15 @@
 .btnC:hover {
     background-color: yellow;
 }
+.btnPN{
+    border: 0px solid green;
+    border-radius: 5px;
+    padding: 5px;
+    background-color: lightcyan;
+}
+.btnPN:hover {
+    background-color: yellow;
+}
 .labelbom {
     width: 15ch;
 }

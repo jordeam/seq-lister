@@ -15,7 +15,7 @@ block content
       img(src="/image/label-icon.svg" alt="Etiquetas" width="20pt" height="24pt")
     | &nbsp;
     a.btn.btn-primary
-      img(src="/image/edit-icon.svg" alt="Editar" width="20pt" height="24pt" onclick="document.getElementById('edit').style.display='block'")
+      img(src="/image/edit-icon.svg" alt="Editar" width="20pt" height="24pt" onclick="document.getElementById('edit').style.display='block';document.getElementById('not_edit').style.display='none';")
     if entries.length === 0
       | &nbsp;
       a.btn.btn-primary(href=location.url+"/delete" onclick="return confirm('Tem certeza que quer excluir a localização?')" class='btn btn-primary')
@@ -26,7 +26,7 @@ block content
     hr
     h2
       a.btn.btn-primary
-        img(src="/image/shrink-icon.svg" alt="Cancelar" width="20pt" height="24pt" onclick="document.getElementById('edit').style.display='none'")
+        img(src="/image/shrink-icon.svg" alt="Cancelar" width="20pt" height="24pt" onclick="document.getElementById('edit').style.display='none';document.getElementById('not_edit').style.display='block';")
       | &nbsp; Editar
     form(name="alter" method="post" action=location.url)
       div.form-group
@@ -42,27 +42,32 @@ block content
         label(for='nbox') Quantidade de caixas:
         input#nbox.form-control(type="text", placeholder="1" name="nbox" required="true" value=(undefined===location ? '' : location.nbox))
 
+        label(for="drawBorderline") Ativo:
+        input#drawBorderline(type="checkbox" name="active" checked=(location.active ? "checked" : false))
+        br
+
         button(type="submit" class='btn btn-primary')
           img(src="/image/ok-icon.svg" alt="Alterar" width="20pt" height="24pt")
 
     hr
 
-  div#info
+  div#not_edit(style="display: block;")
     p #[Strong Quantidade a fabricar:] #{location.quant}
 
     p #[Strong Quantidade de caixas:] #{location.nbox}
 
-    if location.active
-      p  #[Strong Ativo]
-    else
-      p #[Strong Inativo]
+    if location.note.length > 0
+      p #[Strong Obs.:] #{location.note}
 
-  if location.note.length > 0
-    p #[Strong Obs.:] #{location.note}
+    if location.active
+      p Ativo
+    else
+      p Inativo
 
   h3 Componentes
 
-  a.btn.btn-primary(href='/locationentry/choose/'+location.id)
+
+  a.btn.btn-primary(href='/locationentry/choose/'+location.id+(usingTable? "/table" : ""))
     img(src="/image/add-icon.svg" alt="Adicionar" width="20pt" height="24pt")
 
   if entries.length > 0

@@ -306,6 +306,55 @@ controller.create = asyncHandler(async (req, res) => {
   });
 });
 
+//** Create component, references, partnumber, etc. and insert it into location.
+controller.insertExistingPN = asyncHandler(async (req, res) => {
+  const locId = +req.params.id;
+  const index = +req.query.line;
+  console.log(`index=${index}`);
+  // get location
+  const [loc, suppliers, manufacts, allCases, groups, supergroups] =
+        await Promise.all([
+          Location.findOne({where: {id: locId}}),
+          Supplier.findAll({order: seqlz.col('name')}),
+          Manufacturer.findAll({order: seqlz.col('name')}),
+          Case.findAll({order: seqlz.col('name')}),
+          Group.findAll({order: seqlz.col('name')}),
+          SuperGroup.findAll({order: seqlz.col('name')}),
+        ]);
+
+  const bom_lst = loc.get('bom').split(/\r?\n/);
+  //  console.log(`Header=${bom_lst[0]}`);
+  const indx = makeEntryIndexes(bom_lst[0], manufacts, suppliers);
+  const entry = makeEntries(indx, bom_lst[index + 1], manufacts, suppliers);
+
+  let sc_pn, sc_oc;
+  if (entry.pn.length > 1)
+    sc_pn = await Suppliercode.findOne({where: {partnumber: {[Op.regexp]: `^ *${escapeStringRegexp(entry.pn)} *$`}}});
+  if (entry.ordercode.length > 1)
+    sc_oc = await Suppliercode.findOne({where: {ordercode: {[Op.regexp]: `^ *${escapeStringRegexp(entry.ordercode)} *$`}}});
+  let err_str = "";
+  if (sc_pn) {
+    err_str += "<p>Erro: Partnumber encontrado, use criar por Partnumber\n";
+    console.log(sc_pn);
+  }
+  if (sc_oc)
+    err_str += "<p>Erro: Ordercode encontrado, use criar por Ordercode\n";
+
+  if (err_str.length > 0)
+    return res.send(err_str);
+
+  res.render("bom_insert_exist_pn", {
+    loc,
+    entry,
+    index,
+    suppliers,
+    manufacts,
+    allCases,
+    groups,
+    supergroups,
+  });
+});
+
 controller.insertComp = asyncHandler(async (req, res) => {
   const comp_id = req.body.comp_id;
   let comp;

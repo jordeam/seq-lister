@@ -1,0 +1,27 @@
+h4 Utilizando Partnumber existente
+
+form#insert_exist_pn(method="post" action="/bom/"+loc.id+"/insertExistPN" onsubmit="return false;")
+  input#locid(type='hidden' name="loc_id" value=loc.id)
+  input#index(type="hidden" name="index" value=index)
+  br
+  label.labelbom(for="qty") Quant.
+  input#qty(type="text" name="qty" value=entry.qty)
+  br
+  label.labelbom(for="round") Arredondamento
+  input#round(type="text" name="rounding" value="1")
+  br
+  label.labelbom(for="labels") Labels
+  textarea#labels(rows="2" type="text" name="labels") #{entry.labels}
+  br
+  label.labelbom(for="box") Caixa
+  input#box(type="text" name="box" value="1")
+  br
+  label.labelbom(for="compname") Nome/valor
+  input#compname(type="text" name="compname" data-index=index value=entry.compname oninput="on_name_changed_pn(this);")
+  br
+  label.labelbom(for="footprint") Footprint
+  textarea#footprint(roes="2" type="text" name="footprint" readonly) #{entry.foot}
+  br
+  h4 Selecione um componente com partnumber existente:
+
+  div#choices_pn

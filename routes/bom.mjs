@@ -25,6 +25,9 @@ router.post('/:id/insert', ensureAuthenticated, bomController.insert);
 // Create a component
 router.get('/:id/create', ensureAuthenticated, bomController.create);
 
+// Insert using a existing PN
+router.get('/:id/insExistPN', ensureAuthenticated, bomController.insertExistingPN);
+
 // Insert a locationentry in location with component name or id
 router.post('/:id/insert_comp', ensureAuthenticated, bomController.insertComp);
 

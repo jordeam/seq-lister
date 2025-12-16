@@ -42,6 +42,27 @@ function createCompClicked(wdg) {
     });
 }
 
+function useExistingPNClicked(wdg) {
+  const div = document.getElementById("dialog-content");
+  const params = wdg.getAttribute("value");
+  const lst = params.split(",");
+  const locId = lst[0];
+  const index = lst[1];
+  //
+  fetch(`/bom/${locId}/insExistPN?line=${index}`)
+    .then(res => {return res.text();})
+    .then(res => {
+      div.innerHTML = res.toString();
+      document.getElementById('dialog').style="display: block";
+      document.getElementById('back').style='pointer-events: none; opacity: 70%;';
+      const form = document.getElementById('insert_exist_pn');
+      if (form) {
+        const obj = {value: form.elements.compname.value, dataset: {index: index}};
+        on_name_changed_pn(obj);
+      }
+    });
+}
+
 function insertWithPartnumber(index) {
   const form = document.getElementById('insert-comp');
 
@@ -109,6 +130,62 @@ function on_name_changed(obj) {
         const locid = +document.getElementById("locid").getAttribute('value');
         console.log(`locid = ${locid}`);
         const choices = document.getElementById("choices");
+        let msgTag = document.createElement('h4');
+        msgTag.innerHTML = "Ou escolha um Componente existente abaixo:";
+        choices.appendChild(msgTag);
+        table = document.createElement('table');
+        tbody = document.createElement('tbody');
+        const theaders = ['Grupo', 'Valor', 'Case'];
+        const tr = document.createElement('tr');
+        for (const e of theaders) {
+          const th = document.createElement('th');
+          th.innerHTML = `${e}`;
+          tr.appendChild(th);
+        }
+        tbody.appendChild(tr);
+        for (let elt of data) {
+          const row_data = [elt.gname, elt.compname, elt.csname];
+          const tr = document.createElement('tr');
+          for (const e of row_data) {
+            const td = document.createElement('td');
+            td.textContent = e;
+            tr.appendChild(td);
+          }
+          const td4 = document.createElement('td');
+          td4.innerHTML = '<a class="btn btn-primary" href="/component/' + elt.comp_id +'"><img src="/image/component-icon.svg" alt="Editar" width="20pt" height="24pt"></a>';
+          tr.appendChild(td4);
+          const td5 = document.createElement('td');
+          td5.innerHTML = '<button class="btn btn-primary" type="button" data-index="'+index+'" value="'+elt.comp_id+'" onclick="return insertWithComp(this);">Inserir</button>';
+          tr.appendChild(td5);
+          tbody.appendChild(tr);
+        }
+        table.appendChild(tbody);
+        choices.appendChild(table);
+      }
+
+    });
+  console.log(`name=${name}`);
+}
+
+function on_name_changed_pn(obj) {
+  const name = obj.value;
+  const index = +obj.dataset.index;
+  const choices = document.getElementById("choices_pn");
+  if (name.length === 0) {
+    choices.innerHTML = 'Nenhum componente encontrado.';
+    return;
+  }
+  const req = new Request('/search/onlycomp?expr=' + encodeURIComponent(name));
+  fetch(req)
+    .then(res => res.json())
+    .then(data => {
+      // console.log(data);
+      choices.innerHTML = '';
+      let table, tbody;
+      if (data.length > 0) {
+        // has some data
+        const locid = +document.getElementById("locid").getAttribute('value');
+        console.log(`locid = ${locid}`);
         let msgTag = document.createElement('h4');
         msgTag.innerHTML = "Ou escolha um Componente existente abaixo:";
         choices.appendChild(msgTag);

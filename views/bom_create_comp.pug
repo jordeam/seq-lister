@@ -41,7 +41,7 @@ form#insert-comp(method="post" action="/bom/"+loc.id+"/insert" onsubmit="return 
   label.labelbom(for="footprint") Footprint
   textarea#footprint(roes="2" type="text" name="footprint" readonly) #{entry.foot}
   br
-  h3 Defina o nome do Componente, Encapsulamento, Grupo e Supergrupo
+  h4 Defina o nome do Componente, Encapsulamento, Grupo e Supergrupo
   label.labelbom(for="sg") Supergrupo
   select#sg(onchange="on_supergroup_changed(this);")
     each sg in supergroups

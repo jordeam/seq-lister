@@ -24,14 +24,16 @@ const __dirname = path.dirname(__filename);
 
 // List all locations
 controller.list = asyncHandler(async (req, res, next) => {
-  const activeLocations = await Location.findAll({where: {quant: 0, active: true}, order: seqlz.col('name')});
-  const innactiveLocations = await Location.findAll({where: {quant: 0, active: false}, order: seqlz.col('name')});
+  // const otherLocations = await Location.findAll({where: {quant: 0}, order: seqlz.col('name')});
   const underConst = await Location.findAll({where: {quant: {[Op.not]: 0}}, order: seqlz.col('name')});
+  const activeLocs = await Location.findAll({ where: { quant: 0, active: true}, order: seqlz.col('name') });
+  const inactiveLocs = await Location.findAll({ where: { quant: 0, active: false }, order: seqlz.col('name') });
+
   res.render("location_list", {
     user: req.user,
-    activeLocations,
-    innactiveLocations,
     underConst,
+    activeLocs,
+    inactiveLocs,
   });
 });
 
@@ -72,9 +74,10 @@ controller.update = asyncHandler(async (req, res, next) => {
     }
     loc.name = req.body.name.trim();
     loc.quant = req.body.quant;
-  loc.note = req.body.note.trim();
-  loc.nbox = req.body.nbox;
-  loc.active = req.body.active;
+    loc.note = req.body.note;
+    loc.nbox = req.body.nbox;
+  loc.active = req.body.active ? true : false;
+
     await loc.save();
     res.redirect(loc.url);
 });

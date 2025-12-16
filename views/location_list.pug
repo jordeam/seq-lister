@@ -19,9 +19,9 @@ block content
       if val.note.length > 0
         | &nbsp; &mdash; #[i #{val.note}]
 
-  h2 Fora de montagem e ativos
+  h2 Ativos
   dl
-  each val in activeLocations
+  each val in activeLocs
     dd
       a(href=val.url class='btn btn-primary')
         img(src="/image/loc-icon.svg" alt="Ir" width="20pt" height="24pt")
@@ -29,12 +29,9 @@ block content
       if val.note.length > 0
         | &nbsp; &mdash; #[i #{val.note}]
 
-  else
-    li Não existem localizações.
-
-  h2 Fora de montagem e ativos
+  h2 Inativos
   dl
-  each val in innactiveLocations
+  each val in inactiveLocs
     dd
       a(href=val.url class='btn btn-primary')
         img(src="/image/loc-icon.svg" alt="Ir" width="20pt" height="24pt")
