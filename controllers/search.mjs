@@ -5,6 +5,17 @@ import asyncHandler from "express-async-handler";
 
 const controller = {};
 
+/**
+ * Escapes the wildcard characters '%', '_', and the escape character '\' for use in a SQL LIKE clause.
+ * Assumes the escape character is '\'.
+ * @param {string} input The raw search string from the user.
+ * @returns {string} The escaped string.
+ */
+function escapeLikeWildcards(input) {
+  // Escape the backslash first, then the other wildcards
+  return input.replace(/\\/g, '\\\\').replace(/%/g, '\\%').replace(/_/g, '\\_');
+}
+
 // List all components of a location
 controller.get = asyncHandler(async (req, res, next) => {
   res.render("search_home", {
@@ -62,13 +73,13 @@ controller.searchComp = asyncHandler(async (req, res, next) => {
   let query_str;
   if (/onlycomp/.test(req.originalUrl))
     query_str = 'SELECT c.id AS comp_id, c.name AS compname, g.name AS gname, cs.name AS csname FROM components AS c LEFT JOIN cases AS cs ON cs.id = c.case_id LEFT JOIN groups AS g ON g.id = c.group_id WHERE (LOWER(c.name) LIKE LOWER($1)) ORDER BY g.name, c.name, cs.name';
-  else if (/compPN/.test(req.originalUrl))
+  else if (/comp_pn/.test(req.originalUrl))
     query_str = 'SELECT sc.id, c.id AS comp_id, c.name AS compname, g.name AS gname, cs.name AS csname, sc.partnumber,sc.ordercode, s.name AS supplier, m.name AS manufact FROM suppliercodes AS sc LEFT JOIN  components as C ON sc.component_id = c.id LEFT JOIN cases AS cs ON cs.id = c.case_id LEFT JOIN groups AS g ON g.id = c.group_id LEFT JOIN suppliers AS s ON s.id = sc.supplier_id LEFT JOIN manufacturers AS m ON m.id = sc.manufact_id WHERE (LOWER(c.name) LIKE LOWER($1)) ORDER BY g.name, c.name, cs.name, sc.partnumber';
   else
     query_str = 'SELECT sc.id, c.id AS comp_id, c.name AS compname, g.name AS gname, cs.name AS csname, sc.partnumber,sc.ordercode, s.name AS supplier, m.name AS manufact FROM suppliercodes AS sc LEFT JOIN  components as C ON sc.component_id = c.id LEFT JOIN cases AS cs ON cs.id = c.case_id LEFT JOIN groups AS g ON g.id = c.group_id LEFT JOIN suppliers AS s ON s.id = sc.supplier_id LEFT JOIN manufacturers AS m ON m.id = sc.manufact_id WHERE (LOWER(c.name) LIKE LOWER($1)) ORDER BY g.name, c.name, cs.name, sc.partnumber';
   const components = await seqlz.query(query_str,
     {
-      bind: [req.query.expr + '%'],
+      bind: ['%' + escapeLikeWildcards(req.query.expr) + '%'],
       type: QueryTypes.SELECT,
     });
   res.json(components);

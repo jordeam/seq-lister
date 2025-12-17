@@ -175,7 +175,7 @@ function on_name_changed_pn(obj) {
     choices.innerHTML = 'Nenhum componente encontrado.';
     return;
   }
-  const req = new Request('/search/onlycomp?expr=' + encodeURIComponent(name));
+  const req = new Request('/search/comp_pn?expr=' + encodeURIComponent(name));
   fetch(req)
     .then(res => res.json())
     .then(data => {
@@ -191,7 +191,7 @@ function on_name_changed_pn(obj) {
         choices.appendChild(msgTag);
         table = document.createElement('table');
         tbody = document.createElement('tbody');
-        const theaders = ['Grupo', 'Valor', 'Case'];
+        const theaders = ['Grupo', 'Valor', 'Case', 'Partnumber', 'Manufact', 'Ordercode', 'Supplier'];
         const tr = document.createElement('tr');
         for (const e of theaders) {
           const th = document.createElement('th');
@@ -200,7 +200,7 @@ function on_name_changed_pn(obj) {
         }
         tbody.appendChild(tr);
         for (let elt of data) {
-          const row_data = [elt.gname, elt.compname, elt.csname];
+          const row_data = [elt.gname, elt.compname, elt.csname, elt.partnumber, elt.manufact, elt.ordercode, elt.supplier];
           const tr = document.createElement('tr');
           for (const e of row_data) {
             const td = document.createElement('td');
@@ -211,7 +211,7 @@ function on_name_changed_pn(obj) {
           td4.innerHTML = '<a class="btn btn-primary" href="/component/' + elt.comp_id +'"><img src="/image/component-icon.svg" alt="Editar" width="20pt" height="24pt"></a>';
           tr.appendChild(td4);
           const td5 = document.createElement('td');
-          td5.innerHTML = '<button class="btn btn-primary" type="button" data-index="'+index+'" value="'+elt.comp_id+'" onclick="return insertWithComp(this);">Inserir</button>';
+          td5.innerHTML = '<button class="btn btn-primary" type="button" data-index="'+index+'" value="'+elt.id+'" onclick="return insertCompWithPN(this);">Inserir</button>';
           tr.appendChild(td5);
           tbody.appendChild(tr);
         }
@@ -264,6 +264,42 @@ function insertWithComp(wdg) {
     }).toString(),
   };
   const request = new Request('/bom/'+loc_id+'/insert_comp', requestOptions);
+  fetch(request)
+    .then(res => res.text())
+    .then(data => {
+      const divbom = document.getElementById('bom'+index);
+      divbom.innerHTML = data;
+      close_dialog();
+    })
+    .catch(error => console.error(error));
+
+  return false;
+}
+
+function insertCompWithPN(wdg) {
+  const index = +wdg.dataset.index;
+  const sc_id = +wdg.getAttribute('value');
+  console.log(`index=${index}`);
+  const form = document.getElementById('insert_exist_pn');
+  const loc_id = form.elements.loc_id.value;
+  const qty = +form.elements.qty.value;
+  const round= +form.elements.round.value;
+  const labels = form.elements.labels.value;
+  const box = +form.elements.box.value;
+
+  requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({
+      index,
+      loc_id,
+      qty,
+      round,
+      labels,
+      box,
+    }).toString(),
+  };
+  const request = new Request('/bom/'+sc_id+'/insert_comp_w_pn', requestOptions);
   fetch(request)
     .then(res => res.text())
     .then(data => {

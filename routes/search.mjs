@@ -10,7 +10,7 @@ import searchController from "../controllers/search.mjs";
 router.get("/", searchController.get);
 router.get("/comp", searchController.searchComp);
 router.get("/onlycomp", searchController.searchComp);
-router.get("/compPN", searchController.searchComp);
+router.get("/comp_pn", searchController.searchComp);
 router.post('/', searchController.post);
 
 export default router;

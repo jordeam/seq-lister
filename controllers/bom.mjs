@@ -337,8 +337,8 @@ controller.insertExistingPN = asyncHandler(async (req, res) => {
     err_str += "<p>Erro: Partnumber encontrado, use criar por Partnumber\n";
     console.log(sc_pn);
   }
-  if (sc_oc)
-    err_str += "<p>Erro: Ordercode encontrado, use criar por Ordercode\n";
+  // if (sc_oc)
+  //   err_str += "<p>Erro: Ordercode encontrado, use criar por Ordercode\n";
 
   if (err_str.length > 0)
     return res.send(err_str);
@@ -389,6 +389,18 @@ controller.insertComp = asyncHandler(async (req, res) => {
     labels: req.body.labels.trim(),
 //    component_id: comp.id,
     supcode_id: supcode.id,
+    quant_unit: req.body.qty,
+    box: req.body.box,
+  });
+  res.send('<p> Componente inserido');
+});
+
+controller.insertCompWithPN = asyncHandler(async (req, res) => {
+  await LocationEntry.create({
+    location_id: req.body.loc_id,
+    labels: req.body.labels.trim(),
+//    component_id: comp.id,
+    supcode_id: req.params.id,
     quant_unit: req.body.qty,
     box: req.body.box,
   });

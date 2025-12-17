@@ -31,4 +31,7 @@ router.get('/:id/insExistPN', ensureAuthenticated, bomController.insertExistingP
 // Insert a locationentry in location with component name or id
 router.post('/:id/insert_comp', ensureAuthenticated, bomController.insertComp);
 
+// Insert a locationentry in location with an existing partnumber and  component name
+router.post('/:id/insert_comp_w_pn', ensureAuthenticated, bomController.insertCompWithPN);
+
 export default router;
