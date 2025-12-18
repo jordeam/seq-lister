@@ -60,7 +60,7 @@ block content
     dl
     each val, idx in entries
       dd
-        input(type="checkbox" name="comp_"+val.component_id)
+        input(type="checkbox" name="sc_"+val.supcode_id)
         | &nbsp; #{idx+1}
         | &nbsp; #{val.gname}: &nbsp;
         a(href='/component/' + val.component_id) #[Strong #{val.cname}]

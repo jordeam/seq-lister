@@ -51,14 +51,14 @@ controller.home = asyncHandler(async (req, res, next) => {
     return next(err);
   }
 
-  const entries_w_supcodes = await seqlz.query("SELECT le.id, c.name AS cname, g.name AS gname, sc.component_id, le.quant, le.quant_unit, le.box, le.labels, cs.name AS csname, le.supcode_id, sc.partnumber, sc.ordercode FROM location_entry AS le LEFT JOIN suppliercodes AS sc ON sc.id = le.supcode_id LEFT JOIN components AS c ON c.id = sc.component_id LEFT JOIN cases AS cs ON cs.id = c.case_id LEFT JOIN groups AS g ON g.id = c.group_id WHERE le.location_id = ? ORDER BY g.name, c.name", {
+  const entries = await seqlz.query("SELECT le.id, c.name AS cname, g.name AS gname, sc.component_id, le.quant, le.quant_unit, le.box, le.labels, cs.name AS csname, le.supcode_id, sc.partnumber, sc.ordercode FROM location_entry AS le LEFT JOIN suppliercodes AS sc ON sc.id = le.supcode_id LEFT JOIN components AS c ON c.id = sc.component_id LEFT JOIN cases AS cs ON cs.id = c.case_id LEFT JOIN groups AS g ON g.id = c.group_id WHERE le.location_id = ? ORDER BY g.name, c.name", {
     replacements: [req.params.id],
     type: QueryTypes.SELECT
   });
   res.render(/labels$/.test(req.originalUrl) ? "location_labels" : "location_home", {
     user: req.user,
     location: loc,
-    entries: entries_w_supcodes,
+    entries: entries,
     allLocations,
   });
 });
@@ -176,12 +176,15 @@ controller.labels_post = asyncHandler(async (req, res, next) => {
   }
   // Component labels
   for (let idx in req.body) {
-    // console.log(`${idx} = ${req.body[idx]}`);
-    const re = idx.toString().match(/^comp_([0-9]+)/);
-    // console.log(`re=${re}`);
+    console.log(`idx: ${idx} = ${req.body[idx]}`);
+    const re = idx.toString().match(/^sc_([0-9]+)/);
+    console.log(`re=${re}`);
     if (re && req.body[idx] === 'on') {
+      const supcode_id = parseInt(re[1]);
+      console.log(`supcode_id=${supcode_id}`);
+      const supcode = await Suppliercode.findOne({where: {id: supcode_id}, raw: true});
       const comp = await Component.findOne({
-        where: {id: parseInt(re[1])},
+        where: {id: supcode.component_id},
         raw: true,
         include: [
           {
@@ -196,7 +199,7 @@ controller.labels_post = asyncHandler(async (req, res, next) => {
           }]
       });
 
-      const le = await LocationEntry.findOne({where: {location_id: req.params.id, component_id : parseInt(re[1])}});
+      const le = await LocationEntry.findOne({where: {location_id: req.params.id, supcode_id : supcode_id}});
       const str = render(component_template, {
         component: lescape(comp.name, { preserveFormatting: false }),
         case: lescape(comp['case.name'], { preserveFormatting: false }),
