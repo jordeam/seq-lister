@@ -4,7 +4,7 @@
   {{enableBorderline}} \draw (\labelWidth*0.45,\labelHeight) -- (\labelWidth*0.55,\labelHeight);
   {{enableBorderline}} \draw (\labelWidth,\labelHeight*0.45) -- (\labelWidth,\labelHeight*0.55);
   {{enableBorderline}} \draw (0,\labelHeight*0.45) -- (0,\labelHeight*0.55);
-  \node[text width=\labelWidth, anchor=north west] at (0,\labelHeight) {\small {{group}}\\ {\bf {{component}}}\\ {{case}} {{labels}}};
-  \node[anchor=south east] at (\labelWidth,0) {\small {{location}}/{{box}}};
-  \node[anchor=south west] at (0,0) {\small $\cdot$ {{unit}}};
+  \node[text width=\labelWidth, anchor=north west] at (0,\labelHeight) {\small {{group}}\\ {\bf {{component}}}\\ $\cdot$ {{unit}} -- {{case}}; {{labels}}};
+  \node[anchor=south east] at (\labelWidth,0) { \small cx: \bf {{box}}};
+  \node[anchor=south west] at (0,0) {\tiny {{location}}};
 \end{tikzpicture}%
