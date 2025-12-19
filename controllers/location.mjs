@@ -55,7 +55,7 @@ controller.home = asyncHandler(async (req, res, next) => {
     replacements: [req.params.id],
     type: QueryTypes.SELECT
   });
-  res.render(/labels$/.test(req.originalUrl) ? "location_labels" : "location_home", {
+  res.render("location_home", {
     user: req.user,
     location: loc,
     entries: entries,
@@ -101,7 +101,30 @@ controller.delete = asyncHandler(async (req, res, next) => {
     res.redirect('/location/');
 });
 
-// List all components of a location to print labels
+// List all components of a location for labels
+controller.labels = asyncHandler(async (req, res, next) => {
+  const loc = await Location.findOne({where: {id: req.params.id}});
+  if (loc === null) {
+    // No results.
+    const err = new Error("Localização não encontrada");
+    err.status = 404;
+    return next(err);
+  }
+
+  const entries = await seqlz.query("SELECT le.id, c.name AS cname, g.name AS gname, sc.component_id, le.quant, le.quant_unit, le.box, le.labels, cs.name AS csname, le.supcode_id, sc.partnumber, sc.ordercode FROM location_entry AS le LEFT JOIN suppliercodes AS sc ON sc.id = le.supcode_id LEFT JOIN components AS c ON c.id = sc.component_id LEFT JOIN cases AS cs ON cs.id = c.case_id LEFT JOIN groups AS g ON g.id = c.group_id WHERE le.location_id = ? ORDER BY g.name, c.name", {
+    replacements: [req.params.id],
+    type: QueryTypes.SELECT
+  });
+  res.render("location_labels", {
+    user: req.user,
+    location: loc,
+    entries: entries,
+  });
+});
+
+/**
+ * Generates the final pdf file with the labels.
+ */
 controller.labels_post = asyncHandler(async (req, res, next) => {
   const loc_id = req.params.id; // location id
   console.log(`location_id=${loc_id}`);
@@ -200,6 +223,7 @@ controller.labels_post = asyncHandler(async (req, res, next) => {
       });
 
       const le = await LocationEntry.findOne({where: {location_id: req.params.id, supcode_id : supcode_id}});
+      const labels = le.labels.split(/\s*,\s*/);
       const str = render(component_template, {
         component: lescape(comp.name, { preserveFormatting: false }),
         case: lescape(comp['case.name'], { preserveFormatting: false }),
@@ -207,6 +231,7 @@ controller.labels_post = asyncHandler(async (req, res, next) => {
         location: lescape(location.name, { preserveFormatting: false }),
         box: le.box,
         unit: le.quant_unit,
+        labels: req.body.includeRefs ? labels.join(', ') : "",
         enableBorderline: req.body.drawBorderline ? "" : "%",
       });
       out_str += str;
@@ -330,6 +355,29 @@ controller.insert_from = asyncHandler(async (req, res, next) => {
       box: entry.box});
   }
     res.redirect("/location/"+req.params.id);
+});
+
+controller.saveParams = asyncHandler(async (req, res, next) => {
+  const loc_id = req.params.id; // location id
+  console.log(`saveParams: location_id=${loc_id}`);
+  await Location.update({
+    n_columns: parseInt(req.body.nColumns),
+    n_rows: parseInt(req.body.nRows),
+    page_width: parseFloat(req.body.pageWidth), // mm
+    page_height: parseFloat(req.body.pageHeight), // mm
+    top_margin: parseFloat(req.body.topMargin), //mm
+    bottom_margin: parseFloat(req.body.bottomMargin), //mm
+    left_margin: parseFloat(req.body.leftMargin), // mm
+    right_margin: parseFloat(req.body.rightMargin), // mm
+    horiz_spacing: parseFloat(req.body.horizSpacing), // mm
+  },
+                        {
+                          where: {id: loc_id},
+                        });
+  res.set({
+    "Content-Type": "text/html",
+  })
+    .send("<p> Dados salvos </p>");
 });
 
 export default controller;

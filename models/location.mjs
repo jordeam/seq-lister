@@ -9,6 +9,15 @@ const Location = seqlz.define("location", {
   quant: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0 },
   bom: { type: DataTypes.TEXT, allowNull: false, defaultValue: '' },
   active: {type: DataTypes.BOOLEAN, allowNull: false, defaultValue: true},
+  n_columns: {type: DataTypes.INTEGER, allowNull: false, defaultValue: 5},
+  n_rows: {type: DataTypes.INTEGER, allowNull: false, defaultValue: 12},
+  page_width: {type: DataTypes.REAL, allowNull: false, defaultValue: 210},
+  page_height: {type: DataTypes.REAL, allowNull: false, defaultValue: 298},
+  top_margin: {type: DataTypes.REAL, allowNull: false, defaultValue: 2},
+  bottom_margin: {type: DataTypes.REAL, allowNull: false, defaultValue: 2},
+  left_margin: {type: DataTypes.REAL, allowNull: false, defaultValue: 2},
+  right_margin: {type: DataTypes.REAL, allowNull: false, defaultValue: 2},
+  horiz_spacing: {type: DataTypes.REAL, allowNull: false, defaultValue: 2},
   url: {
     type: DataTypes.VIRTUAL,
     get() {

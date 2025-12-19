@@ -242,7 +242,7 @@ function insertWithComp(wdg) {
   const case_id = +form.elements.case_id.value;
   const box = +form.elements.box.value;
 
-  requestOptions = {
+  const requestOptions = {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: new URLSearchParams({
@@ -287,7 +287,7 @@ function insertCompWithPN(wdg) {
   const labels = form.elements.labels.value;
   const box = +form.elements.box.value;
 
-  requestOptions = {
+  const requestOptions = {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: new URLSearchParams({

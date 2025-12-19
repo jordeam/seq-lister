@@ -10,7 +10,13 @@ import Suppliercode from '../models/suppliercode.mjs';
 import Supplier from '../models/supplier.mjs';
 import Manufacturer from '../models/manufacturer.mjs';
 import SuperGroup from '../models/supergroup.mjs';
-import escapeStringRegexp from 'escape-string-regexp';
+
+// import escapeStringRegexp from 'escape-string-regexp';
+// because there is a bug in this function, using:
+function escapeStringRegexp(string) {
+  // $& means the whole matched string.
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
 
 const controller = {};
 
@@ -159,7 +165,9 @@ controller.home = asyncHandler(async (req, res, next) => {
   });
 });
 
-
+/**
+ * Upload the BOM from schematic
+ */
 controller.upload = asyncHandler(async (req, res) => {
   if (!req.files || Object.keys(req.files).length === 0) {
     return res.status(400).send('No files were uploaded.');
@@ -395,6 +403,9 @@ controller.insertComp = asyncHandler(async (req, res) => {
   res.send('<p> Componente inserido');
 });
 
+/**
+ * Finally insert a new location entry with an existing partnumer
+ */
 controller.insertCompWithPN = asyncHandler(async (req, res) => {
   await LocationEntry.create({
     location_id: req.body.loc_id,

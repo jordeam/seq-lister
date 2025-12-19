@@ -11,41 +11,54 @@ block content
 
 
   form(action="/location/"+location.id+"/labels" method="post")
-    h2 Dimensões:
+    input(type="hidden" name="locationId" value=location.id)
+    div#dim_hide
+      p
+        button.btn.btn-primary(type="button" onclick="editDimsShow();") Editar Dimensões
+    div#dim_show(style="display: none;")
+      h2 Dimensões:
+      p
+        label(for="nColumns") Colunas:
+        input#nColumns(type="text" name="nColumns" value=location.n_columns)
+      p
+        label(for="nRows") Linhas:
+        input#nRows(type="text" name="nRows" value=location.n_rows required)
+      p
+        label(for="pageWidth") Largura da página (mm):
+        input#pageWidth(type="text" name="pageWidth" value=location.page_width required)
+      p
+        label(for="pageHeight") Altura da página (mm):
+        input#pageHeight(type="text" name="pageHeight" value=location.page_height required)
+      p
+        label(for="topMargin") Margem superior (mm):
+        input#topMargin(type="text" name="topMargin" value=location.top_margin required)
+      p
+        label(for="bottomMargin") Margem inferior (mm):
+        input#bottomMargin(type="text" name="bottomMargin" value=location.bottom_margin required)
+      p
+        label(for="leftMargin") Margem esquerda (mm):
+        input#leftMargin(type="text" name="leftMargin" value=location.left_margin required)
+      p
+        label(for="rightMargin") Margem direita (mm):
+        input#rightMargin(type="text" name="rightMargin" value=location.right_margin required)
+      p
+        label(for="horizSpacing") Inter espaçamento horizontal (mm):
+        input#horizSpacing(type="text" name="horizSpacing" value=location.horiz_spacing required)
+      p
+        button.btn.btn-primary(type="button" onclick="editDimsHide();")
+          img(src="/image/shrink-icon.svg" alt="Fechar" width="20pt" height="24pt")
+        | &nbsp;
+        button.btn.btn-primary(type="button" onclick="saveParams(this.form)") Salvar dados
+    div#save_msg
     p
-      label(for="nColumns") Colunas:
-      input#nColumns(type="text" name="nColumns" value="5")
-      | &nbsp;
-      label(for="nRows") Linhas:
-      input#nRows(type="text" name="nRows" value="15" required)
-      | &nbsp;
       label(for="initPos") Posição incial:
       input#initPos(type="text" name="initPos" value="1" required)
-      | &nbsp;
-      label(for="pageWidth") Largura da página (mm):
-      input#pageWidth(type="text" name="pageWidth" value="210" required)
-      | &nbsp;
-      label(for="pageHeight") Altura da página (mm):
-      input#pageHeight(type="text" name="pageHeight" value="297" required)
-      | &nbsp;
-      label(for="topMargin") Margem superior (mm):
-      input#topMargin(type="text" name="topMargin" value="2" required)
-      | &nbsp;
-      label(for="bottomMargin") Margem inferior (mm):
-      input#bottomMargin(type="text" name="bottomMargin" value="2" required)
-      | &nbsp;
-      label(for="leftMargin") Margem esquerda (mm):
-      input#leftMargin(type="text" name="leftMargin" value="2" required)
-      | &nbsp;
-      label(for="rightMargin") Margem direita (mm):
-      input#rightMargin(type="text" name="rightMargin" value="2" required)
-      | &nbsp;
-      label(for="horizSpacing") Inter espaçamento horizontal (mm):
-      input#horizSpacing(type="text" name="horizSpacing" value="2" required)
-      | &nbsp;
+    p
       label(for="drawBorderline") Desenhar borda:
       input#drawBorderline(type="checkbox" name="drawBorderline" checked)
-
+    p
+      label(for="includeRefs") Incluir referências dos componentes
+      input#includeRefs(type="checkbox" name="includeRefs" checked)
     h2 Etiquetas:
 
     each _, box in Array(location.nbox)
