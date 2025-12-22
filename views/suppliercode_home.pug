@@ -8,7 +8,7 @@ block content
     if locs.length == 0
       a.btn.btn-primary(href="/suppliercode/"+suppliercode.id.toString()+'/delete')
         img(src='/image/trash-icon.svg' alt="Excluir" width="20pt" height="24pt" onclick="return confirm('Tem certeza que quer excluir o código?');")
-    | &nbsp; Código do Componente #{component.name}
+    | &nbsp; Código do Componente #{component.name} &mdash; #{compcase.name}
   h2 #[strong Grupo:] #{group.name}
   p
 

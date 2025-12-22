@@ -198,7 +198,8 @@ controller.upload = asyncHandler(async (req, res) => {
   res.redirect("/bom/" + loc.id);
 });
 
-controller.query = asyncHandler(async (req, res) => {
+// search by partnumber
+controller.search_pn = asyncHandler(async (req, res) => {
   const locId = +req.params.id;
   const index = +req.query.line;
   // get location
@@ -211,29 +212,21 @@ controller.query = asyncHandler(async (req, res) => {
   const indx = makeEntryIndexes(bom_lst[0], manufacts, suppliers);
   const entry = makeEntries(indx, bom_lst[index + 1], manufacts, suppliers);
 
-  let sc, comp, group, ccase;
+  let partnumbers;
 
   console.log(`entry.pn=${entry.pn}`);
   if (entry.pn.length > 1)
-    sc = await Suppliercode.findOne({where: {partnumber: entry.pn.trim()}});
-  if (sc)
-    comp = await Component.findOne({where: {id: sc.component_id}});
-  if (comp)
-    group = await Group.findOne({where: {id: comp.group_id}});
-  if (comp)
-    ccase = await Case.findOne({where: {id: comp.case_id}});
-
-  if (sc) {
-    sc.ordercode = sc.ordercode.trim();
-    sc.partnumber = sc.partnumber.trim();
+      partnumbers = await seqlz.query("SELECT c.id AS comp_id, c.name AS comp_name, cs.name AS case_name, g.name AS g_name, sc.partnumber, sc.ordercode, s.name AS s_name, m.name AS m_name, sc.id AS sc_id FROM suppliercodes AS sc, components AS c, groups AS g, suppliers AS s, manufacturers AS m, cases as cs WHERE manufact_id = m.id AND supplier_id = s.id AND component_id = c.id AND group_id = g.id AND cs.id = c.case_id AND (partnumber ~* $1 OR ordercode ~* $1)",
+                                    {
+                                      bind: [entry.pn],
+                                      type: QueryTypes.SELECT,
+                                    });
+  if (partnumbers && partnumbers.length > 0) {
     res.render("bom_by_partnumber", {
       loc,
       entry,
       index,
-      sc,
-      ccase,
-      comp,
-      group,
+      partnumbers,
       suppliers,
       manufacts,
     });
@@ -242,25 +235,13 @@ controller.query = asyncHandler(async (req, res) => {
     res.send("<h3> Partnumber não encontrado: use Criar Component");
 });
 
-controller.insert = asyncHandler(async (req, res) => {
-  // Find Mouser supplier ID
-  console.log(req.body);
-
+// insert component using the same partnumber
+controller.insert_pn = asyncHandler(async (req, res) => {
   await LocationEntry.create({
     location_id: req.params.id,
     labels: req.body.labels.trim(),
-//    component_id: component_id,
     supcode_id: req.body.sc_id,
     quant_unit: req.body.qty,
-  });
-
-  await Suppliercode.update({
-    ordercode: req.body.ordercode.trim(),
-    rounding: req.body.rounding,
-    manufact_id: req.body.manufact_id,
-    supplier_id: req.body.supplier_id,
-  }, {
-    where: {id: req.body.sc_id}
   });
   res.send("<p>Componente inserido!\n<hr>");
 });

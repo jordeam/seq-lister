@@ -22,6 +22,11 @@ const controller = {};
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const paperTypes = [
+  {id: 0, name: 'A4 Paper', value: 'a4paper', width: 210, height: 297},
+  {id: 1, name: 'US Letter', value: 'letter', width: 8.5*25.4, height: 11*25.4},
+];
+
 // List all locations
 controller.list = asyncHandler(async (req, res, next) => {
   // const otherLocations = await Location.findAll({where: {quant: 0}, order: seqlz.col('name')});
@@ -118,6 +123,7 @@ controller.labels = asyncHandler(async (req, res, next) => {
   res.render("location_labels", {
     user: req.user,
     location: loc,
+    paperTypes,
     entries: entries,
   });
 });
@@ -136,8 +142,9 @@ controller.labels_post = asyncHandler(async (req, res, next) => {
   //
   const nColumns = parseInt(req.body.nColumns);
   const nRows = parseInt(req.body.nRows);
-  const pageWidth = parseFloat(req.body.pageWidth); // mm
-  const pageHeight = parseFloat(req.body.pageHeight); // mm
+  const paperId = parseInt(req.body.paperId);
+  const pageWidth = paperTypes[paperId].width;
+  const pageHeight = paperTypes[paperId].height;
   const topMargin = parseFloat(req.body.topMargin); //mm
   const bottomMargin = parseFloat(req.body.bottomMargin); //mm
   const leftMargin = parseFloat(req.body.leftMargin); // mm
@@ -146,7 +153,10 @@ controller.labels_post = asyncHandler(async (req, res, next) => {
   const initPos = parseInt(req.body.initPos) - 1;
   const horizSpacing = parseFloat(req.body.horizSpacing); // mm
   const labelWidth = (pageWidth - leftMargin - rightMargin - (nColumns - 1) * horizSpacing) / nColumns;
-  const labelHeight = (pageHeight - tolHeight - topMargin - bottomMargin) / nRows;
+  const labelHeight = (pageHeight + tolHeight * (nRows - 1) - topMargin - bottomMargin) / nRows;
+
+  console.log(`labelWidth=${labelWidth}`);
+  console.log(`labelHeight=${labelHeight}`);
 
   // Initial values
   let row = 1;
@@ -165,6 +175,7 @@ controller.labels_post = asyncHandler(async (req, res, next) => {
       }
       else
         out_str += "\\\\[-\\lineskip]\n";
+        // out_str += "\\\\\n";
     }
     else {
       out_str += `\\hspace*{${horizSpacing}mm}%\n`;
@@ -191,6 +202,7 @@ controller.labels_post = asyncHandler(async (req, res, next) => {
         }
         else
           out_str += "\\\\[-\\lineskip]\n";
+          // out_str += "\\\\\n";
       }
       else {
         out_str += `\\hspace*{${horizSpacing}mm}%\n`;
@@ -199,12 +211,12 @@ controller.labels_post = asyncHandler(async (req, res, next) => {
   }
   // Component labels
   for (let idx in req.body) {
-    console.log(`idx: ${idx} = ${req.body[idx]}`);
+    // console.log(`idx: ${idx} = ${req.body[idx]}`);
     const re = idx.toString().match(/^sc_([0-9]+)/);
-    console.log(`re=${re}`);
+    // console.log(`re=${re}`);
     if (re && req.body[idx] === 'on') {
       const supcode_id = parseInt(re[1]);
-      console.log(`supcode_id=${supcode_id}`);
+      // console.log(`supcode_id=${supcode_id}`);
       const supcode = await Suppliercode.findOne({where: {id: supcode_id}, raw: true});
       const comp = await Component.findOne({
         where: {id: supcode.component_id},
@@ -243,6 +255,7 @@ controller.labels_post = asyncHandler(async (req, res, next) => {
         }
         else
           out_str += "\\\\[-\\lineskip]\n";
+          // out_str += "\\\\\n";
       }
       else {
         out_str += `\\hspace*{${horizSpacing}mm}%\n`;
@@ -269,9 +282,15 @@ controller.labels_post = asyncHandler(async (req, res, next) => {
 
   // Render final template
   await renderToFolder(template_dir + 'label-doc.tex', out_dir, {
+    paperType: paperTypes[paperId].value,
+    pageHeight,
+    pageWidth,
     topMargin,
+    bottomMargin,
     textHeight: pageHeight - topMargin - bottomMargin,
     leftMargin: -25.4 + leftMargin,
+    // leftMargin,
+    rightMargin,
     textWidth: pageWidth - rightMargin - leftMargin,
     labelWidth,
     labelHeight,
@@ -363,8 +382,9 @@ controller.saveParams = asyncHandler(async (req, res, next) => {
   await Location.update({
     n_columns: parseInt(req.body.nColumns),
     n_rows: parseInt(req.body.nRows),
-    page_width: parseFloat(req.body.pageWidth), // mm
-    page_height: parseFloat(req.body.pageHeight), // mm
+    paper_type: parseInt(req.body.paperId),
+    // page_width: parseFloat(req.body.pageWidth), // mm
+    // page_height: parseFloat(req.body.pageHeight), // mm
     top_margin: parseFloat(req.body.topMargin), //mm
     bottom_margin: parseFloat(req.body.bottomMargin), //mm
     left_margin: parseFloat(req.body.leftMargin), // mm

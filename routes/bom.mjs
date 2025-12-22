@@ -17,10 +17,10 @@ router.get('/:id', bomController.home);
 router.post('/:id/upload', ensureAuthenticated, bomController.upload);
 
 // Query a line of a BOM list
-router.get('/:id/query', bomController.query);
+router.get('/:id/search_pn', bomController.search_pn);
 
-// Insert an entry in location
-router.post('/:id/insert', ensureAuthenticated, bomController.insert);
+// Insert an entry in location with the same partnumber
+router.post('/:id/insert_pn', ensureAuthenticated, bomController.insert_pn);
 
 // Create a component
 router.get('/:id/create', ensureAuthenticated, bomController.create);

@@ -5,14 +5,13 @@ function statusClicked(wdg) {
 }
 
 function byPNClicked(wdg) {
-  const id = wdg.getAttribute("name");
   const div = document.getElementById("dialog-content");
   const params = wdg.getAttribute("value");
   const lst = params.split(",");
   const locId = lst[0];
   const i = lst[1];
   //
-  fetch(`/bom/${locId}/query?line=${i}`)
+  fetch(`/bom/${locId}/search_pn?line=${i}`)
     .then(res => {return res.text();})
     .then(res => {
       div.innerHTML = res.toString();
@@ -63,28 +62,32 @@ function useExistingPNClicked(wdg) {
     });
 }
 
-function insertWithPartnumber(index) {
+function insertWithPartnumber(wdg) {
   const form = document.getElementById('insert-comp');
 
   const loc_id = form.elements.loc_id.value;
+  const index = form.elements.index.value;
 
   const requestOptions = {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: new URLSearchParams({
       qty: form.elements.qty.value,
-      comp_id: form.elements.comp_id.value,
-      sc_id: form.elements.sc_id.value,
-      pn: form.elements.pn.value.trim(),
-      ordercode: form.elements.ordercode.value.trim(),
-      rounding: form.elements.rounding.value,
+      // comp_id: form.elements.comp_id.value,
+      sc_id: wdg.value,
+      // pn: form.elements.pn.value.trim(),
+      // ordercode: form.elements.ordercode.value.trim(),
+      // rounding: form.elements.rounding.value,
       labels: form.elements.labels.value.trim(),
-      supplier_id: form.elements.supplier_id.value,
-      manufact_id: form.elements.manufact_id.value,
+      box: +form.elements.box.value,
+      // supplier_id: form.elements.supplier_id.value,
+      // manufact_id: form.elements.manufact_id.value,
     }).toString(),
   };
 
-  const request = new Request('/bom/'+loc_id+'/insert', requestOptions);
+  // console.log(requestOptions.body);
+
+  const request = new Request('/bom/'+loc_id+'/insert_pn', requestOptions);
 
   fetch(request)
     .then(res => res.text())

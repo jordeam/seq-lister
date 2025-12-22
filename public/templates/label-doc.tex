@@ -1,4 +1,4 @@
-\documentclass[a4paper,oneside,10pt]{article}
+\documentclass[{{paperType}},oneside,10pt]{article}
 
 \usepackage[utf8]{inputenc}
 \usepackage[english,brazilian]{babel}
@@ -10,6 +10,18 @@
 \usepackage{amssymb}
 
 \usepackage{tikz}
+\usepackage{eso-pic}
+\usetikzlibrary{shapes.geometric, positioning, calc}
+
+% \usepackage[
+%     paperwidth={{pageWidth}}mm, % 2 mm right and left margins
+%     paperheight={{pageHeight}}mm,
+%     top={{topMargin}}mm,
+%     bottom={{bottomMargin}}mm,
+%     left={{leftMargin}}mm,
+%     right={{rightMargin}}mm,
+%     % showframe % Optional: Use this to see exactly where LaTeX thinks the page boundaries are
+% ]{geometry}
 
 \setlength{\topmargin}{-1in}
 \setlength{\headheight}{0pt}

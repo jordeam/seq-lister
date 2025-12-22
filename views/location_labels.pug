@@ -18,17 +18,23 @@ block content
     div#dim_show(style="display: none;")
       h2 Dimensões:
       p
-        label(for="nColumns") Colunas:
+        label.labelbom(for="nColumns") Colunas:
         input#nColumns(type="text" name="nColumns" value=location.n_columns)
       p
-        label(for="nRows") Linhas:
+        label.labelbom(for="nRows") Linhas:
         input#nRows(type="text" name="nRows" value=location.n_rows required)
+      //- p
+      //-   label(for="pageWidth") Largura da página (mm):
+      //-   input#pageWidth(type="text" name="pageWidth" value=location.page_width required)
+      //- p
+      //-   label(for="pageHeight") Altura da página (mm):
+      //-   input#pageHeight(type="text" name="pageHeight" value=location.page_height required)
       p
-        label(for="pageWidth") Largura da página (mm):
-        input#pageWidth(type="text" name="pageWidth" value=location.page_width required)
-      p
-        label(for="pageHeight") Altura da página (mm):
-        input#pageHeight(type="text" name="pageHeight" value=location.page_height required)
+        label.labelbom(for="paper") Tipo do papel:
+        select#paper(name="paperId")
+          each paper in paperTypes
+            option(value=paper.id selected=(paper.id === location.paper_type) ? "selected" : false) #{paper.name}
+
       p
         label(for="topMargin") Margem superior (mm):
         input#topMargin(type="text" name="topMargin" value=location.top_margin required)

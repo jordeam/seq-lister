@@ -4,9 +4,11 @@ import Supplier from "../models/supplier.mjs";
 import Manufacturer from "../models/manufacturer.mjs";
 import Component from '../models/component.mjs';
 import Group from '../models/group.mjs';
+import Case from '../models/case.mjs';
 
 import asyncHandler from "express-async-handler";
 import { QueryTypes } from 'sequelize';
+// import { promises } from 'superagent/lib/node/response';
 
 const controller = {};
 
@@ -23,7 +25,10 @@ controller.home = asyncHandler(async (req, res, next) => {
   }
 
   const component = await Component.findOne({where: {id: suppliercode.component_id}});
-  const group = await Group.findOne({where: {id: component.group_id}});
+  const [compcase, group] = await Promise.all([
+    Case.findOne({where: {id: component.case_id}}),
+    Group.findOne({where: {id: component.group_id}}),
+  ]);
 
   const [suppliers, manufacturers] = await Promise.all([
     Supplier.findAll({order: seqlz.col('name')}),
@@ -40,6 +45,7 @@ controller.home = asyncHandler(async (req, res, next) => {
     user: req.user,
     suppliercode,
     component,
+    compcase,
     group,
     suppliers,
     manufacturers,

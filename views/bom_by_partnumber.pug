@@ -1,48 +1,38 @@
-h4 Inserindo com Partnumber existente
-
-p Componente encontrado: &nbsp;
-  a(href='/component/'+comp.id) #{group.name} - #{comp.name}
-  if ccase.name.length > 1
-    | (#{ccase.name})
+h3 Inserir componente com Partnumber existente
 
 form#insert-comp(method="post" action="/bom/"+loc.id+"/insert")
-  input(type="hidden" name="comp_id" value=comp.id)
   input(type='hidden' name="loc_id" value=loc.id)
   input(type="hidden" name="index" value=index)
-  input(type="hidden" name="sc_id" value=sc.id)
   br
-  label.labelbom(for="qty") Quant.
+  label.labelbom(for="qty") Quantidade:
   input#qty(type="text" name="qty" value=entry.qty)
-  br
-  label.labelbom(for="round") Arredondamento
-  input#round(type="text" name="rounding" value=sc.rounding)
-  br
-  label.labelbom(for="pn") Partnumber
-  input#pn(type="text" name="pn" value=entry.pn readonly)
-  br
-  label.labelbom(for="manufact") Fabricante:
-  select#manufact(name="manufact_id")
-    each val in manufacts
-      option(value=val.id selected=(val.id == sc.manufact_id ? "selected" : false)) #{val.name}
-  br
-  if sc.ordercode.length > 1
-    if sc.ordercode !== entry.ordercode
-      | Ordercode do BOM (#{entry.ordercode}) difere do DB (#{sc.ordercode}): usando DB
-    label.labelbom(for="order") Ordercode
-    input#order(type="text" name="ordercode" value=sc.ordercode)
-  else
-    label.labelbom(for="order") Ordercode
-    input#order(type="text" name="ordercode" value=entry.ordercode)
-  br
-  label.labelbom(for="supplier") Fornecedor:
-  select#supplier(name="supplier_id")
-    each val in suppliers
-      option(value=val.id selected=(val.id == sc.supplier_id) ? "selected" : false) #{val.name}
   br
   label.labelbom.fwidth(for="labels") Labels
   input#labels(type="text" name="labels" value=entry.labels)
   br
   label.labelbom(for="box") Caixa
   input#box(type="text" name="box" value="1")
-  p
-    button.btn.btn-primary(type="button" onclick="return insertWithPartnumber("+index+");") Inserir
+  table
+    tr
+      th
+      th Grupo
+      th Valor
+      th Case
+      th PN
+      th Fabricante
+      th Ordercode
+      th Fornecedor
+    each partnumber in partnumbers
+      tr
+        td
+          a.btn.btn-primary(href="/suppliercode/"+partnumber.sc_id)
+            img(src="/image/edit-icon.svg" alt="Edit" width="20pt" height="24pt")
+        td #{partnumber.g_name}
+        td #{partnumber.comp_name}
+        td #{partnumber.case_name}
+        td #{partnumber.partnumber}
+        td #{partnumber.m_name}
+        td #{partnumber.ordercode}
+        td #{partnumber.s_name}
+        td
+          button.btn.btn-primary(type="button" onclick="return insertWithPartnumber(this);" value=partnumber.sc_id) Inserir
