@@ -1,4 +1,10 @@
-h4 Criando Novo Componente ou Partnumber
+h3 Criando Novo Componente ou Partnumber
+
+if (att_str && att_str.length > 0)
+  div.attention
+    h4 Atenção
+    each elt in att_str
+      h5 #{elt}
 
 form#insert-comp(method="post" action="/bom/"+loc.id+"/insert" onsubmit="return false;")
   input#locid(type='hidden' name="loc_id" value=loc.id)

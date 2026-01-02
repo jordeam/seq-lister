@@ -34,4 +34,7 @@ router.post('/:id/insert_comp', ensureAuthenticated, bomController.insertComp);
 // Insert a locationentry in location with an existing partnumber and  component name
 router.post('/:id/insert_comp_w_pn', ensureAuthenticated, bomController.insertCompWithPN);
 
+// Change the status character of a BOM line in location :id
+router.get('/:id/change', ensureAuthenticated, bomController.changeStatus);
+
 export default router;

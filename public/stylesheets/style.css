@@ -100,3 +100,6 @@ a img {
   visibility: visible;
   opacity: 1;
 }
+.attention {
+    background-color: #ff0000;
+}

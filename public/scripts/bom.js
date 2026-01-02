@@ -1,7 +1,21 @@
 function statusClicked(wdg) {
   const id = wdg.getAttribute("name");
   const div = document.getElementById(id);
-  div.innerHTML = "";
+  const params = wdg.getAttribute("value");
+  const lst = params.split(",");
+  const locId = lst[0];
+  const line = lst[1];
+  // Change line entry status
+  fetch(`/bom/${locId}/change?line=${line}`)
+    .then(res => {return res.text()})
+    .then(text => {
+      let status = text.toString();
+      if (status.length == 1)
+        wdg.childNodes[0].innerHTML = status;
+      else if (status.length > 1) {
+        document.getElementById('bom' + line).innerHTML = status;
+      }
+    });
 }
 
 function byPNClicked(wdg) {
@@ -75,6 +89,7 @@ function insertWithPartnumber(wdg) {
       qty: form.elements.qty.value,
       // comp_id: form.elements.comp_id.value,
       sc_id: wdg.value,
+      index,
       // pn: form.elements.pn.value.trim(),
       // ordercode: form.elements.ordercode.value.trim(),
       // rounding: form.elements.rounding.value,
@@ -91,9 +106,12 @@ function insertWithPartnumber(wdg) {
 
   fetch(request)
     .then(res => res.text())
-    .then(data => {
+    .then(txt => {
       const divbom = document.getElementById('bom'+index);
-      divbom.innerHTML = data;
+      const rgx = /,(?=(?:(?:[^"]*"){2})*[^"]*$)/;
+      lst = txt.split(rgx);
+      divbom.innerHTML = lst[1];
+      document.getElementById('status' + index).innerHTML = lst[0];
       // hide dialog
       document.getElementById('dialog').style='display: none';
       document.getElementById('back').style = 'display: block';
@@ -269,9 +287,13 @@ function insertWithComp(wdg) {
   const request = new Request('/bom/'+loc_id+'/insert_comp', requestOptions);
   fetch(request)
     .then(res => res.text())
-    .then(data => {
+    .then(txt => {
       const divbom = document.getElementById('bom'+index);
-      divbom.innerHTML = data;
+      const rgx = /,(?=(?:(?:[^"]*"){2})*[^"]*$)/;
+      const lst = txt.split(rgx);
+      console.log(lst);
+      divbom.innerHTML = lst[1];
+      document.getElementById('status'+index).innerHTML = lst[0];
       close_dialog();
     })
     .catch(error => console.error(error));
@@ -305,9 +327,12 @@ function insertCompWithPN(wdg) {
   const request = new Request('/bom/'+sc_id+'/insert_comp_w_pn', requestOptions);
   fetch(request)
     .then(res => res.text())
-    .then(data => {
+    .then(txt => {
       const divbom = document.getElementById('bom'+index);
-      divbom.innerHTML = data;
+      const rgx = /,(?=(?:(?:[^"]*"){2})*[^"]*$)/;
+      const lst = txt.split(rgx);
+      divbom.innerHTML = lst[1];
+      document.getElementById('status' + index).innerHTML = lst[0];
       close_dialog();
     })
     .catch(error => console.error(error));

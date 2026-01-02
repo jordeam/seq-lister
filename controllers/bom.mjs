@@ -40,6 +40,20 @@ function findInList(str, lst) {
   return i;
 }
 
+const fieldList = {
+  qty: /Qty/i,
+  ref: /Reference/i,
+  pn: /(Part *Number)|(pn)|(mfg#)|(mfr#)/i,
+  mfr: /(mfg)|(mfr)|(Manufacturer)/i,
+  sup: /(Vendor)|(Sup)|(Supplier)/i,
+  oc: /(oc)|(supplier#)|(oc#)|(Order *Code)/i,
+  val: /Value/i,
+  desc: /Descr.*/i,
+  foot: /Foot.*/i,
+};
+
+fieldList['desc'] = /Desc.*/i;
+
 /**
  * return all indexes of entries in str
  */
@@ -49,23 +63,23 @@ function makeEntryIndexes(headerStr, mfrList, supList) {
   let qty, labels, pn, order, compname, descr, mfr, sup, foot;
   console.log(`header=%j`, header);
   for (const i in header) {
-    if (/Qty/i.test(header[i]))
+    if (fieldList['qty'].test(header[i]))
       qty = +i;
-    else if (/Reference/i.test(header[i]))
+    else if (fieldList['ref'].test(header[i]))
       labels = +i;
-    else if (/(Part *Number)|(mfg#)|(mfr#)/i.test(header[i]))
+    else if (fieldList['pn'].test(header[i]))
       pn = +i;
-    else if (/(mfg)|(mfr)|(Manufacturer)/i.test(header[i]))
-      mfr = + i;
-    else if (/(Vendor)|(Sup)|(Supplier)/i.test(header[i]))
-      sup = + i;
-    else if (/(oc)|(oc#)|(Order *Code)/i.test(header[i]))
+    else if (fieldList['mfr'].test(header[i]))
+      mfr = +i;
+    else if (fieldList['sup'].test(header[i]))
+      sup = +i;
+    else if (fieldList['oc'].test(header[i]))
      order = +i;
-    else if (/Value/i.test(header[i]))
+    else if (fieldList['val'].test(header[i]))
       compname = +i;
-    else if (/Descr.*/i.test(header[i]))
+    else if (fieldList['desc'].test(header[i]))
       descr = +i;
-    else if (/Foot.*/i.test(header[i]))
+    else if (fieldList['foot'].test(header[i]))
       foot = +i;
   }
   console.log({qty, labels, pn, order, compname, descr, mfr, sup, foot});
@@ -122,6 +136,25 @@ function makeEntries(indx, entryLine, mfrList, supList) {
   }
   // console.log(`compname=${entry.compname}\nentry=%j`, entry);
   return entry;
+}
+
+// Change the status of a BOM line to new_status
+async function changeStatus(location_id, line, new_status) {
+  const loc = await Location.findOne({ where: { id: location_id } });
+  const bom_lst = loc.get('bom').split(/\r?\n/);
+  let status;
+  line++;
+  if (line <= bom_lst.length) {
+    const regex = /,(?=(?:(?:[^"]*"){2})*[^"]*$)/;
+    const lst = bom_lst[line].split(regex);
+    status = new_status;
+    lst[0] = status;
+    bom_lst[line] = lst.join(',');
+    console.log(`bom_lst[${line}]=${bom_lst[line]}`);
+    loc.set('bom', bom_lst.join('\n'));
+    await loc.save();
+  }
+  return status;
 }
 
 // Redirect to list of Locations
@@ -237,13 +270,15 @@ controller.search_pn = asyncHandler(async (req, res) => {
 
 // insert component using the same partnumber
 controller.insert_pn = asyncHandler(async (req, res) => {
+  const location_id = +req.params.id;
   await LocationEntry.create({
-    location_id: req.params.id,
+    location_id,
     labels: req.body.labels.trim(),
-    supcode_id: req.body.sc_id,
-    quant_unit: req.body.qty,
+    supcode_id: +req.body.sc_id,
+    quant_unit: +req.body.qty,
   });
-  res.send("<p>Componente inserido!\n<hr>");
+  changeStatus(location_id, +req.body.index, 'i');
+  res.send("i,<p>Componente inserido!\n<hr>");
 });
 
 //** Create component, references, partnumber, etc. and insert it into location.
@@ -272,18 +307,16 @@ controller.create = asyncHandler(async (req, res) => {
     sc_pn = await Suppliercode.findOne({where: {partnumber: {[Op.regexp]: `^ *${escapeStringRegexp(entry.pn)} *$`}}});
   if (entry.ordercode.length > 1)
     sc_oc = await Suppliercode.findOne({where: {ordercode: {[Op.regexp]: `^ *${escapeStringRegexp(entry.ordercode)} *$`}}});
-  let err_str = "";
+  let att_str = [];
   if (sc_pn) {
-    err_str += "<p>Erro: Partnumber encontrado, use criar por Partnumber\n";
+    att_str.push(`Partnumber encontrado, considere criar por Partnumber (= PN: ${sc_pn.partnumber})`);
     console.log(sc_pn);
   }
   if (sc_oc)
-    err_str += "<p>Erro: Ordercode encontrado, use criar por Ordercode\n";
-
-  if (err_str.length > 0)
-    return res.send(err_str);
+    att_str.push(`Ordercode encontrado, considere criar por Partnumber (= PN: ${sc_oc.ordercode}) `);
 
   res.render("bom_create_comp", {
+    att_str,
     loc,
     entry,
     index,
@@ -321,18 +354,16 @@ controller.insertExistingPN = asyncHandler(async (req, res) => {
     sc_pn = await Suppliercode.findOne({where: {partnumber: {[Op.regexp]: `^ *${escapeStringRegexp(entry.pn)} *$`}}});
   if (entry.ordercode.length > 1)
     sc_oc = await Suppliercode.findOne({where: {ordercode: {[Op.regexp]: `^ *${escapeStringRegexp(entry.ordercode)} *$`}}});
-  let err_str = "";
+  let att_str = [];
   if (sc_pn) {
-    err_str += "<p>Erro: Partnumber encontrado, use criar por Partnumber\n";
+    att_str.push(`Partnumber encontrado, considere criar por Partnumber (= PN: ${sc_pn.partnumber})`);
     console.log(sc_pn);
   }
-  // if (sc_oc)
-  //   err_str += "<p>Erro: Ordercode encontrado, use criar por Ordercode\n";
-
-  if (err_str.length > 0)
-    return res.send(err_str);
+  if (sc_oc)
+    att_str.push(`Ordercode encontrado, considere criar por Partnumber (= PN: ${sc_oc.ordercode}) `);
 
   res.render("bom_insert_exist_pn", {
+    att_str,
     loc,
     entry,
     index,
@@ -381,22 +412,48 @@ controller.insertComp = asyncHandler(async (req, res) => {
     quant_unit: req.body.qty,
     box: req.body.box,
   });
-  res.send('<p> Componente inserido');
+  res.send('i,<p> Componente inserido');
 });
 
 /**
  * Finally insert a new location entry with an existing partnumer
  */
 controller.insertCompWithPN = asyncHandler(async (req, res) => {
+  const location_id = +req.body.loc_id;
   await LocationEntry.create({
-    location_id: req.body.loc_id,
+    location_id,
     labels: req.body.labels.trim(),
 //    component_id: comp.id,
     supcode_id: req.params.id,
     quant_unit: req.body.qty,
     box: req.body.box,
   });
-  res.send('<p> Componente inserido');
+  changeStatus(location_id, +req.body.index, 'i');
+  res.send("i,<p>Componente inserido!\n<hr>");
+});
+
+// Change the status char of a line in location
+controller.changeStatus = asyncHandler(async (req, res) => {
+  let location_id = +req.params.id;
+  let n = +req.query.line + 1;
+  console.log(`location_id = ${location_id}, line number = ${n}`);
+  const loc = await Location.findOne({ where: { id: location_id } });
+  const bom_lst = loc.get('bom').split(/\r?\n/);
+  let status;
+  if (n <= bom_lst.length) {
+    const regex = /,(?=(?:(?:[^"]*"){2})*[^"]*$)/;
+    const lst = bom_lst[n].split(regex);
+    if (lst[0] == 'i')
+      lst[0] = 'u';
+    else
+      lst[0] = 'i';
+    status = lst[0];
+    bom_lst[n] = lst.join(',');
+    console.log(`bom_lst[${n}]=${bom_lst[n]}`);
+    loc.set('bom', bom_lst.join('\n'));
+    await loc.save();
+  }
+  res.send(status);
 });
 
 export default controller;

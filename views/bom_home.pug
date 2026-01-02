@@ -31,7 +31,8 @@ block content
 
     each elt, i in bom
       p
-        span.btn2.fwidth(style="text-align: center; width: 2em;" onclick="return statusClicked(this);" name="bom"+i value=location.id+","+i) #{elt.status}
+        a(onclick="return statusClicked(this);" name="bom"+i value=location.id+","+i)
+          span.btn2.fwidth(style="text-align: center; width: 2em;" id="status"+i) #{elt.status}
         | &nbsp;
         span.btnPN.fwidth(style="text-align: center; width: 3em;" onclick="return byPNClicked(this);" name="bom"+i value=location.id+","+i) = PN
         | &nbsp;
