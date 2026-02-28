@@ -133,3 +133,5 @@ dist
 /sessions/
 /public/temp/
 /auth-keys.yaml
+*.aux
+*.gz

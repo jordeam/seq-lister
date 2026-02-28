@@ -15,6 +15,9 @@ block content
   form(method='POST' action=suppliercode.url)
     div.form-group
       label(for='partnumber') Partnumber:
+      button.btn-primary(type="button" onclick="copyToClipboard('partnumber');")
+        img(src="/image/edit-icon.svg" alt="Edit" width="12pt" height="16pt")
+
       input#partnumber.form-control(placeholder='Partnumber' name='partnumber' value=suppliercode.partnumber)
 
       label(for="manufact") Fabricante:
@@ -23,6 +26,8 @@ block content
           option(value=val.id selected=(val.id === suppliercode.manufact_id) ? "selected" : false) #{val.name}
 
       label(for='ordercode') Código no fornecedor:
+      button.btn-primary(type="button" onclick="copyToClipboard('ordercode');")
+        img(src="/image/edit-icon.svg" alt="Edit" width="12pt" height="16pt")
       input#ordercode.form-control(placeholder='Código do fornecedor' name='ordercode' value=suppliercode.ordercode)
 
       label(for="supplier") Fornecedor:
@@ -50,3 +55,5 @@ block content
         a(href="/location/"+val.id class='btn btn-primary')
           img(src="/image/loc-icon.svg" alt="Ir" width="20pt" height="24pt")
         | &nbsp; #{val.name} / #{val.box}: #{val.quant}
+
+  script(src="/script/partnumber.js")

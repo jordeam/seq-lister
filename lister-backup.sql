@@ -2,10 +2,8 @@
 -- PostgreSQL database dump
 --
 
-\restrict InzaMuPWGCch4f4rSXqqUvjsapfBW187JOAoBGAffPdzMZX42xysLvFIJhFlvUQ
-
--- Dumped from database version 15.14 (Debian 15.14-0+deb12u1)
--- Dumped by pg_dump version 15.14 (Debian 15.14-0+deb12u1)
+-- Dumped from database version 13.9 (Debian 13.9-0+deb11u1)
+-- Dumped by pg_dump version 13.9 (Debian 13.9-0+deb11u1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -22,14 +20,12 @@ SET row_security = off;
 -- Name: lister; Type: DATABASE; Schema: -; Owner: jrm
 --
 
-CREATE DATABASE lister WITH TEMPLATE = template0 ENCODING = 'UTF8' LOCALE_PROVIDER = libc LOCALE = 'en_US.UTF-8';
+CREATE DATABASE lister WITH TEMPLATE = template0 ENCODING = 'UTF8' LOCALE = 'en_US.UTF-8';
 
 
 ALTER DATABASE lister OWNER TO jrm;
 
-\unrestrict InzaMuPWGCch4f4rSXqqUvjsapfBW187JOAoBGAffPdzMZX42xysLvFIJhFlvUQ
 \connect lister
-\restrict InzaMuPWGCch4f4rSXqqUvjsapfBW187JOAoBGAffPdzMZX42xysLvFIJhFlvUQ
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -772,7 +768,7 @@ COPY public.cases (id, name, descr) FROM stdin;
 33	CP Elec 6.3 x 7.7	
 53	CP Elec 5.9	
 54	CP Elec 5.5	
-55	SOIC-08	Small Outline Integrated Circuit 8 pins
+55	SO-4	SMD 2.54mm pitch
 \.
 
 
@@ -1884,6 +1880,7 @@ TLC1543	100	1295	0
 74HCT139	101	1319	0
 EURO 2C 32 MALE 90	11	1320	0
 74HC165	101	1325	0
+74HC1G125	101	1326	0
 74HC1G04	101	1327	0
 LMC6062IM	100	1329	0
 TLV2553IDW	100	1330	0
@@ -2294,7 +2291,6 @@ UCC5870QEVM-045	192	1728	0
 Carretel ETD59	34	1732	0
 ETD59	33	1733	0
 220R/5W	196	1755	47
-LTV-816S	195	1756	0
 Presilha CLM-ETD59	34	1734	0
 2.2uF/450VDC	27	1735	0
 2.2uF/305VAC	194	1736	0
@@ -2356,21 +2352,7 @@ IDC_02x10	183	1783	21
 33uF/25V	181	1793	33
 100K/0.1%	196	1794	10
 100K/1%	196	1773	10
-HCPL0639	195	1795	20
-TMCS1100A4	100	1796	55
-330nF/305VAC	27	1797	0
-10uF	17	1798	10
-49R9/0.1%	196	1799	9
-2R7/0.5W	196	1800	10
-UA9637	100	1801	55
-ST485E	100	1802	55
-TMCS1126B6	100	1803	45
-HCPL0601	195	1804	55
-MIC6270	100	1805	49
-ES1J	26	1806	38
-B1215S-2W	180	1812	0
-B1212S-2W	180	1813	0
-74HC1G125	101	1326	49
+LTV-816S	195	1756	55
 \.
 
 
@@ -2565,7 +2547,6 @@ COPY public.location_entry (id, location_id, component_id, quant_unit, quant_min
 3017	154	0	1	0	0		1	1774
 3039	156	0	5	0	0	U1,U3,U9,U10,U11	1	1727
 3060	156	0	1	0	0	J7	1	1812
-3083	156	0	1	0	0	Q10	1	1714
 792	81	415	0	0	41		5	1111
 273	81	345	0	0	19		1	1077
 274	81	419	0	0	5		1	1261
@@ -2636,9 +2617,6 @@ COPY public.location_entry (id, location_id, component_id, quant_unit, quant_min
 593	23	816	0	0	23		1	1297
 83	0	151	0	0	0		1	1301
 3018	154	0	1	0	0		1	1773
-3040	156	0	1	0	0	R63	1	1798
-3061	156	0	1	0	0	J6	1	1813
-3084	157	0	1	0	0		1	1826
 116	0	1090	0	0	24		1	237
 70	0	468	0	0	0		1	150
 65	0	445	0	0	0		1	89
@@ -2677,6 +2655,7 @@ COPY public.location_entry (id, location_id, component_id, quant_unit, quant_min
 1154	74	1262	0	0	2		1	464
 1155	74	886	0	0	5		2	200
 1166	74	1273	0	0	2		2	482
+3061	156	0	1	0	0	J6	2	1813
 1131	74	643	0	0	50		3	59
 1132	74	114	0	0	50		3	66
 1133	74	648	0	0	50		3	448
@@ -2701,9 +2680,7 @@ COPY public.location_entry (id, location_id, component_id, quant_unit, quant_min
 146	0	1170	0	0	0		1	1495
 2996	153	0	30	0	0		1	1775
 3019	154	0	3	0	0		1	1788
-3041	156	0	1	0	0	R61	1	946
 3062	156	0	1	0	0	J3	1	1814
-3085	157	0	1	0	0		1	1827
 143	0	1148	0	0	0		1	403
 117	0	1091	0	0	2		1	239
 137	0	1135	0	0	0		1	305
@@ -2779,7 +2756,6 @@ COPY public.location_entry (id, location_id, component_id, quant_unit, quant_min
 2694	139	1609	2	0	0	Q2,Q3	1	1739
 2997	153	0	6	0	0		1	1776
 3020	154	0	4	0	0		1	896
-3042	156	0	1	0	0	R60	1	1799
 3063	156	0	1	0	0	J2	1	1815
 599	23	371	0	0	3		1	845
 1825	35	88	0	0	0		2	960
@@ -2797,6 +2773,7 @@ COPY public.location_entry (id, location_id, component_id, quant_unit, quant_min
 1986	25	719	0	0	0		6	393
 507	19	616	0	0	18		1	280
 510	19	482	0	0	24		1	834
+3042	156	0	1	0	0	R60	2	1799
 509	19	113	0	0	16		1	394
 506	19	528	0	0	5		1	612
 508	19	641	0	0	10		1	638
@@ -2812,7 +2789,6 @@ COPY public.location_entry (id, location_id, component_id, quant_unit, quant_min
 1902	35	486	0	0	0		6	1126
 2861	149	1623	3	0	0	U6,U9,U10	1	1727
 1026	61	1176	0	0	10		1	1500
-3043	156	0	2	0	0	R56,R59	1	1800
 3065	156	0	2	0	0	FB1,FB2	1	938
 723	35	249	0	0	74		1	160
 740	35	727	0	0	0		1	686
@@ -2873,8 +2849,6 @@ COPY public.location_entry (id, location_id, component_id, quant_unit, quant_min
 2031	48	1023	0	0	0		2	1410
 2047	48	979	0	0	0		3	1371
 3022	154	0	4	0	0		1	1757
-3044	156	0	1	0	0	R44	1	1801
-3066	156	0	1	0	0	D2	1	937
 1231	87	426	1	0	0	 C7	1	1118
 1230	87	64	4	0	0	C4 C11 C13 C16	1	489
 1247	87	93	2	0	10	 C6 C17	1	111
@@ -2916,6 +2890,7 @@ COPY public.location_entry (id, location_id, component_id, quant_unit, quant_min
 1183	82	92	7	0	40	   D1 D2 D8 D15 D16 D17 D18	2	936
 1184	82	97	0	0	10		2	499
 1187	82	1286	1	0	5	 D12	2	500
+3043	156	0	2	0	0	R56,R59	2	1800
 1185	82	1287	1	0	10	 D13	2	501
 1189	82	1277	6	0	20	 FB1 FB3 FB4 FB6 FB7 FB8	2	486
 1225	82	1304	1	0	3	  R75	2	536
@@ -2939,7 +2914,6 @@ COPY public.location_entry (id, location_id, component_id, quant_unit, quant_min
 2976	150	0	1	0	0		1	1755
 3000	153	0	2	0	0	C20,C21	1	1778
 3067	156	0	1	0	0	D1	1	1816
-3045	156	0	1	0	0	R43	1	914
 1237	87	717	1	0	2	U1	1	1736
 1239	87	125	1	0	6	 U6	1	6
 1242	87	646	1	0	44	R5	1	529
@@ -3035,8 +3009,6 @@ COPY public.location_entry (id, location_id, component_id, quant_unit, quant_min
 2977	138	0	1	0	1		1	1507
 3001	153	0	5	0	0	C24,C25,C26,C28,C29	1	1779
 3024	154	0	1	0	0		1	1762
-3046	156	0	2	0	0	R50,R52	1	1802
-3068	156	0	2	0	0	R40,R45	1	1803
 1493	87	1340	0	0	1	 	2	969
 1491	87	242	0	0	5	 	2	734
 1492	87	1278	0	0	50	 	2	534
@@ -3097,7 +3069,6 @@ COPY public.location_entry (id, location_id, component_id, quant_unit, quant_min
 2978	138	0	1	0	1		1	1505
 3002	153	0	4	0	0	D4,D5,D9,D10	1	1780
 3025	154	0	1	0	0		1	1784
-3069	156	0	4	0	0	R27,R28,R49,R51	1	1817
 1710	23	442	0	0	0		6	82
 1680	23	775	0	0	0		4	268
 1683	23	430	0	0	0		5	138
@@ -3146,6 +3117,8 @@ COPY public.location_entry (id, location_id, component_id, quant_unit, quant_min
 2010	19	444	0	0	0		2	91
 2003	19	125	0	0	0		2	6
 2009	19	10	0	0	0		2	35
+3046	156	0	2	0	0	R50,R52	2	1802
+3068	156	0	2	0	0	R40,R45	2	1803
 2019	19	46	0	0	0		2	31
 2020	19	50	0	0	0		2	388
 2013	19	51	0	0	0		2	28
@@ -3203,7 +3176,6 @@ COPY public.location_entry (id, location_id, component_id, quant_unit, quant_min
 2180	111	1365	4	0	0	 	1	1650
 2165	111	1357	1	0	0	 	2	1578
 3004	153	0	4	0	0	FB2,FB4,FB6,FB8	1	1781
-3049	156	0	6	0	0	R21,R23,R24,R55,R64,R65	1	1805
 3072	154	0	1	0	0		1	1781
 2177	111	1117	3	0	0	  	1	289
 2176	111	1364	2	0	0	 	1	754
@@ -3269,8 +3241,6 @@ COPY public.location_entry (id, location_id, component_id, quant_unit, quant_min
 2981	153	0	5	0	0		1	1759
 3005	153	0	1	0	0	LED1	1	1782
 3028	156	0	1	0	0	X1	1	966
-3029	156	0	1	0	0	U22	1	1785
-3050	156	0	3	0	0	R18,R19,R20	1	1806
 3073	156	0	1	0	0	C30	1	1818
 2431	119	153	0	0	20		4	809
 2434	119	1448	0	0	10		4	812
@@ -3360,7 +3330,6 @@ COPY public.location_entry (id, location_id, component_id, quant_unit, quant_min
 2982	153	0	6	0	0		1	1760
 3006	153	0	6	0	0	Q1	1	1757
 3030	156	0	1	0	0	U21	1	1793
-3051	156	0	10	0	0	R8,R9,R15,R16,R22,R29,R42,R48,R57,R62	1	1807
 3074	156	0	1	0	0	C20	1	876
 2542	134	1527	1	0	0		1	1654
 2544	134	1528	1	0	0		1	1655
@@ -3379,6 +3348,7 @@ COPY public.location_entry (id, location_id, component_id, quant_unit, quant_min
 2501	119	1480	0	0	1		8	825
 2502	119	1389	0	0	3		8	826
 2489	119	9	0	0	5		7	822
+3050	156	0	3	0	0	R18,R19,R20	2	1806
 2491	119	1472	0	0	19		7	823
 2475	119	474	0	0	1		7	202
 2485	119	258	0	0	10		7	614
@@ -3416,7 +3386,6 @@ COPY public.location_entry (id, location_id, component_id, quant_unit, quant_min
 3007	153	0	6	0	0	Q2,Q3	1	903
 2983	153	0	8	0	0		1	1761
 3031	156	0	1	0	0	U19	1	1794
-3052	156	0	8	0	0	R4,R6,R10,R11,R26,R39,R41,R53	1	1808
 3075	156	0	1	0	0	C20	1	1819
 2697	139	114	1	0	19	R7	1	66
 2716	141	1284	1	0	0	C4	1	496
@@ -3490,9 +3459,10 @@ COPY public.location_entry (id, location_id, component_id, quant_unit, quant_min
 3008	153	0	2	0	0	Q5,Q6	1	1783
 3032	156	0	4	0	0	U5,U17,U18,U23	1	1795
 2808	146	659	11	0	0	R5,R6,R7,R8,R37,R38,R39,R40,R69,R70,R71	1	947
-3053	156	0	1	0	0	R17	1	1809
 2757	140	1631	4	0	0	c/ CN5,CN14,CN16,CN17	1	871
 3076	156	0	5	0	0	C15,C22,C23,C29,C33	1	1820
+2967	152	1724	3	0	0	U1,U4,U7	1	958
+3052	156	0	8	0	0	R4,R6,R10,R11,R26,R39,R41,R53	2	1808
 2809	146	1239	44	0	0	R9,R10,R11,R12,R13,R14,R15,R16,R17,R18,R19,R20,R21,R22,R23,R24,R41,R42,R43,R44,R45,R46,R47,R48,R49,R50,R51,R52,R53,R54,R55,R56,R72,R73,R74,R75,R76,R77,R78,R79,R80,R81,R82,R83	1	439
 2806	146	117	8	0	0	R1,R2,R4,R93,R95,R96,R97,R98	1	950
 2810	146	112	22	0	0	R25,R27,R29,R31,R33,R34,R35,R36,R57,R59,R61,R63,R65,R66,R67,R68,R84,R86,R88,R90,R91,R92	1	62
@@ -3538,7 +3508,6 @@ COPY public.location_entry (id, location_id, component_id, quant_unit, quant_min
 2867	149	1630	1	0	0	CN2	1	1752
 3009	153	0	3	0	0		1	1784
 3033	156	0	1	0	0	U16	1	961
-3054	156	0	8	0	0	R3,R7,R12,R13,R31,R32,R35,R38	1	1810
 3077	156	0	12	0	0	C12,C13,C16,C17,C27,C34,C35,C37,C38,C40,C41,C42	1	1821
 2870	140	1594	1	0	0	D7	1	858
 2914	151	1682	2	0	0	R6,R29	1	908
@@ -3573,7 +3542,6 @@ COPY public.location_entry (id, location_id, component_id, quant_unit, quant_min
 2905	151	1673	1	0	0	J3	1	899
 2906	151	1674	2	0	0	J4, J5	1	900
 2907	151	1675	1	0	0	L1	1	901
-2908	151	1676	1	0	0	PS1	1	902
 2909	151	1677	2	0	0	Q5,Q6	1	903
 2910	151	1678	1	0	0	R1	1	904
 2911	151	1679	1	0	0	R2	1	905
@@ -3602,7 +3570,6 @@ COPY public.location_entry (id, location_id, component_id, quant_unit, quant_min
 2939	152	1705	4	0	0	C44,C45,C48,C49	1	933
 2937	152	1703	2	0	0	C18,C20	1	931
 2969	152	88	1	0	0	U3	1	960
-2967	152	1724	3	0	0	U1,U4,U7	1	958
 2968	152	1590	3	0	0	U2,U6,U8	1	959
 2973	152	1264	1	0	0	U13	1	964
 2971	152	1725	1	0	0	U9	1	962
@@ -3633,6 +3600,7 @@ COPY public.location_entry (id, location_id, component_id, quant_unit, quant_min
 2851	149	26	1	0	0	R31	1	954
 2853	149	117	3	0	0	R18,R22,R23	1	950
 2854	149	1599	2	0	0	SV1,SV2	1	864
+2932	152	1452	17	0	0	C1,C3,C4,C5,C7,C9,C12,C16,C19,C37,C38,C39,C40,C41,C42,C43,C50	1	926
 2972	152	1293	5	0	0	U10,U11,U12,U15,U16	1	963
 2986	153	0	2	0	0		1	1764
 2974	152	1726	1	0	0	U17	1	965
@@ -3645,7 +3613,6 @@ COPY public.location_entry (id, location_id, component_id, quant_unit, quant_min
 54	0	191	0	0	0		1	12
 53	0	192	0	0	0		1	13
 3034	156	0	1	0	0	U14	1	1796
-3055	156	0	10	0	0	R1,R2,R5,R14,R33,R34,R36,R37,R46,R47	1	1811
 126	0	1099	0	0	2		1	249
 44	0	206	0	0	0		1	114
 18	0	11	0	0	0		1	1
@@ -3785,7 +3752,6 @@ COPY public.location_entry (id, location_id, component_id, quant_unit, quant_min
 1895	35	476	0	0	0		6	643
 1814	35	243	0	0	0		2	589
 1897	35	478	0	0	0		6	641
-3057	156	0	9	0	0	Q3,Q4,Q5,Q6,Q7,Q8,Q9,Q11,Q12	1	945
 1861	35	853	0	0	0		4	219
 3080	156	0	2	0	0	C3,C9	1	933
 1840	35	795	0	0	0		3	706
@@ -3826,6 +3792,8 @@ COPY public.location_entry (id, location_id, component_id, quant_unit, quant_min
 2248	114	474	0	0	13	 	1	202
 36	0	124	0	0	0		1	999
 84	0	927	0	0	1		1	1307
+43	0	139	0	0	20		1	1005
+3057	156	0	9	0	0	Q3,Q4,Q5,Q6,Q7,Q8,Q9,Q11,Q12	2	945
 1173	82	21	51	0	140	 C5 C6 C7 C9 C10 C12 C15 C27 C29 C31 C33 C42 CD1 CD1A CD2 CD3 CD4 CD5 CD6 CD8 CD9 CD10 CD11 CD12 CD13 CD14 CD15 CD16 CD17 CD23 CD29 CS1A CS1B CS2A CS2B CS3A CS3B CS4A CS4B CS5A CS5B CS6A CS6B CS7A CS7B CS8A CS8B CS10A CS10B CS11A CS11B	3	846
 1181	82	1284	1	0	0	  C41	1	496
 1496	82	1333	8	0	0	  ISO1 ISO2 ISO3 ISO5 ISO6 ISO8 ISO10 ISO11	3	557
@@ -3848,7 +3816,6 @@ COPY public.location_entry (id, location_id, component_id, quant_unit, quant_min
 2989	153	0	2	0	0		1	1768
 3013	153	0	1	0	0	U6	1	1786
 3037	156	0	5	0	0	U4,U6,U7,U12,U20	1	1797
-3058	156	0	2	0	0	Q1,Q2	1	1605
 3081	156	0	1	0	0	C1	1	1824
 953	52	186	0	0	98		1	510
 647	26	898	0	0	7		1	212
@@ -3938,7 +3905,6 @@ COPY public.location_entry (id, location_id, component_id, quant_unit, quant_min
 26	0	54	0	0	10		1	991
 48	0	172	0	0	0		1	1006
 72	0	543	0	0	0		1	1013
-43	0	139	0	0	20		1	1005
 13	0	6	0	0	0		1	980
 16	0	7	0	0	0		1	986
 38	0	130	0	0	0		1	1001
@@ -4071,6 +4037,7 @@ COPY public.location_entry (id, location_id, component_id, quant_unit, quant_min
 2036	48	1003	0	0	0		2	1414
 2037	48	1027	0	0	0		2	1415
 2033	48	1026	0	0	0		2	1412
+3015	155	0	1	0	0		1	1787
 1394	93	1217	1	0	0	JP2	1	1720
 1262	87	1312	3	0	0	F1 F2 F3	1	1025
 1233	87	998	1	0	0	R4	1	1389
@@ -4635,48 +4602,21 @@ COPY public.location_entry (id, location_id, component_id, quant_unit, quant_min
 2993	153	0	8	0	0		1	1772
 3016	154	0	4	0	0		1	1771
 3038	156	0	1	0	0	U2	1	964
-3059	156	0	2	0	0	L1,L2	1	940
-3082	156	0	4	0	0	R25,R30,R54,R58	1	1825
-3086	152	0	17	0	0	C1,C3,C4,C5,C7,C9,C12,C16,C19,C37,C38,C39,C40,C41,C42,C43,C50	1	926
-3087	158	0	6	0	0	C1,C2,C11,C12,C23,C26	1	933
-3088	158	0	2	0	0	C3,C32	1	1828
-3089	158	0	13	0	0	C4,C6,C7,C8,C10,C14,C15,C16,C25,C27,C29,C30,C31	1	926
-3090	158	0	1	0	0	C5	1	935
-3091	158	0	1	0	0	C9	1	1829
-3092	158	0	1	0	0	C13	1	1830
-3093	158	0	2	0	0	C17,C21	1	1831
-3094	158	0	1	0	0	C19	1	934
-3095	158	0	1	0	0	C24	1	1832
-3096	158	0	1	0	0	C28	1	1833
-3097	158	0	1	0	0	CN1	1	1834
-3098	158	0	1	0	0	FB1	1	938
-3099	158	0	1	0	0	FB5	1	1788
-3100	158	0	1	0	0	J4	1	1716
-3101	158	0	1	0	0	L1	1	940
-3103	158	0	2	0	0	Q3,Q4	1	1739
-3104	158	0	1	0	0	R1	1	955
-3105	158	0	1	0	0	R2	1	956
-3106	158	0	1	0	0	R3	1	1835
-3107	158	0	2	0	0	R4,R9	1	1836
-3108	158	0	1	0	0	R8	1	1837
-3109	158	0	3	0	0	R10,R11,R12	1	1838
-3110	158	0	3	0	0	R13,R14,R15	1	1839
-3111	158	0	1	0	0	R16	1	1840
-3112	158	0	1	0	0	R18	1	1841
-3113	158	0	1	0	0	U2	1	1842
-3114	158	0	4	0	0	U3,U6,U9,U12	1	1843
-3115	158	0	1	0	0	U4	1	1844
-3116	158	0	1	0	0	U5	1	1845
-3117	158	0	1	0	0	U7	1	965
-3118	158	0	1	0	0	U8	1	1766
-3119	158	0	1	0	0	U10	1	1846
-3120	158	0	1	0	0	U11	1	1847
-3121	158	0	1	0	0	U13	1	1795
-3122	158	0	1	0	0	U14	1	1848
-3123	158	0	2	0	0	D1,D2	1	1849
-3139	158	0	1	0	0	DCDC1	1	1856
-3140	158	0	1	0	0	DCDC2	1	1857
-3141	158	0	2	0	0	Q1,Q2	1	1858
+3059	156	0	2	0	0	L1,L2	2	940
+3082	156	0	4	0	0	R25,R30,R54,R58	2	1825
+3045	156	0	1	0	0	R43	2	914
+3051	156	0	10	0	0	R8,R9,R15,R16,R22,R29,R42,R48,R57,R62	2	1807
+3055	156	0	10	0	0	R1,R2,R5,R14,R33,R34,R36,R37,R46,R47	2	1811
+3041	156	0	1	0	0	R61	2	946
+3044	156	0	1	0	0	R44	2	1801
+3069	156	0	4	0	0	R27,R28,R49,R51	2	1817
+3054	156	0	8	0	0	R3,R7,R12,R13,R31,R32,R35,R38	2	1810
+3040	156	0	1	0	0	R63	2	1798
+3049	156	0	6	0	0	R21,R23,R24,R55,R64,R65	2	1805
+3053	156	0	1	0	0	R17	2	1809
+3066	156	0	1	0	0	D2	2	937
+3058	156	0	2	0	0	Q1,Q2	2	1605
+3056	156	0	1	0	0	Q10	2	1783
 \.
 
 
@@ -4685,68 +4625,66 @@ COPY public.location_entry (id, location_id, component_id, quant_unit, quant_min
 --
 
 COPY public.locations (id, name, note, nbox, quant, bom, active, n_columns, n_rows, top_margin, bottom_margin, left_margin, right_margin, horiz_spacing, paper_type) FROM stdin;
-48	R		6	0		f	5	12	2	2	2	2	2	0
-52	P01	Caixa de papelão comprida	1	0		f	5	12	2	2	2	2	2	0
-56	P02	caixa papelão	1	0		f	5	12	2	2	2	2	2	0
-26	P03	Antiga C04	1	0		f	5	12	2	2	2	2	2	0
-61	M02	Arruelas	1	0		f	5	12	2	2	2	2	2	0
-64	M03	Porcas	1	0		f	5	12	2	2	2	2	2	0
-50	M01	Parafusos	1	0		f	5	12	2	2	2	2	2	0
-65	P05	Caixa com LCDs	1	0		f	5	12	2	2	2	2	2	0
-66	M05	Parafusos	1	0		f	5	12	2	2	2	2	2	0
-67	M04	Brocas	1	0		f	5	12	2	2	2	2	2	0
-72	M06	Parafusos, porcas, terminais, espaçadores	1	0		f	5	12	2	2	2	2	2	0
-73	Satelite	Componentes do Satélite	1	0		f	5	12	2	2	2	2	2	0
-88	CBUS		1	0		f	5	12	2	2	2	2	2	0
-92	CADR-DA		1	0		f	5	12	2	2	2	2	2	0
-90	CADR-IO		1	0		f	5	12	2	2	2	2	2	0
-89	CADR-AN		1	0		f	5	12	2	2	2	2	2	0
-93	CADR	Não existe: somente para acrescentar nas outras montagens	1	0		f	5	12	2	2	2	2	2	0
-87	A420		2	0		f	5	12	2	2	2	2	2	0
-2	A18		1	0		f	5	12	2	2	2	2	2	0
-82	INV09	Pedido W35429	4	0		f	5	12	2	2	2	2	2	0
-104	CADR-MIX	2 DA, 1PWM, 2OUT, 3IN, 4 ANALOG	1	0		f	5	12	2	2	2	2	2	0
-11	G	Está sem a G2 -- Caixa 1: A06; Caixa 2: A07 e A08 (erro?); 4: A09; 5: A10;	5	0		f	5	12	2	2	2	2	2	0
-23	C		6	0		f	5	12	2	2	2	2	2	0
-107	B	Falta Caixa 3	5	0		f	5	12	2	2	2	2	2	0
-35	D		5	0		f	5	12	2	2	2	2	2	0
-25	E		1	0		f	5	12	2	2	2	2	2	0
-112	invleg	Ainda sem caixa	1	0		f	5	12	2	2	2	2	2	0
-113	OSC-1	Projeto com o Heitor	1	0		f	5	12	2	2	2	2	2	0
-19	F		6	0		f	5	12	2	2	2	2	2	0
-114	GDEC	Existem vários componentes que não fazem parte da placa GDEC	1	0		f	5	12	2	2	2	2	2	0
-71	X	Espaço gde vazio - componentes não catalogados	6	0		f	5	12	2	2	2	2	2	0
-115	Fuel Cell		1	0		f	5	12	2	2	2	2	2	0
-116	Invslave1		2	0		f	5	12	2	2	2	2	2	0
-118	Headcon1	Comprar: C34, quem é C37?	2	0		f	5	12	2	2	2	2	2	0
-120	CHOPPER		1	0		f	5	12	2	2	2	2	2	0
-121	Marcelo	Compra Farnell jul 2015	1	0		f	5	12	2	2	2	2	2	0
-119	FRD		8	0		f	5	12	2	2	2	2	2	0
-132	A4INPUTS		1	0		f	5	12	2	2	2	2	2	0
-133	BLESH2		1	0		f	5	12	2	2	2	2	2	0
-137	Chaves		1	0		f	5	12	2	2	2	2	2	0
-138	Integrados		3	0		f	5	12	2	2	2	2	2	0
-81	A	A/1 etc. ok -- Antigas Caixas A01 A02 A03 A04 A05	5	0		f	5	12	2	2	2	2	2	0
-0	Não existe	Localização inexistente	1	0		f	5	12	2	2	2	2	2	0
-134	A420C		1	0		f	5	12	2	2	2	2	2	0
-74	ACBOX	Pedidos: W37530 e W37354	3	0		f	5	12	2	2	2	2	2	0
-111	BoatArm		2	0		f	5	12	2	2	2	2	2	0
-151	Vydence PFC		1	0		t	5	12	2	2	2	2	2	0
-150	ConverterABV		1	0	status,compId,leId,"Reference","Value","Footprint","Qty","PartNumber","Ordercode","Manufacturer","Supplier"\nu,0,0,"C2,C3,C4,C5,C6,C7,C8,C9,C10,C11","10nF","Capacitor_SMD:C_0805_2012Metric","10","C0805C103K1RAC7411 "," 80-C0805C103K1RACLR ","Kemet","Mouser"\nu,0,0,"C12,C13,C14,C16,C17,C18,C19,C20,C21,C22,C23,C24,C25,C50","100nF/50V","Capacitor_SMD:C_0805_2012Metric","14","CL21B104KBCNNNL "," 80-C0805C300J4HACTU ","Samsung","Mouser"\nu,0,0,"C27,C29","1uF","Capacitor_SMD:C_1206_3216Metric","2","C1206C105Z3VAC "," 80-C1206C105Z3VAC ","Kemet","Mouser"\nu,0,0,"C30,C31","470uF/16V","Capacitor_SMD:CP_Elec_10x10.5","2","UWT1E471MNL1GS "," 647-UWT1E471MNL1S ","Nichicon","Mouser"\nu,0,0,"C44,C48,C49","22uF/25V","Capacitor_SMD:CP_Elec_5x5.9","3","EEE-1EA220WR"," 667-EEE-1EA220WR ","Panasonic","Mouser"\nu,0,0,"C46","220nF","Capacitor_SMD:C_0805_2012Metric","1","CL21B224KAFNNNG "," 187-CL21B224KAFNNNG ","Samsung","Mouser"\nu,0,0,"C47","47pF","Capacitor_SMD:C_0805_2012Metric","1","0805N470J500CT "," 791-0805N470J500CT ","Walsin","Mouser"\nu,0,0,"C51","2.2uF","Capacitor_SMD:C_0805_2012Metric","1","CL21B225KPFNNNG "," 187-CL21B225KPFNNNG ","Samsung","Mouser"\nu,0,0,"CN1,CN5,CN20","Conn_02x07_Odd_Even","Connector_IDC:IDC-Header_2x08_P2.54mm_Vertical","3","","","",""\nu,0,0,"CN12","Conn_01x02","Connector_Phoenix_GMSTB:PhoenixContact_GMSTBA_2,5_2-G_1x02_P7.50mm_Horizontal","1","","","",""\nu,0,0,"CN13","Conn_01x03","Connector_Phoenix_MSTB:PhoenixContact_MSTBA_2,5_3-G-5,08_1x03_P5.08mm_Horizontal","1","","","",""\nu,0,0,"CN14,CN19,CN21","Conn_01x02","Connector_Phoenix_MSTB:PhoenixContact_MSTBA_2,5_2-G-5,08_1x02_P5.08mm_Horizontal","3","","","",""\nu,0,0,"CN15,CN16,CN17,CN18,J1","Conn_02x05_Odd_Even","Connector_IDC:IDC-Header_2x05_P2.54mm_Vertical","5","","","",""\nu,0,0,"D1","1N4148W","Diode_SMD:D_SOD-123","1"," 1N4148W "," 637-1N4148W ","Diotec","Mouser"\nu,0,0,"D4","ESDCAN-03","Package_TO_SOT_SMD:SOT-23","1","ESDCAN03-2BWY"," 511-ESDCAN03-2BWY ","ST","Mouser"\nu,0,0,"H1,H2,H3,H4","MountingHole_Pad","MountingHole:MountingHole_3.2mm_M3_DIN965_Pad","4","","","",""\nu,0,0,"J2","Screw_Terminal_01x03","Connector_Phoenix_MSTB:PhoenixContact_MSTBA_2,5_3-G-5,08_1x03_P5.08mm_Horizontal","1","","","",""\nu,0,0,"J3","Conn_01x03","Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical","1","","","",""\nu,0,0,"J4","Conn_01x05","Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical","1","","","",""\nu,0,0,"JP1,JP2,JP3,JP4,JP5","Jumper_2_Open","Jumper:SolderJumper-2_P1.3mm_Open_Pad1.0x1.5mm","5","","","",""\nu,0,0,"K1","Relê 12V","Relay_THT:Relay_SPDT_Omron-G5LE-1","1","","","",""\nu,0,0,"L1","15uH","Inductor_SMD:L_Wuerth_MAPI-3012","1"," VLS3012CX-150M-1 "," 810-VLS3012CX150M1 ","TDK","Mouser"\nu,0,0,"PL3","LAUNCHXL-F28379D-J1-8","ABV_Footprint:LAUNCHXL-F28379D-J1-8","1","","","",""\nu,0,0,"Q1,Q2,Q3,Q4,Q5,Q6,Q7,Q8,Q9,Q10","BC817-40","Package_TO_SOT_SMD:SOT-23","10"," BC807-40,215 "," 771-BC807-40-T/R ","Nexperia","Mouser"\nu,0,0,"R1,R2,R4,R28,R30,R32,R58,R60,R62,R64,R85,R87,R89,R93,R95,R96,R97,R98","4K7","Resistor_SMD:R_0805_2012Metric","18","CRCW08054K70JNEB "," 71-CRCW08054K70JNEB ","Vishay","Mouser"\nu,0,0,"R3","1K","Resistor_SMD:R_0805_2012Metric","1"," RC0805JR-071KP "," 603-RC0805JR-071KP ","Yageo","Mouser"\nu,0,0,"R6,R7,R8,R37,R38,R39,R40,R69,R70,R71","100R","Resistor_SMD:R_0805_2012Metric","10","CRCW0805100RJNEC "," 71-CRCW0805J-100-E3 ","Vishay","Mouser"\nu,0,0,"R10,R11,R12,R14,R15,R16,R19,R20,R21,R22,R23,R24,R41,R42,R43,R44,R45,R46,R47,R48,R49,R50,R51,R52,R53,R54,R55,R56,R72,R73,R74,R75,R76,R77,R78,R79,R80,R81,R82,R83","499K/1%","Resistor_SMD:R_0805_2012Metric","40"," ERJ-PB6D4993V "," 667-ERJ-PB6D4993V ","Panasonic","Mouser"\nu,0,0,"R27,R29,R31,R34,R35,R36,R57,R59,R61,R63,R65,R66,R67,R68,R84,R86,R88,R90,R91,R92","330R 1%","Resistor_SMD:R_0805_2012Metric","20"," RC0805DR-07330RL "," 603-RC0805DR-07330RL ","Yageo","Mouser"\nu,0,0,"R94","1M","Resistor_SMD:R_0805_2012Metric","1"," RC0805JR-101ML "," 603-RC0805JR-101ML ","Yageo","Mouser"\nu,0,0,"R99","13K3 0.1%","Resistor_SMD:R_0805_2012Metric","1"," ERA-6AEB1332V "," 667-ERA-6AEB1332V ","Panasonic","Mouser"\nu,0,0,"R100","100K 0.1%","Resistor_SMD:R_0805_2012Metric","1"," ERA-6AEB104V "," 667-ERA-6AEB104V ","Panasonic","Mouser"\nu,0,0,"R101","49R9/1%","Resistor_SMD:R_0805_2012Metric","1","0805W8F499JT5E "," 303-0805W8F499JT5E ","Royalohm","Mouser"\nu,0,0,"U1,U2,U3,U4,U5","LM358","Package_SO:SOIC-8_3.9x4.9mm_P1.27mm","5"," LM358DMR2G "," 863-LM358DMR2G ","ONSemi","Mouser"\nu,0,0,"U7","MAX6675","Package_SO:SOIC-8_3.9x4.9mm_P1.27mm","1","","","",""\nu,0,0,"U8","74HCT541","Package_SO:SOIC-20W_7.5x12.8mm_P1.27mm","1"," 74HCT541D,653 "," 771-74HCT541D-T ","Nexperia","Mouser"\nu,0,0,"U9,U12","AM26C32","Package_SO:SOIC-16_3.9x9.9mm_P1.27mm","2","AM26C32IDRG4 "," 595-AM26C32IDRG4 ","TI","Mouser"\nu,0,0,"U10,U11","AM26C31","Package_SO:SOIC-16_3.9x9.9mm_P1.27mm","2"," AM26C31IDR "," 595-AM26C31IDR ","TI","Mouser"\nu,0,0,"U13","LM3940IMP-3.3","Package_TO_SOT_SMD:TO-252-3_TabPin4","1"," LM3940IMP-3.3/NOPB "," 926-LM3940IMP3.3NOPB ","TI","Mouser"\nu,0,0,"U17","TPS54202DDC","Package_TO_SOT_SMD:SOT-23-6","1"," TPS54202DDCR "," 595-TPS54202DDCR ","TI","Mouser"\n	t	5	12	2	2	2	2	2	0
-156	Vydence Control2		1	0	status,compId,leId,"Reference","Qty","Value","Exclude from BOM","Footprint","Description","mfg#","Supplier","mfr","Ordercode"\nu,0,0,"X1","1","8MHz","","Crystal:Crystal_SMD_Abracon_ABM3B-4Pin_5.0x3.2mm","Four pin crystal, GND on pins 2 and 4","ABM3B-8.0-10-1UT","","",""\nu,0,0,"U22","1","LTV-816S","","Package_DIP:SMDIP-4_W9.53mm","DC Optocoupler, Vce 35V, CTR 50%, SMDIP-4"," LTV-816S-TA1 ","","LiteON"," 859-LTV-816S-TA1 "\nu,0,0,"U21","1","74AHC1G02","","Package_TO_SOT_SMD:SOT-23-5","Single NOR Gate, Low-Voltage CMOS","","","",""\nu,0,0,"U19","1","74HCT74","","Package_SO:SO-14_3.9x8.65mm_P1.27mm","Dual D Flip-flop, Set & Reset","74HCT74D,653","","",""\nu,0,0,"U17,U18,U23","3","74HCT1G08","","Package_TO_SOT_SMD:SOT-23-5","","74HC1G08GV,125","","",""\nu,0,0,"U16","1","TJA1050","","Package_SO:SOIC-8_3.9x4.9mm_P1.27mm","","TJA1050T/CM ","","",""\nu,0,0,"U14","1","STM32F7xxRx","","Package_QFP:LQFP-64_10x10mm_P0.5mm","STMicroelectronics Arm Cortex-M7 MCU, 512KB flash, 256KB RAM, 216 MHz, 1.7-3.6V, 50 GPIO, LQFP64","STM32F722RET6","","",""\nu,0,0,"U13,U15","2","74AHC1G14","","Package_TO_SOT_SMD:SOT-23-5","Single Schmitt NOT Gate, Low-Voltage CMOS","","","",""\nu,0,0,"U8","1","TPS54202DDC","","Package_TO_SOT_SMD:SOT-23-6","2A, 4.5 to 28V Input, EMI Friendly integrated switch synchronous step-down regulator, pulse-skipping, SOT-23-6","","","",""\nu,0,0,"U5","1","74HC1G08","","Package_TO_SOT_SMD:SOT-23-5","","74HC1G08GV,125","","",""\nu,0,0,"U4,U6,U7,U12,U20","5","TLV9361","","Package_TO_SOT_SMD:SOT-23-5","40-V, 1-MHz, RRO Operational Amplifiers for Cost-Sensitive Systems, SOT-23-5","TLV9361IDBVR","","",""\nu,0,0,"U2","1","LM3940IMP-3.3","","Package_TO_SOT_SMD:TO-252-3_TabPin4","","LM3940IMP-3.3","","",""\nu,0,0,"U1,U3,U9,U10,U11","5","INA826","","Package_SO:SOIC-8_3.9x4.9mm_P1.27mm","","INA826AIDR","","",""\nu,0,0,"TP1,TP2,TP3,TP4,TP5,TP6,TP7,TP8,TP9,TP10","10","TestPoint","","Connector_Pin:Pin_D0.7mm_L6.5mm_W1.8mm_FlatFork","test point","","","",""\nu,0,0,"SW1","1","SW_Push","","Button_Switch_SMD:SW_SPST_CK_RS282G05A3","Push button switch, generic, two pins","","","",""\nu,0,0,"R63","1","390R","","Resistor_SMD:R_0603_1608Metric","Resistor, US symbol","","","",""\nu,0,0,"R61","1","120R","","Resistor_SMD:R_1206_3216Metric","","","","",""\nu,0,0,"R60","1","470K","","Resistor_SMD:R_0603_1608Metric","Resistor, US symbol","","","",""\nu,0,0,"R56,R59","2","2320R","","Resistor_SMD:R_0603_1608Metric","","RT0805FRE072K32L","","",""\nu,0,0,"R50,R52","2","2K2","","Resistor_SMD:R_0603_1608Metric","Resistor, US symbol","","","",""\nu,0,0,"R44","1","13K3 0.1%","","Resistor_SMD:R_0603_1608Metric","Resistor, US symbol","MCT06030D1332BP5","","",""\nu,0,0,"R43","1","100K 1%","","Resistor_SMD:R_0603_1608Metric","Resistor, US symbol","CPF0603F100KC1","","",""\nu,0,0,"R40,R45","2","4220R","","Resistor_SMD:R_0603_1608Metric","","ERA-8AEB4221V","","",""\nu,0,0,"R27,R28,R49,R51","4","160K","","Resistor_SMD:R_1206_3216Metric","Resistor, US symbol","ERA-8AEB164V","","",""\nu,0,0,"R25,R30,R54,R58","4","100K","","Resistor_SMD:R_1206_3216Metric","Resistor, US symbol","RT1206FRE07100KL","","",""\nu,0,0,"R21,R23,R24,R55,R64,R65","6","39K","","Resistor_SMD:R_0603_1608Metric","Resistor, US symbol","","","",""\nu,0,0,"R18,R19,R20","3","270R","","Resistor_SMD:R_0603_1608Metric","Resistor, US symbol","","","",""\nu,0,0,"R17","1","47R","","Resistor_SMD:R_0603_1608Metric","Resistor, US symbol","","","",""\nu,0,0,"R8,R9,R15,R16,R22,R29,R42,R48,R57,R62","10","100R","","Resistor_SMD:R_0603_1608Metric","Resistor, US symbol","","","",""\nu,0,0,"R4,R6,R10,R11,R26,R39,R41,R53","8","4K7","","Resistor_SMD:R_0603_1608Metric","","","","",""\nu,0,0,"R3,R7,R12,R13,R31,R32,R35,R38","8","1K8","","Resistor_SMD:R_0603_1608Metric","","CRGCQ0603F1K8","","",""\nu,0,0,"R1,R2,R5,R14,R33,R34,R36,R37,R46,R47","10","10K","","Resistor_SMD:R_0603_1608Metric","","","","",""\nu,0,0,"Q10","1","PZT2222A","","Package_TO_SOT_SMD:SOT-223-3_TabPin2",""," PZT2222A-TP","",""," 833-PZT2222A-TP "\nu,0,0,"Q3,Q4,Q5,Q6,Q7,Q8,Q9,Q11,Q12","9","SI2300","","Package_TO_SOT_SMD:SOT-23","","SI2300DS-T1-GE3","","",""\nu,0,0,"Q1,Q2","2","BC807-16","","Package_TO_SOT_SMD:SOT-23","0.8A Ic, 45V Vce, PNP Transistor, SOT-23","","","",""\nu,0,0,"LED3","1","LED_YELLOW","","LED_SMD:LED_1206_3216Metric","","","","",""\nu,0,0,"LED2","1","LED_RED","","LED_SMD:LED_1206_3216Metric","","","","",""\nu,0,0,"LED1","1","LED_GREEN","","LED_SMD:LED_1206_3216Metric","","","","",""\nu,0,0,"L1,L2","2","15uH","","Inductor_SMD:L_Wuerth_MAPI-3012","Inductor with ferrite core"," VLS3012CX-150M-1","","TDK",""\nu,0,0,"JP2","1","Jumper_2_Open","","Jumper:SolderJumper-2_P1.3mm_Open_Pad1.0x1.5mm","","","","",""\nu,0,0,"JP1","1","SolderJumper_2_Bridged","Excluded from BOM","Jumper:SolderJumper-2_P1.3mm_Bridged2Bar_Pad1.0x1.5mm","Solder Jumper, 2-pole, closed/bridged","","","",""\nu,0,0,"J9","1","Conn_01x02","","Connector_CH:MicroFit_01x02","Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)","","","",""\nu,0,0,"J7","1","Conn_01x01","","Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Horizontal","Generic connector, single row, 01x01, script generated (kicad-library-utils/schlib/autogen/connector/)","","","",""\nu,0,0,"J6","1","Conn_02x03_Odd_Even","","Connector_PinHeader_2.54mm:PinHeader_2x03_P2.54mm_Horizontal","Generic connector, double row, 02x03, odd/even pin numbering scheme (row 1 odd numbers, row 2 even numbers), script generated (kicad-library-utils/schlib/autogen/connector/)","","","",""\nu,0,0,"J5,J8","2","Conn_01x02,Conn_02x05_Odd_Even","","Connector_PinHeader_2.54mm:PinHeader_2x05_P2.54mm_Horizontal","Generic connector, double row, 02x05, odd/even pin numbering scheme (row 1 odd numbers, row 2 even numbers), script generated (kicad-library-utils/schlib/autogen/connector/),Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)","","","",""\nu,0,0,"J4","1","Conn_01x03","","Connector_CH:MicroFit_01x03","Generic connector, single row, 01x03, script generated (kicad-library-utils/schlib/autogen/connector/)"," 216571-3003 ","","",""\nu,0,0,"J3","1","IDC_02x10","","Connector_IDC:IDC-Header_2x10_P2.54mm_Vertical","Generic connector, double row, 02x10, odd/even pin numbering scheme (row 1 odd numbers, row 2 even numbers), script generated (kicad-library-utils/schlib/autogen/connector/)","","","",""\nu,0,0,"J2","1","Conn_01x03","","Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical","","","","",""\nu,0,0,"J1","1","SWD","","Connector_Molex:Molex_KK-254_AE-6410-06A_1x06_P2.54mm_Vertical","","","","",""\nu,0,0,"FID1,FID2","2","Fiducial","Excluded from BOM","Fiducial:Fiducial_1.5mm_Mask3mm","Fiducial Marker","","","",""\nu,0,0,"FB3,FB4","2","2K","","Inductor_SMD:L_0603_1608Metric","Ferrite bead, small symbol","ILBB0603ER202V ","Mouser","Vishay"," 70-ILBB0603ER202V "\nu,0,0,"FB1,FB2","2","60R","","Inductor_SMD:L_1206_3216Metric","Ferrite bead, small symbol","ILB1206ER600V","","",""\nu,0,0,"D2","1","ESDCAN-03","","Package_TO_SOT_SMD:SOT-23","Dual Line CAN Bus Protector, 24Vrwm","ESDCAN03-2BWY","","",""\nu,0,0,"D1","1","TSD03","","Diode_SMD:D_SOD-323","ESD Protection Diodes / TVS Diodes 3.3V unidirectional surge protection device in SOD-323 package","TSD03DYFR ","",""," 595-TSD03DYFR "\nu,0,0,"C30","1","47pF","","Capacitor_SMD:C_0603_1608Metric","","","","",""\nu,0,0,"C20","1","100uF","","Capacitor_SMD:CP_Elec_4x5.8","","","","",""\nu,0,0,"C18,C39","2","30pF","","Capacitor_SMD:C_0603_1608Metric","","","","",""\nu,0,0,"C15,C22,C23,C29,C33","5","2.2u","","Capacitor_SMD:C_0603_1608Metric","","","","",""\nu,0,0,"C12,C13,C16,C17,C27,C34,C35,C37,C38,C40,C41,C42","12","100n","","Capacitor_SMD:C_0603_1608Metric","","","","",""\nu,0,0,"C10,C11","2","15p","","Capacitor_SMD:C_0603_1608Metric","","","","",""\nu,0,0,"C5","1","1uF","","Capacitor_SMD:C_0603_1608Metric","","","","",""\nu,0,0,"C4,C7,C8,C14,C21,C25,C26,C32","8","10nF","","Capacitor_SMD:C_0603_1608Metric","","","","",""\nu,0,0,"C3,C9","2","22uF/25V","","Capacitor_SMD:CP_Elec_5x5.9","","","","",""\nu,0,0,"C2,C6,C19,C24,C28,C31,C36,C43","8","100nF","","Capacitor_SMD:C_0603_1608Metric","","","","",""\nu,0,0,"C1","1","33uF/25V","","Capacitor_SMD:CP_Elec_6.3x5.4","","","","",""\n	t	3	10	12	13	5	5	3	0
-140	lacep_control Completa	Placa com todos os componentes, iremos montar com menos componentes.	2	0		f	5	12	2	2	2	2	2	0
-139	invleg6v2	estoque ok	2	0		f	5	12	2	2	2	2	2	0
-148	iv4203Hall	Utilzando sensor de corrente da LEM, fazer 3 por placa	1	0		f	5	12	2	2	2	2	2	0
-141	iv420 Completa	Para correntes mais baixas ou tensão	1	0		f	5	12	2	2	2	2	2	0
-149	lacep_control menor	Trata-se da versão com menos partes a serem montadas	2	0		f	5	12	2	2	2	2	2	0
-146	Launchbed3		1	0		f	5	12	2	2	2	2	2	0
-147	line_driver		1	0		f	5	12	2	2	2	2	2	0
-153	Compra Extra de Outubro 2025		1	0	status,compId,leId,Qty,Reference,Value,Exclude from BOM,Footprint,Descrição,#,Partnumber,Ordercode,mfr,Supplier\nu,0,0,1,C1,0.33u,,Capacitor_THT:C_Rect_L18.0mm_W8.0mm_P15.00mm_FKS3_FKP3,Unpolarized capacitor,1,B32922C3334M,,,\nu,0,0,11,"C2,C4,C5,C7,C10,C11,C13,C14,C27,C30,C31",100n,,Capacitor_SMD:C_0603_1608Metric,Unpolarized capacitor,2,,,,\nu,0,0,4,"C3,C6,C12,C15",10u,,Capacitor_SMD:C_1206_3216Metric,Unpolarized capacitor,3,,,,\nu,0,0,2,"C8,C22",4u7,,Capacitor_THT:C_Rect_L33.0mm_W20.0mm_P27.50mm_MKS4,Unpolarized capacitor,4,B32924C3475M,,,\nu,0,0,1,C9,2.2uF/630VDC,,Capacitor_THT:C_Rect_L28.0mm_W12.0mm_P22.50mm_MKS4,Unpolarized capacitor,5,ECW-FE2J225KA, 667-ECW-FE2J225KA ,,\nu,0,0,3,"C16,C17,C19",22uF/25V,,Capacitor_SMD:CP_Elec_5x5.9,,6,,,,\nu,0,0,1,C18,100uF,,Capacitor_SMD:CP_Elec_6.3x9.9,,7,,,,\nu,0,0,2,"C20,C21",470pF/1000V,,Capacitor_THT:C_Disc_D6.0mm_W4.4mm_P5.00mm,Unpolarized capacitor,8,S471K25Y5PN63J5R ,,,\nu,0,0,1,C23,100nF,,Capacitor_SMD:C_0603_1608Metric,,9,,,,\nu,0,0,5,"C24,C25,C26,C28,C29",47n,,Capacitor_SMD:C_2220_5750Metric,Unpolarized capacitor,10,GA355ER7GB473KW01L,,,\nu,0,0,7,"C32,C33,C34,C35,C36,C37,C38",100nF/1kV,,Capacitor_SMD:C_1812_4532Metric,Unpolarized capacitor,11,C1812C104KDRACTU,,,\nu,0,0,1,C39,330nF/305VAC,,Capacitor_SMD:C_1812_4532Metric,Unpolarized capacitor,12,B32922C3334M,,,\nu,0,0,4,"D1,D2,D6,D7",STTH3010W,,Package_TO_SOT_THT:TO-247-2_Vertical,Diode,13, STTH3010W , 511-STTH3010W ,,\nu,0,0,2,"D3,D8",ES1J,,Diode_SMD:D_SMA,Ultrafast recovery diode,14,ES1J,,,\nu,0,0,4,"D4,D5,D9,D10",SMAJ15,,Diode_SMD:D_SMA,"400W unidirectional Transient Voltage Suppressor, 15.0Vr, SMA(DO-214AC)",15, SMAJ15A-AT/TR13 , 603-SMAJ15A-AT/TR13 ,Yageo,Mouser\nu,0,0,1,DCDC1,B2415S-2WR3,,JRM_Footprint:BXXXXS-2W_EXT,DC/DC Converters - Through Hole 2W 24Vin 15Vout 133mA Single SIP7,16, RKZE-2415S/P , 919-RKZE-2415S/P ,,\nu,0,0,2,"DCDC2,DCDC3",B2412S-2WR3,,JRM_Footprint:BXXXXS-2W_EXT,DC/DC Converters - Through Hole 2W 24Vin +/-15Vout +/-66mA Dual SIP7,17, RKZE-2412S , 919-RKZE-2412S ,,\nu,0,0,2,"FAN1,FAN2",~,,JRM_Footprint:FAN_50mm_15mm_H8.0,,18,,,,\nu,0,0,1,FAN3,~,,JRM_Footprint:FAN_50mm_20mm_H8.0,,19,,,,\nu,0,0,4,"FB1,FB3,FB7,FB9",0.1R,,JRM_Footprint:WE-CBF-SMT-FB,"Ferrite bead, small symbol",20,74279244,,,\nu,0,0,4,"FB2,FB4,FB6,FB8",2K/100Mhz,,Inductor_SMD:L_0603_1608Metric,"Ferrite bead, small symbol",21,ILBB0603ER202V , 70-ILBB0603ER202V ,Vishay,Mouser\nu,0,0,3,"FB5,FB11,FB13",2K2,,Inductor_SMD:L_CommonMode_Wurth_WE-CNSW-1206,"Common mode choke, 370 mA, 125VDC, USB2.0, 111 nH",22,BWCU00321619222M02 , 673-BWCU321619222M02 ,,Mouser\nu,0,0,2,"FB10,FB12",2K,,Inductor_SMD:L_0603_1608Metric,"Ferrite bead, small symbol",23,ILBB0603ER202V , 70-ILBB0603ER202V ,Vishay,Mouser\nu,0,0,1,FID1,Fiducial,Excluded from BOM,Fiducial:Fiducial_1.5mm_Mask3mm,Fiducial Marker,24,,,,\nu,0,0,1,FL1,26A,,JRM_Footprint:Filter 26A,"EMI 2-inductor filter, pin-connections 1-4 and 2-3",25,B82726E6263A040, 871-B82726E6263A40 ,,\nu,0,0,4,"H1,H2,H3,H4",MountingHole_Pad,Excluded from BOM,MountingHole:MountingHole_3.5mm_Pad,Mounting Hole with connection,26,,,,\nu,0,0,2,"HS1,HS3",Heatsink,,JRM_Footprint:Heatsink_HS6835_40_2H,"Heatsink with electrical connection, 2 pin",27,,,,\nu,0,0,2,"HS2,HS4",Heatsink,,JRM_Footprint:Heatsink_HS6835_40_1H,"Heatsink with electrical connection, 1 pin",28,,,,\nu,0,0,1,J1,Conn_02x13_Odd_Even,,JRM_Footprint:PCA2_Control_02x16_B,"Generic connector, double row, 02x13, odd/even pin numbering scheme (row 1 odd numbers, row 2 even numbers), script generated (kicad-library-utils/schlib/autogen/connector/)",29,,,,\nu,0,0,2,"J2,J3",Conn_02x03_Top_Bottom,,Connector_CH:455580003,"Generic connector, double row, 02x03, top/bottom pin numbering scheme (row 1: 1...pins_per_row, row2: pins_per_row+1 ... num_pins), script generated (kicad-library-utils/schlib/autogen/connector/)",30,45558-0003 , 538-45558-0003 ,,\nu,0,0,1,J4,Conn_02x02_Top_Bottom,,Connector_Molex:Molex_Micro-Fit_3.0_43045-0400_2x02_P3.00mm_Horizontal,"Generic connector, double row, 02x02, top/bottom pin numbering scheme (row 1: 1...pins_per_row, row2: pins_per_row+1 ... num_pins), script generated (kicad-library-utils/schlib/autogen/connector/)",31,39-30-1040, 538-39-30-1040 ,,\nu,0,0,1,J5,Conn_01x02,,Connector_Molex:Molex_Mini-Fit_Jr_5569-02A2_2x01_P4.20mm_Horizontal,"Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)",32,,,,\nu,0,0,1,L1,800uH,,JRM_Footprint:CS400125-2,SENDUST CORE,33,K157-125A,,,\nu,0,0,1,LED1,LED_GREEN,,LED_SMD:LED_1206_3216Metric,,34,,,,\nu,0,0,1,M1,Fan,,Connector_JST:JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical,Fan,35,B2B-XH-A-BK(LF)(SN), 306-B2BXHABKLFSNP,,\nu,0,0,2,"M2,M3",Fan,,Connector_JST:JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical,Fan,36,B2B-XH-A-BK(LF)(SN) , 306-B2BXHABKLFSNP,,Mouser\nu,0,0,1,Q1,IXFH90N65X3,,Package_TO_SOT_THT:TO-247-3_Vertical,Depletion-mode N-channel MOSFET gate/drain/source,37,IXFH90N65X3, 747-IXFH90N65X3 ,,\nu,0,0,2,"Q2,Q3",IMW65R007M2H,,Package_TO_SOT_THT:TO-247-3_Vertical,Depletion-mode N-channel MOSFET gate/drain/source,38,IMW65R007M2H, 726-IMW65R007M2HXKSA ,,\nu,0,0,1,Q4,IXFH90N65X3,,Package_TO_SOT_THT:TO-247-3_Vertical,Depletion-mode N-channel MOSFET gate/drain/source,39,IXFH90N65X3 , 747-IXFH90N65X3 ,,\nu,0,0,2,"Q5,Q6",PZT2222A,,Package_TO_SOT_SMD:SOT-223-3_TabPin2,,40, PZT2222A-TP, 833-PZT2222A-TP ,,\nu,0,0,1,Q7,BC817,,Package_TO_SOT_SMD:SOT-23,"0.8A Ic, 45V Vce, NPN Transistor, SOT-23",41,,,,\nu,0,0,2,"R1,R12",0R0,,Resistor_SMD:R_1206_3216Metric,"Resistor, US symbol",42,3540220RJT , 279-3540220RJT ,TE Connectivity,Mouser\nu,0,0,7,"R2,R7,R8,R16,R18,R41,R43",0R0,,Resistor_SMD:R_0603_1608Metric,"Resistor, US symbol",43,,,,\nu,0,0,4,"R3,R9,R13,R15",0R33,,Resistor_SMD:R_1206_3216Metric,"Resistor, US symbol",44,,,,\nu,0,0,4,"R4,R10,R17,R20",1k,,Resistor_SMD:R_0603_1608Metric,"Resistor, US symbol",45,,,,\nu,0,0,4,"R5,R6,R14,R19",10K,,Resistor_SMD:R_0603_1608Metric,"Resistor, US symbol",46,,,,\nu,0,0,1,R11,270R,,Resistor_SMD:R_0603_1608Metric,"Resistor, US symbol",47,,,,\nu,0,0,2,"R21,R22",470K,,Resistor_SMD:R_0603_1608Metric,"Resistor, US symbol",48,,,,\nu,0,0,2,"R23,R24",390R,,Resistor_SMD:R_0603_1608Metric,"Resistor, US symbol",49,,,,\nu,0,0,7,"R25,R40,R44,R48,R49,R50,R51",2K2,,Resistor_SMD:R_0603_1608Metric,"Resistor, US symbol",50,,,,\nu,0,0,4,"R26,R30,R32,R33",100K 1%,,Resistor_SMD:R_1206_3216Metric,"Resistor, US symbol",51,RT1206FRE07100KL ,,,\nu,0,0,14,"R27,R28,R29,R31,R34,R35,R36,R37,R38,R39,R42,R45,R46,R47",160K 1%,,Resistor_SMD:R_1206_3216Metric,"Resistor, US symbol",52,ERA-8AEB164V,,,\nu,0,0,1,R52,220R/5W,,Resistor_SMD:R_2816_7142Metric,"Resistor, US symbol",53,3540220RJT , 279-3540220RJT ,TE Connectivity,Mouser\nu,0,0,4,"R53,R54,R56,R57",0R5,,Resistor_SMD:R_2512_6332Metric,"Resistor, US symbol",54,MSMA2512R5000FEN ,,,\nu,0,0,1,R55,0R0,,Resistor_SMD:R_2512_6332Metric,"Resistor, US symbol",55,3522ZR, 279-3522ZR ,,\nu,0,0,18,"R58,R59,R60,R61,R62,R63,R64,R65,R66,R67,R68,R69,R70,R71,R72,R73,R74,R75",1M,,Resistor_SMD:R_1206_3216Metric,"Resistor, US symbol",56,,,,\nu,0,0,3,"SYM1,SYM2,SYM3",SYM_Flash_Large,Excluded from BOM,Symbol:Symbol_HighVoltage_Triangle_6x6mm_Copper,"Flash symbol, large",57,,,,\nu,0,0,1,T1,ETD59 Coil Former,,JRM_Footprint:ETD59_6x4_CROSS,ETD59 Core Former,58,B66398W1024T001,,,\nu,0,0,2,"TCC1,TCC2",ETD59 Core Clip,,,EC Core Clip,59,B66398A2000X000,,,\nu,0,0,2,"TEC1,TEC2",ETD59 Core,,,Tranformer E Core (half),60,B66397G0200X187,,,\nu,0,0,2,"TH1,TH2",10K,,JRM_Footprint:NTC_P5.08,"Temperature dependent resistor, negative temperature coefficient, US symbol",61,B57861S0103F040,,,\nu,0,0,2,"TH3,TH4",10K,,,"Temperature dependent resistor, negative temperature coefficient, US symbol",62,B57861S0103F040,,,\nu,0,0,22,"TP1,TP2,TP3,TP4,TP5,TP6,TP7,TP8,TP9,TP10,TP11,TP12,TP13,TP14,TP15,TP16,TP17,TP18,TP19,TP20,TP21,TP22",TestPoint,,Connector_Pin:Pin_D0.7mm_L6.5mm_W1.8mm_FlatFork,test point,63,,,,\nu,0,0,1,TP23,TestPoint,,TestPoint:TestPoint_Pad_1.0x1.0mm,test point,64,,,,\nu,0,0,2,"U1,U2",2EDR8259X,,JRM_Footprint:SOIC127P600X175-16_14N-1-V,Dual-channel isolated gate driver ICs in 300 mil DSO package,65,2EDB8259YXUMA1 , 726-2EDB8259YXUMA1,,\nu,0,0,2,"U3,U4",LTV-816S,,Package_DIP:SMDIP-4_W9.53mm,"DC Optocoupler, Vce 35V, CTR 50%, SMDIP-4",66, LTV-816S-TA1 , 859-LTV-816S-TA1 ,LiteON,\nu,0,0,1,U5,TMCS1133C5,,JRM_Footprint:SOIC10_DVG_TEX,,67,TMCS1133C5AQDVGR , 595-TMCS1133C5AQDVGR ,,\nu,0,0,1,U6,74HC1G14,,Package_TO_SOT_SMD:SOT-23-5,Logic Level Inverter,68,HC1G14GV125, 771-HC1G14GV125 ,,\nu,0,0,1,U7,TMCS1133C3,,JRM_Footprint:SOIC10_DVG_TEX,,69,TMCS1133C3AQDVGR , 595-TMCS1133C3AQDVGR ,,\n	f	5	12	2	2	2	2	2	0
-154	Compra Extra Novembro p/ PCA2	Comprada em 18/11/2025, menos o IXYS (cada item vezes 1)	1	0		f	5	12	2	2	2	2	2	0
-157	invegg		1	0		t	5	12	2	2	2	2	2	0
-152	Launchbed4		2	1	status,compId,leId,"Reference","Value","Datasheet","Footprint","Qty","Description","PartNumber","Mouser"\nu,0,0,"C1,C3,C4,C5,C7,C9,C12,C16,C19,C37,C38,C39,C40,C41,C42,C43,C50","100nF/50V","https://br.mouser.com/datasheet/2/585/MLCC-1837944.pdf","Capacitor_SMD:C_0805_2012Metric","17","Capacitores de cerâmica multicamada MLCC - SMD/SMT 100nF+/-10% 50V X7R 0805","CL21B104KBCNNNL "," 187-CL21B104KBCNNNL "\nu,0,0,"C2,C6","30pF","https://br.mouser.com/datasheet/2/447/KEM_C1007_X8R_ULTRA_150C_SMD-3699693.pdf","Capacitor_SMD:C_0805_2012Metric","2","Capacitores de cerâmica multicamada MLCC - SMD/SMT 16V 30pF X8R 0805 5%","C0805C300J4HACTU "," 80-C0805C300J4HACTU "\nu,0,0,"C8,C10,C13,C14,C23,C25,C26,C29,C33,C51","2.2uF","https://br.mouser.com/datasheet/2/585/MLCC-1837944.pdf","Capacitor_SMD:C_0805_2012Metric","10","Capacitores de cerâmica multicamada MLCC - SMD/SMT 2.2uF+/-10% 10V X7R 0805","CL21B225KPFNNNG "," 187-CL21B225KPFNNNG "\nu,0,0,"C11,C32","15p","https://br.mouser.com/datasheet/2/447/KEM_C1007_X8R_ULTRA_150C_SMD-3699693.pdf","Capacitor_SMD:C_0805_2012Metric","2","Capacitores de cerâmica multicamada MLCC - SMD/SMT 10V 15pF X8R 0805 2%","C0805C150G8HACTU "," 80-C0805C150G8HACTU "\nu,0,0,"C15,C17","1uF","https://br.mouser.com/datasheet/2/447/KEM_C1005_Y5V_SMD-3700105.pdf","Capacitor_SMD:C_1206_3216Metric","2","Capacitores de cerâmica multicamada MLCC - SMD/SMT 25V 1uF Y5V 1206 -20/+80%","C1206C105Z3VAC "," 80-C1206C105Z3VAC "\nu,0,0,"C18,C20","470uF/16V","https://br.mouser.com/datasheet/2/293/e_uwt-1847810.pdf","Capacitor_SMD:CP_Elec_10x10.5","2","Capacitores eletrolíticos de alumínio - SMD 25volts 470uF AEC-Q200","UWT1E471MNL1GS "," 647-UWT1E471MNL1S "\nu,0,0,"C21,C22,C24,C27,C28,C30,C31,C34,C35,C36","10nF","https://br.mouser.com/datasheet/2/447/KEM_C1002_X7R_SMD-3699509.pdf","Capacitor_SMD:C_0805_2012Metric","10","Capacitores de cerâmica multicamada MLCC - SMD/SMT 100V .01uF X7R 0805 10%","C0805C103K1RAC7411 "," 80-C0805C103K1RACLR "\nu,0,0,"C44,C45,C48,C49","22uF/25V","https://industrial.panasonic.com/cdbs/www-data/pdf/RDE0000/ABA0000C1145.pdf","Capacitor_SMD:CP_Elec_5x5.9","4","Capacitores eletrolíticos de alumínio - SMD 22UF 25V VS SMD"," 667-EEE-1EA220WR "," 667-EEE-1EA220WR "\nu,0,0,"C46","220nF","https://br.mouser.com/datasheet/2/585/MLCC-1837944.pdf","Capacitor_SMD:C_0805_2012Metric","1","Capacitores de cerâmica multicamada MLCC - SMD/SMT 220nF+/-10% 25V X7R 0805"," 187-CL21B224KAFNNNG ","CL21B224KAFNNNG "\nu,0,0,"C47","47pF","https://br.mouser.com/datasheet/2/210/WTC_MLCC_General_Purpose-1534899.pdf","Capacitor_SMD:C_0805_2012Metric","1","Capacitores de cerâmica multicamada MLCC - SMD/SMT 47pF +-5% 50V"," 791-0805N470J500CT ","0805N470J500CT "\nu,0,0,"CN1,CN2,CN3,CN4,J3,J4","Conn_02x05_Odd_Even","~","Connector_IDC:IDC-Header_2x05_P2.54mm_Vertical","6","Conector IDC","",""\nu,0,0,"CN5,CN8,CN11","Conn_01x02","~","Connector_Phoenix_MSTB:PhoenixContact_MSTBVA_2,5_2-G-5,08_1x02_P5.08mm_Vertical","3","","",""\nu,0,0,"CN6","WeAct_STM32H7XX","","JRM_Footprint:WeAct_STM32H7XX","1","Barra de pinos fêmea pode não ter que soldar","",""\nu,0,0,"CN7","Conn_01x03","~","Connector_Phoenix_MSTB:PhoenixContact_MSTBVA_2,5_3-G-5,08_1x03_P5.08mm_Vertical","1","Generic connector, single row, 01x03, script generated (kicad-library-utils/schlib/autogen/connector/)","",""\nu,0,0,"CN9","Conn_01x02","~","Connector_Phoenix_GMSTB:PhoenixContact_GMSTBA_2,5_2-G_1x02_P7.50mm_Horizontal","1","Trocar para conector parafuso","",""\nu,0,0,"CN10,CN12,CN13,CN14,CN15","Conn_02x04_Odd_Even","~","Connector_IDC:IDC-Header_2x04_P2.54mm_Vertical","5","Conector IDC","",""\nu,0,0,"D3","1N4148W","https://www.vishay.com/docs/85748/1n4148w.pdf","Diode_SMD:D_SOD-123","1","Diodos de Comutação de Sinais Pequenos Small Signal Diode, SOD-123F, 100V, 0.15A, 150C"," 1N4148W "," 637-1N4148W "\nu,0,0,"D4","ESDCAN-03","https://www.onsemi.com/pub_link/Collateral/NUP2105L-D.PDF","Package_TO_SOT_SMD:SOT-23","1","Dual Line CAN Bus Protector, 24Vrwm","ESDCAN03-2BWY"," 511-ESDCAN03-2BWY "\nu,0,0,"FB1","60R","https://www.vishay.com/doc?34023","Inductor_SMD:L_1206_3216Metric","1","Ferrite bead, small symbol","ILB1206ER600V"," 70-ILB1206ER600V "\nu,0,0,"H1,H2,H3,H4","MountingHole_Pad","~","MountingHole:MountingHole_3.2mm_M3_DIN965_Pad","4","","",""\nu,0,0,"J1","Screw_Terminal_01x03","~","Connector_Phoenix_MSTB:PhoenixContact_MSTBA_2,5_3-G-5,08_1x03_P5.08mm_Horizontal","1","","",""\nu,0,0,"J2","Conn_01x05","~","Connector_Phoenix_MC:PhoenixContact_MC_1,5_5-G-3.5_1x05_P3.50mm_Horizontal","1","Generic connector, single row, 01x05, script generated (kicad-library-utils/schlib/autogen/connector/)","",""\nu,0,0,"J5","Molex KK 254 06 vias","Distribuidores e Alojamento de Fios STRT LOCKING HEADER","Connector_Molex:Molex_KK-254_AE-6410-06A_1x06_P2.54mm_Vertical","1","Distribuidores e Alojamento de Fios STRT LOCKING HEADER","22-27-2061"," 538-22-27-2061 "\nu,0,0,"J6","Conn_01x03","~","Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical","1","Barra de pinos simples macho","",""\nu,0,0,"JP1","Jumper_2_Open","~","Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical","1","Pads na PCB","",""\nu,0,0,"JP2,JP3,JP4,JP5,JP6,JP7","Jumper_2_Open","~","Jumper:SolderJumper-2_P1.3mm_Open_Pad1.0x1.5mm","6","","",""\nu,0,0,"K1","Relê 12V","http://www.omron.com/ecb/products/pdf/en-g5le.pdf","Relay_THT:Relay_SPDT_Omron-G5LE-1","1","","",""\nu,0,0,"L1","15uH","https://product.tdk.com/system/files/dam/doc/product/inductor/inductor/smd/catalog/inductor_commercial_power_vls3012cx-1_en.pdf?ref_disty=mouser","Inductor_SMD:L_Wuerth_MAPI-3012","1","Indutores de potência - SMD 1.06A 15uH 514mOhm 3x3x1.2mm"," VLS3012CX-150M-1 "," 810-VLS3012CX150M1 "\nu,0,0,"LED1,LED4","LED_RED","https://br.mouser.com/datasheet/2/239/lite_on_lites10847_1-1737242.pdf","LED_SMD:LED_1206_3216Metric","2","LEDs de cor única Red Clear 621nm"," LTST-C150EKT "," 859-LTST-C150EKT "\nu,0,0,"LED2","LED_GREEN","https://br.mouser.com/datasheet/2/239/LTST_C150KGKT-1143771.pdf","LED_SMD:LED_1206_3216Metric","1","LEDs de cor única Green Clear 571nm"," LTST-C150KGKT "," 859-LTST-C150KGKT "\nu,0,0,"LED3","LED_YELLOW","https://br.mouser.com/datasheet/2/239/Lite_On_LTST_C150KSKT-1175233.pdf","LED_SMD:LED_1206_3216Metric","1","LEDs de cor única Yellow Clear 587nm"," LTST-C150KSKT "," 859-LTST-C150KSKT "\nu,0,0,"Q1,Q2","BC807-40","https://assets.nexperia.com/documents/data-sheet/BC807_SER.pdf","Package_TO_SOT_SMD:SOT-23","2","Transistores bipolares de junção - BJT SOT23 45V .5A PNP GP TRANS"," BC807-40,215 "," 771-BC807-40-T/R "\nu,0,0,"Q3","SI2300","https://www.vishay.com/doc?65701","Package_TO_SOT_SMD:SOT-23","1","MOSFETs 30V Vds 12V Vgs SOT-23"," SI2300DS-T1-GE3 "," 781-SI2300DS-T1-GE3 "\nu,0,0,"Q4","BC817-40","https://br.mouser.com/datasheet/2/258/BC817_16_7eBC817_40_SOT_23_-3423776.pdf","Package_TO_SOT_SMD:SOT-23","1","Transistores bipolares de junção - BJT 45V, 800mA"," BC817-40,235 "," 771-BC817-40235"\nu,0,0,"R1","120R/0.5W","https://br.mouser.com/datasheet/2/418/3/NG_CS_1309350_PASSIVE_COMPONENT_0807-715500.pdf","Resistor_SMD:R_1206_3216Metric","1","Thick Film Resistors - SMD CRGH1206 5% 120R 0.5W","CRGH1206J120R "," 279-CRGH1206J120R "\nu,0,0,"R2,R3,R4,R5,R6,R7,R8,R9,R10,R11","100R","https://www.vishay.com/doc?20035","Resistor_SMD:R_0805_2012Metric","10","Thick Film Resistors - SMD 1/8watt 100ohms 5% 200ppm","CRCW0805100RJNEC "," 71-CRCW0805J-100-E3 "\nu,0,0,"R12,R13,R15","270R","https://br.mouser.com/datasheet/2/385/SEI_RMCF_RMCP-3077565.pdf","Resistor_SMD:R_0805_2012Metric","3","Thick Film Resistors - SMD 270Ohms 0805 0.125W 5% Std Power AEC-Q200","RMCF0805JT270R "," 708-RMCF0805JT270R "\nu,0,0,"R14","10K","https://www.vishay.com/doc?20035","Resistor_SMD:R_0805_2012Metric","1","Thick Film Resistors - SMD D12/CRCW0805 200 10K 5% ET6 e3","CRCW080510K0JNEC "," 71-CRCW080510K0JNEC "\nu,0,0,"R16,R18,R28,R37,R38,R39,R56,R66,R71,R72,R87","4K7","https://www.vishay.com/doc?20035","Resistor_SMD:R_0805_2012Metric","11","Thick Film Resistors - SMD 1/8watt 4.7Kohms 5%","CRCW08054K70JNEB "," 71-CRCW08054K70JNEB "\nu,0,0,"R17,R23,R27,R31,R32,R33,R40,R41,R44,R47,R54,R60,R63,R65,R67,R68,R73,R75,R81,R85","330R/0.5%","https://br.mouser.com/datasheet/2/447/PYu_RC_Group_51_RoHS_L_12-3368608.pdf","Resistor_SMD:R_0805_2012Metric","20","Thick Film Resistors - SMD General Purpose Chip Resistor 0805, 330Ohms, 0.5%, 1/8W"," RC0805DR-07330RL "," 603-RC0805DR-07330RL "\nu,0,0,"R19,R20,R21,R25,R26,R29,R30,R34,R35,R36,R42,R43,R45,R46,R48,R49,R50,R51,R52,R53,R55,R57,R58,R59,R62,R64,R69,R70,R74,R76,R77,R78,R79,R80,R82,R83,R84,R86,R88,R89","499K/0.5%","https://industrial.panasonic.com/cdbs/www-data/pdf/RDM0000/AOA0000C328.pdf","Resistor_SMD:R_0805_2012Metric","40","Thick Film Resistors - SMD 0805 Anti-Surge Res. 0.5%, 499Kohm"," ERJ-PB6D4993V "," 667-ERJ-PB6D4993V "\nu,0,0,"R22,R24","1K","https://br.mouser.com/datasheet/2/447/pyu_rc_51_rohs_p-3370815.pdf","Resistor_SMD:R_0805_2012Metric","2","Thick Film Resistors - SMD General Purpose Chip Resistor 0805, 1kOhms, 5%, 1/8W"," RC0805JR-071KP "," 603-RC0805JR-071KP "\nu,0,0,"R61","1M","https://br.mouser.com/datasheet/2/447/PYu_RC_Group_51_RoHS_L_11-1984063.pdf","Resistor_SMD:R_0805_2012Metric","1","Thick Film Resistors - SMD General Purpose Chip Resistor 0805, 1MOhms, 5%, 1/8W"," RC0805JR-101ML "," 603-RC0805JR-101ML "\nu,0,0,"R90","13K3 0.1%","https://industrial.panasonic.com/cdbs/www-data/pdf/RDM0000/AOA0000C307.pdf","Resistor_SMD:R_0805_2012Metric","1","Thin Film Resistors - SMD 0805 13.3Kohm 0.1% 25ppm"," ERA-6AEB1332V "," 667-ERA-6AEB1332V "\nu,0,0,"R91","100K 0.1%","https://industrial.panasonic.com/cdbs/www-data/pdf/RDM0000/AOA0000C307.pdf","Resistor_SMD:R_0805_2012Metric","1","Thin Film Resistors - SMD 0805 1/8W 100Kohms"," ERA-6AEB104V "," 667-ERA-6AEB104V "\nu,0,0,"R92","49R9/1%","https://br.mouser.com/datasheet/2/1365/1-3571082.pdf","Resistor_SMD:R_0805_2012Metric","1","Thick Film Resistors - SMD RMC 0805 1/8W 1% T/R-5000","0805W8F499JT5E "," 303-0805W8F499JT5E "\nu,0,0,"SW1,SW2","SW_Push","~","Button_Switch_SMD:SW_SPST_CK_RS282G05A3","2","Push button switch, generic, two pins","",""\nu,0,0,"U1,U4,U7","AM26C31","https://www.ti.com/lit/gpn/am26c31m","Package_SO:SOIC-16_3.9x9.9mm_P1.27mm","3","RS-422 Interface IC Quad Diff Line Drvr A 595-AM26C31ID"," AM26C31IDR "," 595-AM26C31IDR "\nu,0,0,"U2,U6,U8","AM26C32","https://www.ti.com/lit/gpn/am26c32","Package_SO:SOIC-16_3.9x9.9mm_P1.27mm","3","RS-422 Interface IC Quad Diff Line ALT 595-AM26C32IDR","AM26C32IDRG4 "," 595-AM26C32IDRG4 "\nu,0,0,"U3","74HCT541","https://assets.nexperia.com/documents/data-sheet/74HC_HCT541.pdf","Package_SO:SOIC-20W_7.5x12.8mm_P1.27mm","1","Buffers & Line Drivers SOT163-1 OCTAL BUFFER/DRIVER"," 74HCT541D,653 "," 771-74HCT541D-T "\nu,0,0,"U5","TJA1050","https://br.mouser.com/datasheet/2/302/TJA1050-3083416.pdf","Package_SO:SOIC-8_3.9x4.9mm_P1.27mm","1","CAN Interface IC High-speed CAN transceiver"," TJA1050T/CM,118 "," 771-TJA1050T/CM118 "\nu,0,0,"U9","STM32F405RGT6","https://www.st.com/resource/en/datasheet/stm32f405rg.pdf","Package_QFP:LQFP-64_10x10mm_P0.5mm","1","ARM Microcontrollers - MCU ARM M4 1024 FLASH 168 Mhz 192kB SRAM","STM32F405RGT6 "," 511-STM32F405RGT6 "\nu,0,0,"U10,U11,U12,U15,U16","LM358","http://www.ti.com/lit/ds/symlink/lm2904-n.pdf","Package_SO:SOIC-8_3.9x4.9mm_P1.27mm","5","Low-Power, Dual Operational Amplifiers, DIP-8/SOIC-8/TO-99-8"," LM358DMR2G "," 863-LM358DMR2G "\nu,0,0,"U13","LM3940IMP-3.3","https://www.ti.com/lit/gpn/lm3940","Package_TO_SOT_SMD:TO-252-3_TabPin4","1","LDO Voltage Regulators 1A LDO REG A 926-LM3940IMPX33NOPB"," LM3940IMP-3.3/NOPB "," 926-LM3940IMP3.3NOPB "\nu,0,0,"U14","MAX6675","","Package_SO:SOIC-8_3.9x4.9mm_P1.27mm","1","","",""\nu,0,0,"U17","TPS54202DDC","http://www.ti.com/lit/ds/symlink/tps54202.pdf","Package_TO_SOT_SMD:SOT-23-6","1","2A, 4.5 to 28V Input, EMI Friendly integrated switch synchronous step-down regulator, pulse-skipping, SOT-23-6"," TPS54202DDCR "," 595-TPS54202DDCR "\nu,0,0,"X1","ABM3B-8.0-10-1UT","https://br.mouser.com/datasheet/2/3/abm3b-1774998.pdf","Crystal:Crystal_SMD_Abracon_ABM3B-4Pin_5.0x3.2mm","1","Crystals 8.0 MHZ 10PF","ABM3B-8.0-10-1UT"," 815-ABM3B8MHZ101UT "\n	t	5	12	2	2	2	2	2	0
-158	invleg7hall		1	0	status,compId,leId,"Reference","Value","Footprint","Qty","Manufacturer","PartNumber","Description","Ordercode"\ni,0,0,"C1,C2,C11,C12,C23,C26","22uF/25V","Capacitor_SMD:CP_Elec_5x5.9","6","Panasonic"," EEE-1EA220WR ","Capacitores eletrolíticos de alumínio - SMD 22UF 25V VS SMD"," 667-EEE-1EA220WR "\ni,0,0,"C3,C32","330nF","Capacitor_THT:C_Rect_L18.0mm_W8.0mm_P15.00mm_FKS3_FKP3","2","TDK","B32922C3334M","capacitores de segurança 0.33uF 305V 20% 15mm L/S Class X2"," 871-B32922C3334M "\ni,0,0,"C4,C6,C7,C8,C10,C14,C15,C16,C25,C27,C29,C30,C31","100nF/50V","Capacitor_SMD:C_0805_2012Metric","13","Samsung","CL21B104KBCNNNL ","Capacitores de cerâmica multicamada MLCC - SMD/SMT 100nF+/-10% 50V X7R 0805"," 187-CL21B104KBCNNNL "\ni,0,0,"C5","47pF","Capacitor_SMD:C_0805_2012Metric","1","Walsin","0805N470J500CT ","Capacitores de cerâmica multicamada MLCC - SMD/SMT 47pF +-5% 50V"," 791-0805N470J500CT "\ni,0,0,"C9","100uF/25V","Capacitor_SMD:CP_Elec_6.3x5.8","1","Panasonic"," EEE-1EA101XP ","Capacitores eletrolíticos de alumínio - SMD 100uF 25V"," 667-EEE-1EA101XP "\ni,0,0,"C13","1uF","Capacitor_SMD:C_1206_3216Metric","1","Kemet","C1206C105Z3VAC ","Capacitores de cerâmica multicamada MLCC - SMD/SMT 25V 1uF Y5V 1206 -20/+80%"," 80-C1206C105Z3VAC "\ni,0,0,"C17,C21","10uF","Capacitor_SMD:C_1206_3216Metric","2","Kemet","C1206C106Z3VACTU ","Capacitores de cerâmica multicamada MLCC - SMD/SMT 25V 10uF Y5V 1206 -20%,+80%"," 80-C1206C106Z3VACTU "\ni,0,0,"C19","220n","Capacitor_SMD:C_0805_2012Metric","1","Samsung","CL21B224KAFNNNG ","Capacitores de cerâmica multicamada MLCC - SMD/SMT 220nF+/-10% 25V X7R 0805"," 187-CL21B224KAFNNNG "\ni,0,0,"C24","1nF","Capacitor_SMD:C_0805_2012Metric","1","Walsin","0805N102J500CT ","Capacitores de cerâmica multicamada MLCC - SMD/SMT 1000pF +-5% 50V"," 791-0805N102J500CT "\ni,0,0,"C28","100pF","Capacitor_SMD:C_0805_2012Metric","1","Walsin"," 0805N101J500CT ","Capacitores de cerâmica multicamada MLCC - SMD/SMT 100pF +-5% 50V"," 791-0805N101J500CT "\ni,0,0,"CN1","Conn_02x05_Odd_Even","Connector_IDC:IDC-Header_2x05_P2.54mm_Vertical","1","","","",""\ni,0,0,"D1,D2","ES1J","Diode_SMD:D_SMA","2","ONSemi","ES1J","Retificadores 600V 1A SMA Super Fast Rectifier"," 512-ES1JAF "\nu,0,0,"DCDC1","B1215S-2W","JRM_Footprint:B_S-2W","1","","","",""\nu,0,0,"DCDC2","B1212S-2W","JRM_Footprint:B_S-2W","1","","","",""\ni,0,0,"FB1","60R","Inductor_SMD:L_1206_3216Metric","1","Vishay","ILB1206ER600V","Esferas de ferrite 60ohms 25%"," 70-ILB1206ER600V "\ni,0,0,"FB5","2K2","Inductor_SMD:L_CommonMode_Wurth_WE-CNSW-1206","1","","","Common mode choke, 370 mA, 125VDC, USB2.0, 111 nH"," 673-BWCU321619222M02 "\nu,0,0,"J1,J2","Conn_02x02","Connector_PinSocket_2.54mm:PinSocket_2x02_P2.54mm_Vertical","2","","","Generic connector, double row, 02x02, odd/even pin numbering scheme (row 1 odd numbers, row 2 even numbers), script generated (kicad-library-utils/schlib/autogen/connector/)",""\nu,0,0,"J3,J5","Conn_01x02","Connector_PinSocket_2.54mm:PinSocket_1x02_P2.54mm_Vertical","2","","","Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)",""\ni,0,0,"J4","PowerConn","Connector_Bendal:Bendal-100-303-SN","1","","Bendal-100-303-SN","Generic screw terminal, single row, 01x03, script generated (kicad-library-utils/schlib/autogen/connector/)",""\ni,0,0,"L1","15uH","Inductor_SMD:L_Wuerth_MAPI-3012","1","TDK"," VLS3012CX-150M-1 ","Indutores de potência - SMD 1.06A 15uH 514mOhm 3x3x1.2mm"," 810-VLS3012CX150M1 "\nu,0,0,"Q1,Q2","BC807-40","Package_TO_SOT_SMD:SOT-23","2","Nexperia"," BC817-40,235 ","Transistores bipolares de junção - BJT SOT23 45V .5A NPN GP TRANS"," 771-BC817-40235 "\ni,0,0,"Q3,Q4","FGH60N60SMD","JRM_Footprint:TO247INV","2","ONSemi","FGH60N60SMD ","IGBTs 600V/60A Field Stop IGBT ver. 2"," 512-FGH60N60SMD "\ni,0,0,"R1","13K3 0.1%","Resistor_SMD:R_0805_2012Metric","1","Panasonic"," ERA-6AEB1332V ","Resistores de Filme Fino - SMD 0805 13.3Kohm 0.1% 25ppm"," 667-ERA-6AEB1332V "\ni,0,0,"R2","100K 0.1%","Resistor_SMD:R_0805_2012Metric","1","Panasonic"," ERA-6AEB104V ","Resistores de Filme Fino - SMD 0805 1/8W 100Kohms"," 667-ERA-6AEB104V "\ni,0,0,"R3","49R9","Resistor_SMD:R_0805_2012Metric","1","Royalohm"," RT0805BRD0749R9L ","Resistores de Filme Fino - SMD 1/8W 49.9 ohm .1% 25 ppm"," 603-RT0805BRD0749R9L "\ni,0,0,"R4,R9","2.7R","Resistor_SMD:R_1206_3216Metric","2","Vishay"," RCS12062R70FKEA ","Resistores de Filme Espesso - SMD 0.5watt 2.7ohms 1% 100ppm"," 71-RCS12062R70FKEA "\ni,0,0,"R8","3K3","Resistor_SMD:R_0805_2012Metric","1","Yageo"," RC0805JR-073K3L ","Resistores de Filme Espesso - SMD General Purpose Chip Resistor 0805, 3.3kOhms, 5%, 1/8W"," 603-RC0805JR-073K3L "\ni,0,0,"R10,R11,R12","1K2","Resistor_SMD:R_0805_2012Metric","3","Yageo"," RC0805JR-071K2L ","Resistores de Filme Espesso - SMD General Purpose Chip Resistor 0805, 1.2kOhms, 5%, 1/8W"," 603-RC0805JR-071K2L "\ni,0,0,"R13,R14,R15","10K","Resistor_SMD:R_0805_2012Metric","3","Yageo"," RC0805JR-0710KL ","Resistores de Filme Espesso - SMD General Purpose Chip Resistor 0805, 10kOhms, 5%, 1/8W"," 603-RC0805JR-0710KL "\ni,0,0,"R16","100R","Resistor_SMD:R_0805_2012Metric","1","Yageo"," RC0805JR-13100RL ","Resistores de Filme Espesso - SMD General Purpose Chip Resistor 0805, 100Ohms, 5%, 1/8W"," 603-RC0805JR-13100RL "\ni,0,0,"R18","10R","Resistor_SMD:R_0805_2012Metric","1","Yageo"," RC0805JR-1310RL ","Resistores de Filme Espesso - SMD General Purpose Chip Resistor 0805, 10Ohms, 5%, 1/8W"," 603-RC0805JR-1310RL "\ni,0,0,"U2","74HC1G125","Package_TO_SOT_SMD:SOT-23-5","1","Nexperia"," 74HC1G125GW,125 ","Buffers e line drivers SOT353-1 BUFFERS & LINE DVRS"," 771-74HC1G125GW-G "\ni,0,0,"U3,U6,U9,U12","74HC1G14","Package_TO_SOT_SMD:SOT-23-5","4","Nexperia"," 74HC1G14GW,125 ","Inversores SOT353-1 INVERTER"," 771-74HC1G14GW-G "\ni,0,0,"U4","UA9637","Package_SO:SOIC-8_3.9x4.9mm_P1.27mm","1","Texas"," UA9637ACDR ","Interface IC RS-422 Dual Differential Li ne Receiver A 595-UA9637ACD"," 595-UA9637ACDR "\ni,0,0,"U5","ST485E","Package_SO:SOIC-8_3.9x4.9mm_P1.27mm","1","Texas"," ST485EBDR ","Half duplex RS-485/RS-422, 5 Mbps, ±15kV ESD, 5V supply, 256 bus load, SOIC-8"," 511-ST485EBDR "\ni,0,0,"U7","TPS54202DDC","Package_TO_SOT_SMD:SOT-23-6","1","Texas"," TPS54202DDCR ","2A, 4.5 to 28V Input, EMI Friendly integrated switch synchronous step-down regulator, pulse-skipping, SOT-23-6"," 595-TPS54202DDCR "\ni,0,0,"U8","2EDB8259","JRM_Footprint:SOIC127P600X175-16_14N-1-V","1","Infineon"," 2EDB8259YXUMA1 ","Dual-channel isolated gate driver ICs in 300 mil DSO package"," 726-2EDB8259YXUMA1 "\ni,0,0,"U10","TMCS1126B6","JRM_Footprint:SOIC10_DVG_TEX","1","Texas","TMCS1126B6BQDVGR ","Board Mount Current Sensors 80ARMS 500kHz Hall-e ffect current sensor"," 595-TMCS1126B6BQDVGR "\ni,0,0,"U11","HCPL0601","Package_SO:SOIC-8_3.9x4.9mm_P1.27mm","1","","HCPL0601","Single High Speed LSTTL/TTL Compatible Optocoupler with enable, dV/dt 10000/us, VCM 1000, max 7V VCC, SOIC-8"," 512-HCPL0601V "\ni,0,0,"U13","74HC1G08","Package_TO_SOT_SMD:SOT-23-5","1","","74HC1G08GV,125",""," 771-74HC1G08GW-Q100 "\ni,0,0,"U14","MIC6270Y","Package_TO_SOT_SMD:SOT-23-5","1","","MIC6270YM5","Single, 1.6V-6.5V, 315nA Quiescent, Push-Pull Output, Comparator, SOT-23-5/SC-70"," 998-MIC6270YM5TR "\n	t	5	12	2	2	2	2	2	0
-159	bobo		1	0	status,compId,leId,"Reference","Value","Footprint","Qty","Manufacturer","PartNumber","Description","Ordercode"\nu,0,0,"C1,C2,C11,C12,C23,C26","22uF/25V","Capacitor_SMD:CP_Elec_5x5.9","6","Panasonic"," EEE-1EA220WR ","Capacitores eletrolíticos de alumínio - SMD 22UF 25V VS SMD"," 667-EEE-1EA220WR "\nu,0,0,"C3,C32","330nF","Capacitor_THT:C_Rect_L18.0mm_W8.0mm_P15.00mm_FKS3_FKP3","2","TDK","B32922C3334M","capacitores de segurança 0.33uF 305V 20% 15mm L/S Class X2"," 871-B32922C3334M "\nu,0,0,"C4,C6,C7,C8,C10,C14,C15,C16,C25,C27,C29,C30,C31","100nF/50V","Capacitor_SMD:C_0805_2012Metric","13","Samsung","CL21B104KBCNNNL ","Capacitores de cerâmica multicamada MLCC - SMD/SMT 100nF+/-10% 50V X7R 0805"," 187-CL21B104KBCNNNL "\nu,0,0,"C5","47pF","Capacitor_SMD:C_0805_2012Metric","1","Walsin","0805N470J500CT ","Capacitores de cerâmica multicamada MLCC - SMD/SMT 47pF +-5% 50V"," 791-0805N470J500CT "\nu,0,0,"C9","100uF/25V","Capacitor_SMD:CP_Elec_6.3x5.8","1","Panasonic"," EEE-1EA101XP ","Capacitores eletrolíticos de alumínio - SMD 100uF 25V"," 667-EEE-1EA101XP "\nu,0,0,"C13","1uF","Capacitor_SMD:C_1206_3216Metric","1","Kemet","C1206C105Z3VAC ","Capacitores de cerâmica multicamada MLCC - SMD/SMT 25V 1uF Y5V 1206 -20/+80%"," 80-C1206C105Z3VAC "\ni,0,0,"C17,C21","10uF","Capacitor_SMD:C_1206_3216Metric","2","Kemet","C1206C106Z3VACTU ","Capacitores de cerâmica multicamada MLCC - SMD/SMT 25V 10uF Y5V 1206 -20%,+80%"," 80-C1206C106Z3VACTU "\ni,0,0,"C19","220n","Capacitor_SMD:C_0805_2012Metric","1","Samsung","CL21B224KAFNNNG ","Capacitores de cerâmica multicamada MLCC - SMD/SMT 220nF+/-10% 25V X7R 0805"," 187-CL21B224KAFNNNG "\nu,0,0,"C24","1nF","Capacitor_SMD:C_0805_2012Metric","1","Walsin","0805N102J500CT ","Capacitores de cerâmica multicamada MLCC - SMD/SMT 1000pF +-5% 50V"," 791-0805N102J500CT "\nu,0,0,"C28","100pF","Capacitor_SMD:C_0805_2012Metric","1","Walsin"," 0805N101J500CT ","Capacitores de cerâmica multicamada MLCC - SMD/SMT 100pF +-5% 50V"," 791-0805N101J500CT "\nu,0,0,"CN1","Conn_02x05_Odd_Even","Connector_IDC:IDC-Header_2x05_P2.54mm_Vertical","1","","","",""\ni,0,0,"D1,D2","ES1J","Diode_SMD:D_SMA","2","ONSemi","ES1J","Retificadores 600V 1A SMA Super Fast Rectifier"," 512-ES1JAF "\nu,0,0,"DCDC1","B1215S-2W","JRM_Footprint:B_S-2W","1","","","",""\nu,0,0,"DCDC2","B1212S-2W","JRM_Footprint:B_S-2W","1","","","",""\ni,0,0,"FB1","60R","Inductor_SMD:L_1206_3216Metric","1","Vishay","ILB1206ER600V","Esferas de ferrite 60ohms 25%"," 70-ILB1206ER600V "\nu,0,0,"FB5","2K2","Inductor_SMD:L_CommonMode_Wurth_WE-CNSW-1206","1","","","Common mode choke, 370 mA, 125VDC, USB2.0, 111 nH"," 673-BWCU321619222M02 "\nu,0,0,"J1,J2","Conn_02x02","Connector_PinSocket_2.54mm:PinSocket_2x02_P2.54mm_Vertical","2","","","Generic connector, double row, 02x02, odd/even pin numbering scheme (row 1 odd numbers, row 2 even numbers), script generated (kicad-library-utils/schlib/autogen/connector/)",""\nu,0,0,"J3,J5","Conn_01x02","Connector_PinSocket_2.54mm:PinSocket_1x02_P2.54mm_Vertical","2","","","Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)",""\nu,0,0,"J4","PowerConn","Connector_Bendal:Bendal-100-303-SN","1","","Bendal-100-303-SN","Generic screw terminal, single row, 01x03, script generated (kicad-library-utils/schlib/autogen/connector/)",""\nu,0,0,"L1","15uH","Inductor_SMD:L_Wuerth_MAPI-3012","1","TDK"," VLS3012CX-150M-1 ","Indutores de potência - SMD 1.06A 15uH 514mOhm 3x3x1.2mm"," 810-VLS3012CX150M1 "\nu,0,0,"Q1,Q2","BC807-40","Package_TO_SOT_SMD:SOT-23","2","Nexperia"," BC817-40,235 ","Transistores bipolares de junção - BJT SOT23 45V .5A NPN GP TRANS"," 771-BC817-40235 "\nu,0,0,"Q3,Q4","FGH60N60SMD","JRM_Footprint:TO247INV","2","ONSemi","FGH60N60SMD ","IGBTs 600V/60A Field Stop IGBT ver. 2"," 512-FGH60N60SMD "\nu,0,0,"R1","13K3 0.1%","Resistor_SMD:R_0805_2012Metric","1","Panasonic"," ERA-6AEB1332V ","Resistores de Filme Fino - SMD 0805 13.3Kohm 0.1% 25ppm"," 667-ERA-6AEB1332V "\nu,0,0,"R2","100K 0.1%","Resistor_SMD:R_0805_2012Metric","1","Panasonic"," ERA-6AEB104V ","Resistores de Filme Fino - SMD 0805 1/8W 100Kohms"," 667-ERA-6AEB104V "\nu,0,0,"R3","49R9","Resistor_SMD:R_0805_2012Metric","1","Royalohm"," RT0805BRD0749R9L ","Resistores de Filme Fino - SMD 1/8W 49.9 ohm .1% 25 ppm"," 603-RT0805BRD0749R9L "\nu,0,0,"R4,R9","2.7R","Resistor_SMD:R_1206_3216Metric","2","Vishay"," RCS12062R70FKEA ","Resistores de Filme Espesso - SMD 0.5watt 2.7ohms 1% 100ppm"," 71-RCS12062R70FKEA "\nu,0,0,"R8","3K3","Resistor_SMD:R_0805_2012Metric","1","Yageo"," RC0805JR-073K3L ","Resistores de Filme Espesso - SMD General Purpose Chip Resistor 0805, 3.3kOhms, 5%, 1/8W"," 603-RC0805JR-073K3L "\nu,0,0,"R10,R11,R12","1K2","Resistor_SMD:R_0805_2012Metric","3","Yageo"," RC0805JR-071K2L ","Resistores de Filme Espesso - SMD General Purpose Chip Resistor 0805, 1.2kOhms, 5%, 1/8W"," 603-RC0805JR-071K2L "\nu,0,0,"R13,R14,R15","10K","Resistor_SMD:R_0805_2012Metric","3","Yageo"," RC0805JR-0710KL ","Resistores de Filme Espesso - SMD General Purpose Chip Resistor 0805, 10kOhms, 5%, 1/8W"," 603-RC0805JR-0710KL "\nu,0,0,"R16","100R","Resistor_SMD:R_0805_2012Metric","1","Yageo"," RC0805JR-13100RL ","Resistores de Filme Espesso - SMD General Purpose Chip Resistor 0805, 100Ohms, 5%, 1/8W"," 603-RC0805JR-13100RL "\nu,0,0,"R18","10R","Resistor_SMD:R_0805_2012Metric","1","Yageo"," RC0805JR-1310RL ","Resistores de Filme Espesso - SMD General Purpose Chip Resistor 0805, 10Ohms, 5%, 1/8W"," 603-RC0805JR-1310RL "\nu,0,0,"U2","74HC1G125","Package_TO_SOT_SMD:SOT-23-5","1","Nexperia"," 74HC1G125GW,125 ","Buffers e line drivers SOT353-1 BUFFERS & LINE DVRS"," 771-74HC1G125GW-G "\nu,0,0,"U3,U6,U9,U12","74HC1G14","Package_TO_SOT_SMD:SOT-23-5","4","Nexperia"," 74HC1G14GW,125 ","Inversores SOT353-1 INVERTER"," 771-74HC1G14GW-G "\nu,0,0,"U4","UA9637","Package_SO:SOIC-8_3.9x4.9mm_P1.27mm","1","Texas"," UA9637ACDR ","Interface IC RS-422 Dual Differential Li ne Receiver A 595-UA9637ACD"," 595-UA9637ACDR "\nu,0,0,"U5","ST485E","Package_SO:SOIC-8_3.9x4.9mm_P1.27mm","1","Texas"," ST485EBDR ","Half duplex RS-485/RS-422, 5 Mbps, ±15kV ESD, 5V supply, 256 bus load, SOIC-8"," 511-ST485EBDR "\nu,0,0,"U7","TPS54202DDC","Package_TO_SOT_SMD:SOT-23-6","1","Texas"," TPS54202DDCR ","2A, 4.5 to 28V Input, EMI Friendly integrated switch synchronous step-down regulator, pulse-skipping, SOT-23-6"," 595-TPS54202DDCR "\nu,0,0,"U8","2EDB8259","JRM_Footprint:SOIC127P600X175-16_14N-1-V","1","Infineon"," 2EDB8259YXUMA1 ","Dual-channel isolated gate driver ICs in 300 mil DSO package"," 726-2EDB8259YXUMA1 "\nu,0,0,"U10","TMCS1126B6","JRM_Footprint:SOIC10_DVG_TEX","1","Texas","TMCS1126B6BQDVGR ","Board Mount Current Sensors 80ARMS 500kHz Hall-e ffect current sensor"," 595-TMCS1126B6BQDVGR "\nu,0,0,"U11","HCPL0601","Package_SO:SOIC-8_3.9x4.9mm_P1.27mm","1","","HCPL0601","Single High Speed LSTTL/TTL Compatible Optocoupler with enable, dV/dt 10000/us, VCM 1000, max 7V VCC, SOIC-8"," 512-HCPL0601V "\nu,0,0,"U13","74HC1G08","Package_TO_SOT_SMD:SOT-23-5","1","","74HC1G08GV,125",""," 771-74HC1G08GW-Q100 "\nu,0,0,"U14","MIC6270Y","Package_TO_SOT_SMD:SOT-23-5","1","","MIC6270YM5","Single, 1.6V-6.5V, 315nA Quiescent, Push-Pull Output, Comparator, SOT-23-5/SC-70"," 998-MIC6270YM5TR "\n	t	5	12	2	2	2	2	2	0
+48	R		6	0		f	5	12	2	2	2	2	2	1
+52	P01	Caixa de papelão comprida	1	0		f	5	12	2	2	2	2	2	1
+56	P02	caixa papelão	1	0		f	5	12	2	2	2	2	2	1
+26	P03	Antiga C04	1	0		f	5	12	2	2	2	2	2	1
+61	M02	Arruelas	1	0		f	5	12	2	2	2	2	2	1
+64	M03	Porcas	1	0		f	5	12	2	2	2	2	2	1
+50	M01	Parafusos	1	0		f	5	12	2	2	2	2	2	1
+65	P05	Caixa com LCDs	1	0		f	5	12	2	2	2	2	2	1
+66	M05	Parafusos	1	0		f	5	12	2	2	2	2	2	1
+67	M04	Brocas	1	0		f	5	12	2	2	2	2	2	1
+72	M06	Parafusos, porcas, terminais, espaçadores	1	0		f	5	12	2	2	2	2	2	1
+73	Satelite	Componentes do Satélite	1	0		f	5	12	2	2	2	2	2	1
+88	CBUS		1	0		f	5	12	2	2	2	2	2	1
+92	CADR-DA		1	0		f	5	12	2	2	2	2	2	1
+90	CADR-IO		1	0		f	5	12	2	2	2	2	2	1
+89	CADR-AN		1	0		f	5	12	2	2	2	2	2	1
+93	CADR	Não existe: somente para acrescentar nas outras montagens	1	0		f	5	12	2	2	2	2	2	1
+87	A420		2	0		f	5	12	2	2	2	2	2	1
+2	A18		1	0		f	5	12	2	2	2	2	2	1
+82	INV09	Pedido W35429	4	0		f	5	12	2	2	2	2	2	1
+104	CADR-MIX	2 DA, 1PWM, 2OUT, 3IN, 4 ANALOG	1	0		f	5	12	2	2	2	2	2	1
+11	G	Está sem a G2 -- Caixa 1: A06; Caixa 2: A07 e A08 (erro?); 4: A09; 5: A10;	5	0		f	5	12	2	2	2	2	2	1
+23	C		6	0		f	5	12	2	2	2	2	2	1
+107	B	Falta Caixa 3	5	0		f	5	12	2	2	2	2	2	1
+35	D		5	0		f	5	12	2	2	2	2	2	1
+25	E		1	0		f	5	12	2	2	2	2	2	1
+112	invleg	Ainda sem caixa	1	0		f	5	12	2	2	2	2	2	1
+113	OSC-1	Projeto com o Heitor	1	0		f	5	12	2	2	2	2	2	1
+19	F		6	0		f	5	12	2	2	2	2	2	1
+114	GDEC	Existem vários componentes que não fazem parte da placa GDEC	1	0		f	5	12	2	2	2	2	2	1
+71	X	Espaço gde vazio - componentes não catalogados	6	0		f	5	12	2	2	2	2	2	1
+115	Fuel Cell		1	0		f	5	12	2	2	2	2	2	1
+116	Invslave1		2	0		f	5	12	2	2	2	2	2	1
+118	Headcon1	Comprar: C34, quem é C37?	2	0		f	5	12	2	2	2	2	2	1
+120	CHOPPER		1	0		f	5	12	2	2	2	2	2	1
+121	Marcelo	Compra Farnell jul 2015	1	0		f	5	12	2	2	2	2	2	1
+119	FRD		8	0		f	5	12	2	2	2	2	2	1
+132	A4INPUTS		1	0		f	5	12	2	2	2	2	2	1
+133	BLESH2		1	0		f	5	12	2	2	2	2	2	1
+137	Chaves		1	0		f	5	12	2	2	2	2	2	1
+138	Integrados		3	0		f	5	12	2	2	2	2	2	1
+81	A	A/1 etc. ok -- Antigas Caixas A01 A02 A03 A04 A05	5	0		f	5	12	2	2	2	2	2	1
+0	Não existe	Localização inexistente	1	0		f	5	12	2	2	2	2	2	1
+134	A420C		1	0		f	5	12	2	2	2	2	2	1
+74	ACBOX	Pedidos: W37530 e W37354	3	0		f	5	12	2	2	2	2	2	1
+111	BoatArm		2	0		f	5	12	2	2	2	2	2	1
+152	Launchbed4		2	0	status,compId,leId,"Reference","Value","Datasheet","Footprint","Qty","Description","PartNumber","Mouser"\nu,0,0,"C1,C3,C4,C5,C7,C9,C12,C16,C19,C37,C38,C39,C40,C41,C42,C43,C50","100nF/50V","https://br.mouser.com/datasheet/2/585/MLCC-1837944.pdf","Capacitor_SMD:C_0805_2012Metric","17","Capacitores de cerâmica multicamada MLCC - SMD/SMT 100nF+/-10% 50V X7R 0805","CL21B104KBCNNNL "," 187-CL21B104KBCNNNL "\nu,0,0,"C2,C6","30pF","https://br.mouser.com/datasheet/2/447/KEM_C1007_X8R_ULTRA_150C_SMD-3699693.pdf","Capacitor_SMD:C_0805_2012Metric","2","Capacitores de cerâmica multicamada MLCC - SMD/SMT 16V 30pF X8R 0805 5%","C0805C300J4HACTU "," 80-C0805C300J4HACTU "\nu,0,0,"C8,C10,C13,C14,C23,C25,C26,C29,C33,C51","2.2uF","https://br.mouser.com/datasheet/2/585/MLCC-1837944.pdf","Capacitor_SMD:C_0805_2012Metric","10","Capacitores de cerâmica multicamada MLCC - SMD/SMT 2.2uF+/-10% 10V X7R 0805","CL21B225KPFNNNG "," 187-CL21B225KPFNNNG "\nu,0,0,"C11,C32","15p","https://br.mouser.com/datasheet/2/447/KEM_C1007_X8R_ULTRA_150C_SMD-3699693.pdf","Capacitor_SMD:C_0805_2012Metric","2","Capacitores de cerâmica multicamada MLCC - SMD/SMT 10V 15pF X8R 0805 2%","C0805C150G8HACTU "," 80-C0805C150G8HACTU "\nu,0,0,"C15,C17","1uF","https://br.mouser.com/datasheet/2/447/KEM_C1005_Y5V_SMD-3700105.pdf","Capacitor_SMD:C_1206_3216Metric","2","Capacitores de cerâmica multicamada MLCC - SMD/SMT 25V 1uF Y5V 1206 -20/+80%","C1206C105Z3VAC "," 80-C1206C105Z3VAC "\nu,0,0,"C18,C20","470uF/16V","https://br.mouser.com/datasheet/2/293/e_uwt-1847810.pdf","Capacitor_SMD:CP_Elec_10x10.5","2","Capacitores eletrolíticos de alumínio - SMD 25volts 470uF AEC-Q200","UWT1E471MNL1GS "," 647-UWT1E471MNL1S "\nu,0,0,"C21,C22,C24,C27,C28,C30,C31,C34,C35,C36","10nF","https://br.mouser.com/datasheet/2/447/KEM_C1002_X7R_SMD-3699509.pdf","Capacitor_SMD:C_0805_2012Metric","10","Capacitores de cerâmica multicamada MLCC - SMD/SMT 100V .01uF X7R 0805 10%","C0805C103K1RAC7411 "," 80-C0805C103K1RACLR "\nu,0,0,"C44,C45,C48,C49","22uF/25V","https://industrial.panasonic.com/cdbs/www-data/pdf/RDE0000/ABA0000C1145.pdf","Capacitor_SMD:CP_Elec_5x5.9","4","Capacitores eletrolíticos de alumínio - SMD 22UF 25V VS SMD"," 667-EEE-1EA220WR "," 667-EEE-1EA220WR "\nu,0,0,"C46","220nF","https://br.mouser.com/datasheet/2/585/MLCC-1837944.pdf","Capacitor_SMD:C_0805_2012Metric","1","Capacitores de cerâmica multicamada MLCC - SMD/SMT 220nF+/-10% 25V X7R 0805"," 187-CL21B224KAFNNNG ","CL21B224KAFNNNG "\nu,0,0,"C47","47pF","https://br.mouser.com/datasheet/2/210/WTC_MLCC_General_Purpose-1534899.pdf","Capacitor_SMD:C_0805_2012Metric","1","Capacitores de cerâmica multicamada MLCC - SMD/SMT 47pF +-5% 50V"," 791-0805N470J500CT ","0805N470J500CT "\nu,0,0,"CN1,CN2,CN3,CN4,J3,J4","Conn_02x05_Odd_Even","~","Connector_IDC:IDC-Header_2x05_P2.54mm_Vertical","6","Conector IDC","",""\nu,0,0,"CN5,CN8,CN11","Conn_01x02","~","Connector_Phoenix_MSTB:PhoenixContact_MSTBVA_2,5_2-G-5,08_1x02_P5.08mm_Vertical","3","","",""\nu,0,0,"CN6","WeAct_STM32H7XX","","JRM_Footprint:WeAct_STM32H7XX","1","Barra de pinos fêmea pode não ter que soldar","",""\nu,0,0,"CN7","Conn_01x03","~","Connector_Phoenix_MSTB:PhoenixContact_MSTBVA_2,5_3-G-5,08_1x03_P5.08mm_Vertical","1","Generic connector, single row, 01x03, script generated (kicad-library-utils/schlib/autogen/connector/)","",""\nu,0,0,"CN9","Conn_01x02","~","Connector_Phoenix_GMSTB:PhoenixContact_GMSTBA_2,5_2-G_1x02_P7.50mm_Horizontal","1","Trocar para conector parafuso","",""\nu,0,0,"CN10,CN12,CN13,CN14,CN15","Conn_02x04_Odd_Even","~","Connector_IDC:IDC-Header_2x04_P2.54mm_Vertical","5","Conector IDC","",""\nu,0,0,"D3","1N4148W","https://www.vishay.com/docs/85748/1n4148w.pdf","Diode_SMD:D_SOD-123","1","Diodos de Comutação de Sinais Pequenos Small Signal Diode, SOD-123F, 100V, 0.15A, 150C"," 1N4148W "," 637-1N4148W "\nu,0,0,"D4","ESDCAN-03","https://www.onsemi.com/pub_link/Collateral/NUP2105L-D.PDF","Package_TO_SOT_SMD:SOT-23","1","Dual Line CAN Bus Protector, 24Vrwm","ESDCAN03-2BWY"," 511-ESDCAN03-2BWY "\nu,0,0,"FB1","60R","https://www.vishay.com/doc?34023","Inductor_SMD:L_1206_3216Metric","1","Ferrite bead, small symbol","ILB1206ER600V"," 70-ILB1206ER600V "\nu,0,0,"H1,H2,H3,H4","MountingHole_Pad","~","MountingHole:MountingHole_3.2mm_M3_DIN965_Pad","4","","",""\nu,0,0,"J1","Screw_Terminal_01x03","~","Connector_Phoenix_MSTB:PhoenixContact_MSTBA_2,5_3-G-5,08_1x03_P5.08mm_Horizontal","1","","",""\nu,0,0,"J2","Conn_01x05","~","Connector_Phoenix_MC:PhoenixContact_MC_1,5_5-G-3.5_1x05_P3.50mm_Horizontal","1","Generic connector, single row, 01x05, script generated (kicad-library-utils/schlib/autogen/connector/)","",""\nu,0,0,"J5","Molex KK 254 06 vias","Distribuidores e Alojamento de Fios STRT LOCKING HEADER","Connector_Molex:Molex_KK-254_AE-6410-06A_1x06_P2.54mm_Vertical","1","Distribuidores e Alojamento de Fios STRT LOCKING HEADER","22-27-2061"," 538-22-27-2061 "\nu,0,0,"J6","Conn_01x03","~","Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical","1","Barra de pinos simples macho","",""\nu,0,0,"JP1","Jumper_2_Open","~","Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical","1","Pads na PCB","",""\nu,0,0,"JP2,JP3,JP4,JP5,JP6,JP7","Jumper_2_Open","~","Jumper:SolderJumper-2_P1.3mm_Open_Pad1.0x1.5mm","6","","",""\nu,0,0,"K1","Relê 12V","http://www.omron.com/ecb/products/pdf/en-g5le.pdf","Relay_THT:Relay_SPDT_Omron-G5LE-1","1","","",""\nu,0,0,"L1","15uH","https://product.tdk.com/system/files/dam/doc/product/inductor/inductor/smd/catalog/inductor_commercial_power_vls3012cx-1_en.pdf?ref_disty=mouser","Inductor_SMD:L_Wuerth_MAPI-3012","1","Indutores de potência - SMD 1.06A 15uH 514mOhm 3x3x1.2mm"," VLS3012CX-150M-1 "," 810-VLS3012CX150M1 "\nu,0,0,"LED1,LED4","LED_RED","https://br.mouser.com/datasheet/2/239/lite_on_lites10847_1-1737242.pdf","LED_SMD:LED_1206_3216Metric","2","LEDs de cor única Red Clear 621nm"," LTST-C150EKT "," 859-LTST-C150EKT "\nu,0,0,"LED2","LED_GREEN","https://br.mouser.com/datasheet/2/239/LTST_C150KGKT-1143771.pdf","LED_SMD:LED_1206_3216Metric","1","LEDs de cor única Green Clear 571nm"," LTST-C150KGKT "," 859-LTST-C150KGKT "\nu,0,0,"LED3","LED_YELLOW","https://br.mouser.com/datasheet/2/239/Lite_On_LTST_C150KSKT-1175233.pdf","LED_SMD:LED_1206_3216Metric","1","LEDs de cor única Yellow Clear 587nm"," LTST-C150KSKT "," 859-LTST-C150KSKT "\nu,0,0,"Q1,Q2","BC807-40","https://assets.nexperia.com/documents/data-sheet/BC807_SER.pdf","Package_TO_SOT_SMD:SOT-23","2","Transistores bipolares de junção - BJT SOT23 45V .5A PNP GP TRANS"," BC807-40,215 "," 771-BC807-40-T/R "\nu,0,0,"Q3","SI2300","https://www.vishay.com/doc?65701","Package_TO_SOT_SMD:SOT-23","1","MOSFETs 30V Vds 12V Vgs SOT-23"," SI2300DS-T1-GE3 "," 781-SI2300DS-T1-GE3 "\nu,0,0,"Q4","BC817-40","https://br.mouser.com/datasheet/2/258/BC817_16_7eBC817_40_SOT_23_-3423776.pdf","Package_TO_SOT_SMD:SOT-23","1","Transistores bipolares de junção - BJT 45V, 800mA"," BC817-40,235 "," 771-BC817-40235"\nu,0,0,"R1","120R/0.5W","https://br.mouser.com/datasheet/2/418/3/NG_CS_1309350_PASSIVE_COMPONENT_0807-715500.pdf","Resistor_SMD:R_1206_3216Metric","1","Thick Film Resistors - SMD CRGH1206 5% 120R 0.5W","CRGH1206J120R "," 279-CRGH1206J120R "\nu,0,0,"R2,R3,R4,R5,R6,R7,R8,R9,R10,R11","100R","https://www.vishay.com/doc?20035","Resistor_SMD:R_0805_2012Metric","10","Thick Film Resistors - SMD 1/8watt 100ohms 5% 200ppm","CRCW0805100RJNEC "," 71-CRCW0805J-100-E3 "\nu,0,0,"R12,R13,R15","270R","https://br.mouser.com/datasheet/2/385/SEI_RMCF_RMCP-3077565.pdf","Resistor_SMD:R_0805_2012Metric","3","Thick Film Resistors - SMD 270Ohms 0805 0.125W 5% Std Power AEC-Q200","RMCF0805JT270R "," 708-RMCF0805JT270R "\nu,0,0,"R14","10K","https://www.vishay.com/doc?20035","Resistor_SMD:R_0805_2012Metric","1","Thick Film Resistors - SMD D12/CRCW0805 200 10K 5% ET6 e3","CRCW080510K0JNEC "," 71-CRCW080510K0JNEC "\nu,0,0,"R16,R18,R28,R37,R38,R39,R56,R66,R71,R72,R87","4K7","https://www.vishay.com/doc?20035","Resistor_SMD:R_0805_2012Metric","11","Thick Film Resistors - SMD 1/8watt 4.7Kohms 5%","CRCW08054K70JNEB "," 71-CRCW08054K70JNEB "\nu,0,0,"R17,R23,R27,R31,R32,R33,R40,R41,R44,R47,R54,R60,R63,R65,R67,R68,R73,R75,R81,R85","330R/0.5%","https://br.mouser.com/datasheet/2/447/PYu_RC_Group_51_RoHS_L_12-3368608.pdf","Resistor_SMD:R_0805_2012Metric","20","Thick Film Resistors - SMD General Purpose Chip Resistor 0805, 330Ohms, 0.5%, 1/8W"," RC0805DR-07330RL "," 603-RC0805DR-07330RL "\nu,0,0,"R19,R20,R21,R25,R26,R29,R30,R34,R35,R36,R42,R43,R45,R46,R48,R49,R50,R51,R52,R53,R55,R57,R58,R59,R62,R64,R69,R70,R74,R76,R77,R78,R79,R80,R82,R83,R84,R86,R88,R89","499K/0.5%","https://industrial.panasonic.com/cdbs/www-data/pdf/RDM0000/AOA0000C328.pdf","Resistor_SMD:R_0805_2012Metric","40","Thick Film Resistors - SMD 0805 Anti-Surge Res. 0.5%, 499Kohm"," ERJ-PB6D4993V "," 667-ERJ-PB6D4993V "\nu,0,0,"R22,R24","1K","https://br.mouser.com/datasheet/2/447/pyu_rc_51_rohs_p-3370815.pdf","Resistor_SMD:R_0805_2012Metric","2","Thick Film Resistors - SMD General Purpose Chip Resistor 0805, 1kOhms, 5%, 1/8W"," RC0805JR-071KP "," 603-RC0805JR-071KP "\nu,0,0,"R61","1M","https://br.mouser.com/datasheet/2/447/PYu_RC_Group_51_RoHS_L_11-1984063.pdf","Resistor_SMD:R_0805_2012Metric","1","Thick Film Resistors - SMD General Purpose Chip Resistor 0805, 1MOhms, 5%, 1/8W"," RC0805JR-101ML "," 603-RC0805JR-101ML "\nu,0,0,"R90","13K3 0.1%","https://industrial.panasonic.com/cdbs/www-data/pdf/RDM0000/AOA0000C307.pdf","Resistor_SMD:R_0805_2012Metric","1","Thin Film Resistors - SMD 0805 13.3Kohm 0.1% 25ppm"," ERA-6AEB1332V "," 667-ERA-6AEB1332V "\nu,0,0,"R91","100K 0.1%","https://industrial.panasonic.com/cdbs/www-data/pdf/RDM0000/AOA0000C307.pdf","Resistor_SMD:R_0805_2012Metric","1","Thin Film Resistors - SMD 0805 1/8W 100Kohms"," ERA-6AEB104V "," 667-ERA-6AEB104V "\nu,0,0,"R92","49R9/1%","https://br.mouser.com/datasheet/2/1365/1-3571082.pdf","Resistor_SMD:R_0805_2012Metric","1","Thick Film Resistors - SMD RMC 0805 1/8W 1% T/R-5000","0805W8F499JT5E "," 303-0805W8F499JT5E "\nu,0,0,"SW1,SW2","SW_Push","~","Button_Switch_SMD:SW_SPST_CK_RS282G05A3","2","Push button switch, generic, two pins","",""\nu,0,0,"U1,U4,U7","AM26C31","https://www.ti.com/lit/gpn/am26c31m","Package_SO:SOIC-16_3.9x9.9mm_P1.27mm","3","RS-422 Interface IC Quad Diff Line Drvr A 595-AM26C31ID"," AM26C31IDR "," 595-AM26C31IDR "\nu,0,0,"U2,U6,U8","AM26C32","https://www.ti.com/lit/gpn/am26c32","Package_SO:SOIC-16_3.9x9.9mm_P1.27mm","3","RS-422 Interface IC Quad Diff Line ALT 595-AM26C32IDR","AM26C32IDRG4 "," 595-AM26C32IDRG4 "\nu,0,0,"U3","74HCT541","https://assets.nexperia.com/documents/data-sheet/74HC_HCT541.pdf","Package_SO:SOIC-20W_7.5x12.8mm_P1.27mm","1","Buffers & Line Drivers SOT163-1 OCTAL BUFFER/DRIVER"," 74HCT541D,653 "," 771-74HCT541D-T "\nu,0,0,"U5","TJA1050","https://br.mouser.com/datasheet/2/302/TJA1050-3083416.pdf","Package_SO:SOIC-8_3.9x4.9mm_P1.27mm","1","CAN Interface IC High-speed CAN transceiver"," TJA1050T/CM,118 "," 771-TJA1050T/CM118 "\nu,0,0,"U9","STM32F405RGT6","https://www.st.com/resource/en/datasheet/stm32f405rg.pdf","Package_QFP:LQFP-64_10x10mm_P0.5mm","1","ARM Microcontrollers - MCU ARM M4 1024 FLASH 168 Mhz 192kB SRAM","STM32F405RGT6 "," 511-STM32F405RGT6 "\nu,0,0,"U10,U11,U12,U15,U16","LM358","http://www.ti.com/lit/ds/symlink/lm2904-n.pdf","Package_SO:SOIC-8_3.9x4.9mm_P1.27mm","5","Low-Power, Dual Operational Amplifiers, DIP-8/SOIC-8/TO-99-8"," LM358DMR2G "," 863-LM358DMR2G "\nu,0,0,"U13","LM3940IMP-3.3","https://www.ti.com/lit/gpn/lm3940","Package_TO_SOT_SMD:TO-252-3_TabPin4","1","LDO Voltage Regulators 1A LDO REG A 926-LM3940IMPX33NOPB"," LM3940IMP-3.3/NOPB "," 926-LM3940IMP3.3NOPB "\nu,0,0,"U14","MAX6675","","Package_SO:SOIC-8_3.9x4.9mm_P1.27mm","1","","",""\nu,0,0,"U17","TPS54202DDC","http://www.ti.com/lit/ds/symlink/tps54202.pdf","Package_TO_SOT_SMD:SOT-23-6","1","2A, 4.5 to 28V Input, EMI Friendly integrated switch synchronous step-down regulator, pulse-skipping, SOT-23-6"," TPS54202DDCR "," 595-TPS54202DDCR "\nu,0,0,"X1","ABM3B-8.0-10-1UT","https://br.mouser.com/datasheet/2/3/abm3b-1774998.pdf","Crystal:Crystal_SMD_Abracon_ABM3B-4Pin_5.0x3.2mm","1","Crystals 8.0 MHZ 10PF","ABM3B-8.0-10-1UT"," 815-ABM3B8MHZ101UT "\n	t	5	12	2	2	2	2	2	1
+151	Vydence PFC		1	0		t	5	12	2	2	2	2	2	1
+150	ConverterABV		1	0	status,compId,leId,"Reference","Value","Footprint","Qty","PartNumber","Ordercode","Manufacturer","Supplier"\nu,0,0,"C2,C3,C4,C5,C6,C7,C8,C9,C10,C11","10nF","Capacitor_SMD:C_0805_2012Metric","10","C0805C103K1RAC7411 "," 80-C0805C103K1RACLR ","Kemet","Mouser"\nu,0,0,"C12,C13,C14,C16,C17,C18,C19,C20,C21,C22,C23,C24,C25,C50","100nF/50V","Capacitor_SMD:C_0805_2012Metric","14","CL21B104KBCNNNL "," 80-C0805C300J4HACTU ","Samsung","Mouser"\nu,0,0,"C27,C29","1uF","Capacitor_SMD:C_1206_3216Metric","2","C1206C105Z3VAC "," 80-C1206C105Z3VAC ","Kemet","Mouser"\nu,0,0,"C30,C31","470uF/16V","Capacitor_SMD:CP_Elec_10x10.5","2","UWT1E471MNL1GS "," 647-UWT1E471MNL1S ","Nichicon","Mouser"\nu,0,0,"C44,C48,C49","22uF/25V","Capacitor_SMD:CP_Elec_5x5.9","3","EEE-1EA220WR"," 667-EEE-1EA220WR ","Panasonic","Mouser"\nu,0,0,"C46","220nF","Capacitor_SMD:C_0805_2012Metric","1","CL21B224KAFNNNG "," 187-CL21B224KAFNNNG ","Samsung","Mouser"\nu,0,0,"C47","47pF","Capacitor_SMD:C_0805_2012Metric","1","0805N470J500CT "," 791-0805N470J500CT ","Walsin","Mouser"\nu,0,0,"C51","2.2uF","Capacitor_SMD:C_0805_2012Metric","1","CL21B225KPFNNNG "," 187-CL21B225KPFNNNG ","Samsung","Mouser"\nu,0,0,"CN1,CN5,CN20","Conn_02x07_Odd_Even","Connector_IDC:IDC-Header_2x08_P2.54mm_Vertical","3","","","",""\nu,0,0,"CN12","Conn_01x02","Connector_Phoenix_GMSTB:PhoenixContact_GMSTBA_2,5_2-G_1x02_P7.50mm_Horizontal","1","","","",""\nu,0,0,"CN13","Conn_01x03","Connector_Phoenix_MSTB:PhoenixContact_MSTBA_2,5_3-G-5,08_1x03_P5.08mm_Horizontal","1","","","",""\nu,0,0,"CN14,CN19,CN21","Conn_01x02","Connector_Phoenix_MSTB:PhoenixContact_MSTBA_2,5_2-G-5,08_1x02_P5.08mm_Horizontal","3","","","",""\nu,0,0,"CN15,CN16,CN17,CN18,J1","Conn_02x05_Odd_Even","Connector_IDC:IDC-Header_2x05_P2.54mm_Vertical","5","","","",""\nu,0,0,"D1","1N4148W","Diode_SMD:D_SOD-123","1"," 1N4148W "," 637-1N4148W ","Diotec","Mouser"\nu,0,0,"D4","ESDCAN-03","Package_TO_SOT_SMD:SOT-23","1","ESDCAN03-2BWY"," 511-ESDCAN03-2BWY ","ST","Mouser"\nu,0,0,"H1,H2,H3,H4","MountingHole_Pad","MountingHole:MountingHole_3.2mm_M3_DIN965_Pad","4","","","",""\nu,0,0,"J2","Screw_Terminal_01x03","Connector_Phoenix_MSTB:PhoenixContact_MSTBA_2,5_3-G-5,08_1x03_P5.08mm_Horizontal","1","","","",""\nu,0,0,"J3","Conn_01x03","Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical","1","","","",""\nu,0,0,"J4","Conn_01x05","Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical","1","","","",""\nu,0,0,"JP1,JP2,JP3,JP4,JP5","Jumper_2_Open","Jumper:SolderJumper-2_P1.3mm_Open_Pad1.0x1.5mm","5","","","",""\nu,0,0,"K1","Relê 12V","Relay_THT:Relay_SPDT_Omron-G5LE-1","1","","","",""\nu,0,0,"L1","15uH","Inductor_SMD:L_Wuerth_MAPI-3012","1"," VLS3012CX-150M-1 "," 810-VLS3012CX150M1 ","TDK","Mouser"\nu,0,0,"PL3","LAUNCHXL-F28379D-J1-8","ABV_Footprint:LAUNCHXL-F28379D-J1-8","1","","","",""\nu,0,0,"Q1,Q2,Q3,Q4,Q5,Q6,Q7,Q8,Q9,Q10","BC817-40","Package_TO_SOT_SMD:SOT-23","10"," BC807-40,215 "," 771-BC807-40-T/R ","Nexperia","Mouser"\nu,0,0,"R1,R2,R4,R28,R30,R32,R58,R60,R62,R64,R85,R87,R89,R93,R95,R96,R97,R98","4K7","Resistor_SMD:R_0805_2012Metric","18","CRCW08054K70JNEB "," 71-CRCW08054K70JNEB ","Vishay","Mouser"\nu,0,0,"R3","1K","Resistor_SMD:R_0805_2012Metric","1"," RC0805JR-071KP "," 603-RC0805JR-071KP ","Yageo","Mouser"\nu,0,0,"R6,R7,R8,R37,R38,R39,R40,R69,R70,R71","100R","Resistor_SMD:R_0805_2012Metric","10","CRCW0805100RJNEC "," 71-CRCW0805J-100-E3 ","Vishay","Mouser"\nu,0,0,"R10,R11,R12,R14,R15,R16,R19,R20,R21,R22,R23,R24,R41,R42,R43,R44,R45,R46,R47,R48,R49,R50,R51,R52,R53,R54,R55,R56,R72,R73,R74,R75,R76,R77,R78,R79,R80,R81,R82,R83","499K/1%","Resistor_SMD:R_0805_2012Metric","40"," ERJ-PB6D4993V "," 667-ERJ-PB6D4993V ","Panasonic","Mouser"\nu,0,0,"R27,R29,R31,R34,R35,R36,R57,R59,R61,R63,R65,R66,R67,R68,R84,R86,R88,R90,R91,R92","330R 1%","Resistor_SMD:R_0805_2012Metric","20"," RC0805DR-07330RL "," 603-RC0805DR-07330RL ","Yageo","Mouser"\nu,0,0,"R94","1M","Resistor_SMD:R_0805_2012Metric","1"," RC0805JR-101ML "," 603-RC0805JR-101ML ","Yageo","Mouser"\nu,0,0,"R99","13K3 0.1%","Resistor_SMD:R_0805_2012Metric","1"," ERA-6AEB1332V "," 667-ERA-6AEB1332V ","Panasonic","Mouser"\nu,0,0,"R100","100K 0.1%","Resistor_SMD:R_0805_2012Metric","1"," ERA-6AEB104V "," 667-ERA-6AEB104V ","Panasonic","Mouser"\nu,0,0,"R101","49R9/1%","Resistor_SMD:R_0805_2012Metric","1","0805W8F499JT5E "," 303-0805W8F499JT5E ","Royalohm","Mouser"\nu,0,0,"U1,U2,U3,U4,U5","LM358","Package_SO:SOIC-8_3.9x4.9mm_P1.27mm","5"," LM358DMR2G "," 863-LM358DMR2G ","ONSemi","Mouser"\nu,0,0,"U7","MAX6675","Package_SO:SOIC-8_3.9x4.9mm_P1.27mm","1","","","",""\nu,0,0,"U8","74HCT541","Package_SO:SOIC-20W_7.5x12.8mm_P1.27mm","1"," 74HCT541D,653 "," 771-74HCT541D-T ","Nexperia","Mouser"\nu,0,0,"U9,U12","AM26C32","Package_SO:SOIC-16_3.9x9.9mm_P1.27mm","2","AM26C32IDRG4 "," 595-AM26C32IDRG4 ","TI","Mouser"\nu,0,0,"U10,U11","AM26C31","Package_SO:SOIC-16_3.9x9.9mm_P1.27mm","2"," AM26C31IDR "," 595-AM26C31IDR ","TI","Mouser"\nu,0,0,"U13","LM3940IMP-3.3","Package_TO_SOT_SMD:TO-252-3_TabPin4","1"," LM3940IMP-3.3/NOPB "," 926-LM3940IMP3.3NOPB ","TI","Mouser"\nu,0,0,"U17","TPS54202DDC","Package_TO_SOT_SMD:SOT-23-6","1"," TPS54202DDCR "," 595-TPS54202DDCR ","TI","Mouser"\n	t	5	12	2	2	2	2	2	1
+155	Compra Extra Dezembro 2025		1	0		t	5	12	2	2	2	2	2	1
+140	lacep_control Completa	Placa com todos os componentes, iremos montar com menos componentes.	2	0		f	5	12	2	2	2	2	2	1
+139	invleg6v2	estoque ok	2	0		f	5	12	2	2	2	2	2	1
+148	iv4203Hall	Utilzando sensor de corrente da LEM, fazer 3 por placa	1	0		f	5	12	2	2	2	2	2	1
+141	iv420 Completa	Para correntes mais baixas ou tensão	1	0		f	5	12	2	2	2	2	2	1
+149	lacep_control menor	Trata-se da versão com menos partes a serem montadas	2	0		f	5	12	2	2	2	2	2	1
+146	Launchbed3		1	0		f	5	12	2	2	2	2	2	1
+147	line_driver		1	0		f	5	12	2	2	2	2	2	1
+156	Vydence Control2		2	0	status,compId,leId,"Reference","Qty","Value","Exclude from BOM","Footprint","Description","mfg#","Supplier","mfr","Ordercode"\nu,0,0,"X1","1","8MHz","","Crystal:Crystal_SMD_Abracon_ABM3B-4Pin_5.0x3.2mm","Four pin crystal, GND on pins 2 and 4","ABM3B-8.0-10-1UT","","",""\nu,0,0,"U22","1","LTV-816S","","Package_DIP:SMDIP-4_W9.53mm","DC Optocoupler, Vce 35V, CTR 50%, SMDIP-4"," LTV-816S-TA1 ","","LiteON"," 859-LTV-816S-TA1 "\nu,0,0,"U21","1","74AHC1G02","","Package_TO_SOT_SMD:SOT-23-5","Single NOR Gate, Low-Voltage CMOS","","","",""\nu,0,0,"U19","1","74HCT74","","Package_SO:SO-14_3.9x8.65mm_P1.27mm","Dual D Flip-flop, Set & Reset","74HCT74D,653","","",""\nu,0,0,"U17,U18,U23","3","74HCT1G08","","Package_TO_SOT_SMD:SOT-23-5","","74HC1G08GV,125","","",""\nu,0,0,"U16","1","TJA1050","","Package_SO:SOIC-8_3.9x4.9mm_P1.27mm","","TJA1050T/CM ","","",""\nu,0,0,"U14","1","STM32F7xxRx","","Package_QFP:LQFP-64_10x10mm_P0.5mm","STMicroelectronics Arm Cortex-M7 MCU, 512KB flash, 256KB RAM, 216 MHz, 1.7-3.6V, 50 GPIO, LQFP64","STM32F722RET6","","",""\nu,0,0,"U13,U15","2","74AHC1G14","","Package_TO_SOT_SMD:SOT-23-5","Single Schmitt NOT Gate, Low-Voltage CMOS","","","",""\nu,0,0,"U8","1","TPS54202DDC","","Package_TO_SOT_SMD:SOT-23-6","2A, 4.5 to 28V Input, EMI Friendly integrated switch synchronous step-down regulator, pulse-skipping, SOT-23-6","","","",""\nu,0,0,"U5","1","74HC1G08","","Package_TO_SOT_SMD:SOT-23-5","","74HC1G08GV,125","","",""\nu,0,0,"U4,U6,U7,U12,U20","5","TLV9361","","Package_TO_SOT_SMD:SOT-23-5","40-V, 1-MHz, RRO Operational Amplifiers for Cost-Sensitive Systems, SOT-23-5","TLV9361IDBVR","","",""\nu,0,0,"U2","1","LM3940IMP-3.3","","Package_TO_SOT_SMD:TO-252-3_TabPin4","","LM3940IMP-3.3","","",""\nu,0,0,"U1,U3,U9,U10,U11","5","INA826","","Package_SO:SOIC-8_3.9x4.9mm_P1.27mm","","INA826AIDR","","",""\nu,0,0,"TP1,TP2,TP3,TP4,TP5,TP6,TP7,TP8,TP9,TP10","10","TestPoint","","Connector_Pin:Pin_D0.7mm_L6.5mm_W1.8mm_FlatFork","test point","","","",""\nu,0,0,"SW1","1","SW_Push","","Button_Switch_SMD:SW_SPST_CK_RS282G05A3","Push button switch, generic, two pins","","","",""\nu,0,0,"R63","1","390R","","Resistor_SMD:R_0603_1608Metric","Resistor, US symbol","","","",""\nu,0,0,"R61","1","120R","","Resistor_SMD:R_1206_3216Metric","","","","",""\nu,0,0,"R60","1","470K","","Resistor_SMD:R_0603_1608Metric","Resistor, US symbol","","","",""\nu,0,0,"R56,R59","2","2320R","","Resistor_SMD:R_0603_1608Metric","","RT0805FRE072K32L","","",""\nu,0,0,"R50,R52","2","2K2","","Resistor_SMD:R_0603_1608Metric","Resistor, US symbol","","","",""\nu,0,0,"R44","1","13K3 0.1%","","Resistor_SMD:R_0603_1608Metric","Resistor, US symbol","MCT06030D1332BP5","","",""\nu,0,0,"R43","1","100K 1%","","Resistor_SMD:R_0603_1608Metric","Resistor, US symbol","CPF0603F100KC1","","",""\nu,0,0,"R40,R45","2","4220R","","Resistor_SMD:R_0603_1608Metric","","ERA-8AEB4221V","","",""\nu,0,0,"R27,R28,R49,R51","4","160K","","Resistor_SMD:R_1206_3216Metric","Resistor, US symbol","ERA-8AEB164V","","",""\nu,0,0,"R25,R30,R54,R58","4","100K","","Resistor_SMD:R_1206_3216Metric","Resistor, US symbol","RT1206FRE07100KL","","",""\nu,0,0,"R21,R23,R24,R55,R64,R65","6","39K","","Resistor_SMD:R_0603_1608Metric","Resistor, US symbol","","","",""\nu,0,0,"R18,R19,R20","3","270R","","Resistor_SMD:R_0603_1608Metric","Resistor, US symbol","","","",""\nu,0,0,"R17","1","47R","","Resistor_SMD:R_0603_1608Metric","Resistor, US symbol","","","",""\nu,0,0,"R8,R9,R15,R16,R22,R29,R42,R48,R57,R62","10","100R","","Resistor_SMD:R_0603_1608Metric","Resistor, US symbol","","","",""\nu,0,0,"R4,R6,R10,R11,R26,R39,R41,R53","8","4K7","","Resistor_SMD:R_0603_1608Metric","","","","",""\nu,0,0,"R3,R7,R12,R13,R31,R32,R35,R38","8","1K8","","Resistor_SMD:R_0603_1608Metric","","CRGCQ0603F1K8","","",""\nu,0,0,"R1,R2,R5,R14,R33,R34,R36,R37,R46,R47","10","10K","","Resistor_SMD:R_0603_1608Metric","","","","",""\nu,0,0,"Q10","1","PZT2222A","","Package_TO_SOT_SMD:SOT-223-3_TabPin2",""," PZT2222A-TP","",""," 833-PZT2222A-TP "\nu,0,0,"Q3,Q4,Q5,Q6,Q7,Q8,Q9,Q11,Q12","9","SI2300","","Package_TO_SOT_SMD:SOT-23","","SI2300DS-T1-GE3","","",""\nu,0,0,"Q1,Q2","2","BC807-16","","Package_TO_SOT_SMD:SOT-23","0.8A Ic, 45V Vce, PNP Transistor, SOT-23","","","",""\nu,0,0,"LED3","1","LED_YELLOW","","LED_SMD:LED_1206_3216Metric","","","","",""\nu,0,0,"LED2","1","LED_RED","","LED_SMD:LED_1206_3216Metric","","","","",""\nu,0,0,"LED1","1","LED_GREEN","","LED_SMD:LED_1206_3216Metric","","","","",""\nu,0,0,"L1,L2","2","15uH","","Inductor_SMD:L_Wuerth_MAPI-3012","Inductor with ferrite core"," VLS3012CX-150M-1","","TDK",""\nu,0,0,"JP2","1","Jumper_2_Open","","Jumper:SolderJumper-2_P1.3mm_Open_Pad1.0x1.5mm","","","","",""\nu,0,0,"JP1","1","SolderJumper_2_Bridged","Excluded from BOM","Jumper:SolderJumper-2_P1.3mm_Bridged2Bar_Pad1.0x1.5mm","Solder Jumper, 2-pole, closed/bridged","","","",""\nu,0,0,"J9","1","Conn_01x02","","Connector_CH:MicroFit_01x02","Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)","","","",""\nu,0,0,"J7","1","Conn_01x01","","Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Horizontal","Generic connector, single row, 01x01, script generated (kicad-library-utils/schlib/autogen/connector/)","","","",""\nu,0,0,"J6","1","Conn_02x03_Odd_Even","","Connector_PinHeader_2.54mm:PinHeader_2x03_P2.54mm_Horizontal","Generic connector, double row, 02x03, odd/even pin numbering scheme (row 1 odd numbers, row 2 even numbers), script generated (kicad-library-utils/schlib/autogen/connector/)","","","",""\nu,0,0,"J5,J8","2","Conn_01x02,Conn_02x05_Odd_Even","","Connector_PinHeader_2.54mm:PinHeader_2x05_P2.54mm_Horizontal","Generic connector, double row, 02x05, odd/even pin numbering scheme (row 1 odd numbers, row 2 even numbers), script generated (kicad-library-utils/schlib/autogen/connector/),Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)","","","",""\nu,0,0,"J4","1","Conn_01x03","","Connector_CH:MicroFit_01x03","Generic connector, single row, 01x03, script generated (kicad-library-utils/schlib/autogen/connector/)"," 216571-3003 ","","",""\nu,0,0,"J3","1","IDC_02x10","","Connector_IDC:IDC-Header_2x10_P2.54mm_Vertical","Generic connector, double row, 02x10, odd/even pin numbering scheme (row 1 odd numbers, row 2 even numbers), script generated (kicad-library-utils/schlib/autogen/connector/)","","","",""\nu,0,0,"J2","1","Conn_01x03","","Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical","","","","",""\nu,0,0,"J1","1","SWD","","Connector_Molex:Molex_KK-254_AE-6410-06A_1x06_P2.54mm_Vertical","","","","",""\nu,0,0,"FID1,FID2","2","Fiducial","Excluded from BOM","Fiducial:Fiducial_1.5mm_Mask3mm","Fiducial Marker","","","",""\nu,0,0,"FB3,FB4","2","2K","","Inductor_SMD:L_0603_1608Metric","Ferrite bead, small symbol","ILBB0603ER202V ","Mouser","Vishay"," 70-ILBB0603ER202V "\nu,0,0,"FB1,FB2","2","60R","","Inductor_SMD:L_1206_3216Metric","Ferrite bead, small symbol","ILB1206ER600V","","",""\nu,0,0,"D2","1","ESDCAN-03","","Package_TO_SOT_SMD:SOT-23","Dual Line CAN Bus Protector, 24Vrwm","ESDCAN03-2BWY","","",""\nu,0,0,"D1","1","TSD03","","Diode_SMD:D_SOD-323","ESD Protection Diodes / TVS Diodes 3.3V unidirectional surge protection device in SOD-323 package","TSD03DYFR ","",""," 595-TSD03DYFR "\nu,0,0,"C30","1","47pF","","Capacitor_SMD:C_0603_1608Metric","","","","",""\nu,0,0,"C20","1","100uF","","Capacitor_SMD:CP_Elec_4x5.8","","","","",""\nu,0,0,"C18,C39","2","30pF","","Capacitor_SMD:C_0603_1608Metric","","","","",""\nu,0,0,"C15,C22,C23,C29,C33","5","2.2u","","Capacitor_SMD:C_0603_1608Metric","","","","",""\nu,0,0,"C12,C13,C16,C17,C27,C34,C35,C37,C38,C40,C41,C42","12","100n","","Capacitor_SMD:C_0603_1608Metric","","","","",""\nu,0,0,"C10,C11","2","15p","","Capacitor_SMD:C_0603_1608Metric","","","","",""\nu,0,0,"C5","1","1uF","","Capacitor_SMD:C_0603_1608Metric","","","","",""\nu,0,0,"C4,C7,C8,C14,C21,C25,C26,C32","8","10nF","","Capacitor_SMD:C_0603_1608Metric","","","","",""\nu,0,0,"C3,C9","2","22uF/25V","","Capacitor_SMD:CP_Elec_5x5.9","","","","",""\nu,0,0,"C2,C6,C19,C24,C28,C31,C36,C43","8","100nF","","Capacitor_SMD:C_0603_1608Metric","","","","",""\nu,0,0,"C1","1","33uF/25V","","Capacitor_SMD:CP_Elec_6.3x5.4","","","","",""\n	t	3	10	13	12	5	5	3	1
+154	Compra Extra Novembro p/ PCA2	Comprada em 18/11/2025, menos o IXYS (cada item vezes 1)	1	0		f	5	12	2	2	2	2	2	1
+153	Compra Extra de Outubro 2025		1	0	status,compId,leId,Qty,Reference,Value,Exclude from BOM,Footprint,Descrição,#,Partnumber,Ordercode,mfr,Supplier\nu,0,0,1,C1,0.33u,,Capacitor_THT:C_Rect_L18.0mm_W8.0mm_P15.00mm_FKS3_FKP3,Unpolarized capacitor,1,B32922C3334M,,,\nu,0,0,11,"C2,C4,C5,C7,C10,C11,C13,C14,C27,C30,C31",100n,,Capacitor_SMD:C_0603_1608Metric,Unpolarized capacitor,2,,,,\nu,0,0,4,"C3,C6,C12,C15",10u,,Capacitor_SMD:C_1206_3216Metric,Unpolarized capacitor,3,,,,\nu,0,0,2,"C8,C22",4u7,,Capacitor_THT:C_Rect_L33.0mm_W20.0mm_P27.50mm_MKS4,Unpolarized capacitor,4,B32924C3475M,,,\nu,0,0,1,C9,2.2uF/630VDC,,Capacitor_THT:C_Rect_L28.0mm_W12.0mm_P22.50mm_MKS4,Unpolarized capacitor,5,ECW-FE2J225KA, 667-ECW-FE2J225KA ,,\nu,0,0,3,"C16,C17,C19",22uF/25V,,Capacitor_SMD:CP_Elec_5x5.9,,6,,,,\nu,0,0,1,C18,100uF,,Capacitor_SMD:CP_Elec_6.3x9.9,,7,,,,\nu,0,0,2,"C20,C21",470pF/1000V,,Capacitor_THT:C_Disc_D6.0mm_W4.4mm_P5.00mm,Unpolarized capacitor,8,S471K25Y5PN63J5R ,,,\nu,0,0,1,C23,100nF,,Capacitor_SMD:C_0603_1608Metric,,9,,,,\nu,0,0,5,"C24,C25,C26,C28,C29",47n,,Capacitor_SMD:C_2220_5750Metric,Unpolarized capacitor,10,GA355ER7GB473KW01L,,,\nu,0,0,7,"C32,C33,C34,C35,C36,C37,C38",100nF/1kV,,Capacitor_SMD:C_1812_4532Metric,Unpolarized capacitor,11,C1812C104KDRACTU,,,\nu,0,0,1,C39,330nF/305VAC,,Capacitor_SMD:C_1812_4532Metric,Unpolarized capacitor,12,B32922C3334M,,,\nu,0,0,4,"D1,D2,D6,D7",STTH3010W,,Package_TO_SOT_THT:TO-247-2_Vertical,Diode,13, STTH3010W , 511-STTH3010W ,,\nu,0,0,2,"D3,D8",ES1J,,Diode_SMD:D_SMA,Ultrafast recovery diode,14,ES1J,,,\nu,0,0,4,"D4,D5,D9,D10",SMAJ15,,Diode_SMD:D_SMA,"400W unidirectional Transient Voltage Suppressor, 15.0Vr, SMA(DO-214AC)",15, SMAJ15A-AT/TR13 , 603-SMAJ15A-AT/TR13 ,Yageo,Mouser\nu,0,0,1,DCDC1,B2415S-2WR3,,JRM_Footprint:BXXXXS-2W_EXT,DC/DC Converters - Through Hole 2W 24Vin 15Vout 133mA Single SIP7,16, RKZE-2415S/P , 919-RKZE-2415S/P ,,\nu,0,0,2,"DCDC2,DCDC3",B2412S-2WR3,,JRM_Footprint:BXXXXS-2W_EXT,DC/DC Converters - Through Hole 2W 24Vin +/-15Vout +/-66mA Dual SIP7,17, RKZE-2412S , 919-RKZE-2412S ,,\nu,0,0,2,"FAN1,FAN2",~,,JRM_Footprint:FAN_50mm_15mm_H8.0,,18,,,,\nu,0,0,1,FAN3,~,,JRM_Footprint:FAN_50mm_20mm_H8.0,,19,,,,\nu,0,0,4,"FB1,FB3,FB7,FB9",0.1R,,JRM_Footprint:WE-CBF-SMT-FB,"Ferrite bead, small symbol",20,74279244,,,\nu,0,0,4,"FB2,FB4,FB6,FB8",2K/100Mhz,,Inductor_SMD:L_0603_1608Metric,"Ferrite bead, small symbol",21,ILBB0603ER202V , 70-ILBB0603ER202V ,Vishay,Mouser\nu,0,0,3,"FB5,FB11,FB13",2K2,,Inductor_SMD:L_CommonMode_Wurth_WE-CNSW-1206,"Common mode choke, 370 mA, 125VDC, USB2.0, 111 nH",22,BWCU00321619222M02 , 673-BWCU321619222M02 ,,Mouser\nu,0,0,2,"FB10,FB12",2K,,Inductor_SMD:L_0603_1608Metric,"Ferrite bead, small symbol",23,ILBB0603ER202V , 70-ILBB0603ER202V ,Vishay,Mouser\nu,0,0,1,FID1,Fiducial,Excluded from BOM,Fiducial:Fiducial_1.5mm_Mask3mm,Fiducial Marker,24,,,,\nu,0,0,1,FL1,26A,,JRM_Footprint:Filter 26A,"EMI 2-inductor filter, pin-connections 1-4 and 2-3",25,B82726E6263A040, 871-B82726E6263A40 ,,\nu,0,0,4,"H1,H2,H3,H4",MountingHole_Pad,Excluded from BOM,MountingHole:MountingHole_3.5mm_Pad,Mounting Hole with connection,26,,,,\nu,0,0,2,"HS1,HS3",Heatsink,,JRM_Footprint:Heatsink_HS6835_40_2H,"Heatsink with electrical connection, 2 pin",27,,,,\nu,0,0,2,"HS2,HS4",Heatsink,,JRM_Footprint:Heatsink_HS6835_40_1H,"Heatsink with electrical connection, 1 pin",28,,,,\nu,0,0,1,J1,Conn_02x13_Odd_Even,,JRM_Footprint:PCA2_Control_02x16_B,"Generic connector, double row, 02x13, odd/even pin numbering scheme (row 1 odd numbers, row 2 even numbers), script generated (kicad-library-utils/schlib/autogen/connector/)",29,,,,\nu,0,0,2,"J2,J3",Conn_02x03_Top_Bottom,,Connector_CH:455580003,"Generic connector, double row, 02x03, top/bottom pin numbering scheme (row 1: 1...pins_per_row, row2: pins_per_row+1 ... num_pins), script generated (kicad-library-utils/schlib/autogen/connector/)",30,45558-0003 , 538-45558-0003 ,,\nu,0,0,1,J4,Conn_02x02_Top_Bottom,,Connector_Molex:Molex_Micro-Fit_3.0_43045-0400_2x02_P3.00mm_Horizontal,"Generic connector, double row, 02x02, top/bottom pin numbering scheme (row 1: 1...pins_per_row, row2: pins_per_row+1 ... num_pins), script generated (kicad-library-utils/schlib/autogen/connector/)",31,39-30-1040, 538-39-30-1040 ,,\nu,0,0,1,J5,Conn_01x02,,Connector_Molex:Molex_Mini-Fit_Jr_5569-02A2_2x01_P4.20mm_Horizontal,"Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)",32,,,,\nu,0,0,1,L1,800uH,,JRM_Footprint:CS400125-2,SENDUST CORE,33,K157-125A,,,\nu,0,0,1,LED1,LED_GREEN,,LED_SMD:LED_1206_3216Metric,,34,,,,\nu,0,0,1,M1,Fan,,Connector_JST:JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical,Fan,35,B2B-XH-A-BK(LF)(SN), 306-B2BXHABKLFSNP,,\nu,0,0,2,"M2,M3",Fan,,Connector_JST:JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical,Fan,36,B2B-XH-A-BK(LF)(SN) , 306-B2BXHABKLFSNP,,Mouser\nu,0,0,1,Q1,IXFH90N65X3,,Package_TO_SOT_THT:TO-247-3_Vertical,Depletion-mode N-channel MOSFET gate/drain/source,37,IXFH90N65X3, 747-IXFH90N65X3 ,,\nu,0,0,2,"Q2,Q3",IMW65R007M2H,,Package_TO_SOT_THT:TO-247-3_Vertical,Depletion-mode N-channel MOSFET gate/drain/source,38,IMW65R007M2H, 726-IMW65R007M2HXKSA ,,\nu,0,0,1,Q4,IXFH90N65X3,,Package_TO_SOT_THT:TO-247-3_Vertical,Depletion-mode N-channel MOSFET gate/drain/source,39,IXFH90N65X3 , 747-IXFH90N65X3 ,,\nu,0,0,2,"Q5,Q6",PZT2222A,,Package_TO_SOT_SMD:SOT-223-3_TabPin2,,40, PZT2222A-TP, 833-PZT2222A-TP ,,\nu,0,0,1,Q7,BC817,,Package_TO_SOT_SMD:SOT-23,"0.8A Ic, 45V Vce, NPN Transistor, SOT-23",41,,,,\nu,0,0,2,"R1,R12",0R0,,Resistor_SMD:R_1206_3216Metric,"Resistor, US symbol",42,3540220RJT , 279-3540220RJT ,TE Connectivity,Mouser\nu,0,0,7,"R2,R7,R8,R16,R18,R41,R43",0R0,,Resistor_SMD:R_0603_1608Metric,"Resistor, US symbol",43,,,,\nu,0,0,4,"R3,R9,R13,R15",0R33,,Resistor_SMD:R_1206_3216Metric,"Resistor, US symbol",44,,,,\nu,0,0,4,"R4,R10,R17,R20",1k,,Resistor_SMD:R_0603_1608Metric,"Resistor, US symbol",45,,,,\nu,0,0,4,"R5,R6,R14,R19",10K,,Resistor_SMD:R_0603_1608Metric,"Resistor, US symbol",46,,,,\nu,0,0,1,R11,270R,,Resistor_SMD:R_0603_1608Metric,"Resistor, US symbol",47,,,,\nu,0,0,2,"R21,R22",470K,,Resistor_SMD:R_0603_1608Metric,"Resistor, US symbol",48,,,,\nu,0,0,2,"R23,R24",390R,,Resistor_SMD:R_0603_1608Metric,"Resistor, US symbol",49,,,,\nu,0,0,7,"R25,R40,R44,R48,R49,R50,R51",2K2,,Resistor_SMD:R_0603_1608Metric,"Resistor, US symbol",50,,,,\nu,0,0,4,"R26,R30,R32,R33",100K 1%,,Resistor_SMD:R_1206_3216Metric,"Resistor, US symbol",51,RT1206FRE07100KL ,,,\nu,0,0,14,"R27,R28,R29,R31,R34,R35,R36,R37,R38,R39,R42,R45,R46,R47",160K 1%,,Resistor_SMD:R_1206_3216Metric,"Resistor, US symbol",52,ERA-8AEB164V,,,\nu,0,0,1,R52,220R/5W,,Resistor_SMD:R_2816_7142Metric,"Resistor, US symbol",53,3540220RJT , 279-3540220RJT ,TE Connectivity,Mouser\nu,0,0,4,"R53,R54,R56,R57",0R5,,Resistor_SMD:R_2512_6332Metric,"Resistor, US symbol",54,MSMA2512R5000FEN ,,,\nu,0,0,1,R55,0R0,,Resistor_SMD:R_2512_6332Metric,"Resistor, US symbol",55,3522ZR, 279-3522ZR ,,\nu,0,0,18,"R58,R59,R60,R61,R62,R63,R64,R65,R66,R67,R68,R69,R70,R71,R72,R73,R74,R75",1M,,Resistor_SMD:R_1206_3216Metric,"Resistor, US symbol",56,,,,\nu,0,0,3,"SYM1,SYM2,SYM3",SYM_Flash_Large,Excluded from BOM,Symbol:Symbol_HighVoltage_Triangle_6x6mm_Copper,"Flash symbol, large",57,,,,\nu,0,0,1,T1,ETD59 Coil Former,,JRM_Footprint:ETD59_6x4_CROSS,ETD59 Core Former,58,B66398W1024T001,,,\nu,0,0,2,"TCC1,TCC2",ETD59 Core Clip,,,EC Core Clip,59,B66398A2000X000,,,\nu,0,0,2,"TEC1,TEC2",ETD59 Core,,,Tranformer E Core (half),60,B66397G0200X187,,,\nu,0,0,2,"TH1,TH2",10K,,JRM_Footprint:NTC_P5.08,"Temperature dependent resistor, negative temperature coefficient, US symbol",61,B57861S0103F040,,,\nu,0,0,2,"TH3,TH4",10K,,,"Temperature dependent resistor, negative temperature coefficient, US symbol",62,B57861S0103F040,,,\nu,0,0,22,"TP1,TP2,TP3,TP4,TP5,TP6,TP7,TP8,TP9,TP10,TP11,TP12,TP13,TP14,TP15,TP16,TP17,TP18,TP19,TP20,TP21,TP22",TestPoint,,Connector_Pin:Pin_D0.7mm_L6.5mm_W1.8mm_FlatFork,test point,63,,,,\nu,0,0,1,TP23,TestPoint,,TestPoint:TestPoint_Pad_1.0x1.0mm,test point,64,,,,\nu,0,0,2,"U1,U2",2EDR8259X,,JRM_Footprint:SOIC127P600X175-16_14N-1-V,Dual-channel isolated gate driver ICs in 300 mil DSO package,65,2EDB8259YXUMA1 , 726-2EDB8259YXUMA1,,\nu,0,0,2,"U3,U4",LTV-816S,,Package_DIP:SMDIP-4_W9.53mm,"DC Optocoupler, Vce 35V, CTR 50%, SMDIP-4",66, LTV-816S-TA1 , 859-LTV-816S-TA1 ,LiteON,\nu,0,0,1,U5,TMCS1133C5,,JRM_Footprint:SOIC10_DVG_TEX,,67,TMCS1133C5AQDVGR , 595-TMCS1133C5AQDVGR ,,\nu,0,0,1,U6,74HC1G14,,Package_TO_SOT_SMD:SOT-23-5,Logic Level Inverter,68,HC1G14GV125, 771-HC1G14GV125 ,,\nu,0,0,1,U7,TMCS1133C3,,JRM_Footprint:SOIC10_DVG_TEX,,69,TMCS1133C3AQDVGR , 595-TMCS1133C3AQDVGR ,,\n	f	5	12	2	2	2	2	2	1
 \.
 
 
@@ -4773,6 +4711,7 @@ COPY public.manufacturers (id, name, descr, web) FROM stdin;
 20	Royalohm		
 12	Infineon	International Rectifier	http://www.irf.com
 21	Yageo		
+2	Texas	Texas Instruments	http://www.ti.com
 0	0 Não Atribuído		
 1	0 Não Determinado		
 22	LITE-ON	LITE-ON Technology Corp. / Optoelectronics	
@@ -4785,8 +4724,6 @@ COPY public.manufacturers (id, name, descr, web) FROM stdin;
 29	Kyocera AVX		
 30	Taiyo Yuden		
 31	Susumu		
-32	MCC		
-2	Texas	Texas Instruments	http://www.ti.com
 \.
 
 
@@ -9078,6 +9015,7 @@ COPY public.suppliercodes (supplier_id, component_id, ordercode, rounding, id, p
 0	1608		1	1711	MEE1S1215SC	0	0	0	DEFAULT
 0	1611		1	1712	10K	0	0	0	DEFAULT
 0	1615		1	1713	10uF/25V	0	0	0	DEFAULT
+0	1618		1	1714	PZT2222A	0	0	0	DEFAULT
 0	1622		1	1715	39K	0	0	0	DEFAULT
 0	1624		1	1716	Bendal 100-303-SN	0	0	0	DEFAULT
 0	1625		1	1717	B1205S-2W	0	0	0	DEFAULT
@@ -9117,7 +9055,6 @@ COPY public.suppliercodes (supplier_id, component_id, ordercode, rounding, id, p
 0	1630		1	1752	STLZ 950 07G 5.08 H	0	0	0	DEFAULT
 0	1708		1	1753	02x04 8 vias	0	0	0	DEFAULT
 0	1707		1	1754	02x05 10 vias	0	0	0	DEFAULT
-40	1618	833-PZT2222A-TP	1	1714	PZT2222A-TP	32	0	0	Bipolar Transistors - BJT NPN 75Vcbo 40Vceo 6Vebo 0.6A 1W
 40	1728	595-UCC5870QEVM-045	1	1755	UCC5870QEVM-045	2	0	0	Ferramentas de desenvolvimento IC de gestão de alimentação UCC5870-Q1 functiona l safety compliant 1
 40	1731	 747-IXFH90N65X3 	1	1758	IXFH90N65X3 	0	0	0	
 40	1732	871-B66398W1024T1	1	1759	B66398W1024T001	19	0	0	Núcleos e acessórios de ferrite COIL FORMER RNITE FR 530
@@ -9145,8 +9082,6 @@ COPY public.suppliercodes (supplier_id, component_id, ordercode, rounding, id, p
 40	1755	279-3540220RJT	1	1784	3540220RJT	24	0	0	Thick Film Resistors - SMD 3540 220R 5%
 40	1751	594-S471K25Y5PN63J5R	1	1778	S471K25Y5PN63J5R	0	0	0	Unpolarized capacitor
 40	1739	726-2EDB8259YXUMA1	1	1766	2EDB8259YXUMA1	0	0	0	Drivers de portas GATE DRIVER
-40	1756	859-LTV-816S-TA1	1	1785	LTV-816S-TA1	0	0	0	DC Optocoupler, Vce 35V, CTR 50%, SMDIP-4
-0	1637		1	1834		0	0	0	
 40	1746	595-TMCS1133C5AQDVGR	1	1773	TMCS1133C5AQDVGR	2	0	0	Board Mount Current Sensors 80ARMS 1MHz Hall-effect current sensor
 40	1747	595-TMCS1133C3AQDVGR	1	1774	TMCS1133C3AQDVGR	2	0	0	Board Mount Current Sensors 80ARMS 1MHz Hall-effect current sensor
 40	1737	667-ECW-FE2J225K	1	1764	ECW-FE2J225K	15	0	0	Capacitores de película 2.2uF 630VDC 10% MPP L/S=22.5mm
@@ -9160,13 +9095,13 @@ COPY public.suppliercodes (supplier_id, component_id, ordercode, rounding, id, p
 40	1726	595-TPS54202DDCR	1	965	TPS54202DDCR	2	0	0	Reguladores de tensão de comutação 4.5V to 28V Input 2 A Output EMI Friend A 595-TPS54202DDCT
 40	1766	595-TLV9361IDBVR	1	1797	TLV9361IDBVR	2	0	0	40-V, 1-MHz, RRO Operational Amplifiers for Cost-Sensitive Systems, SOT-23-5
 40	1264	926-LM3940IMP3.3NOPB	1	964	LM3940IMP-3.3/NOPB	2	0	0	Reguladores de tensão de LDO 1A
+40	1767	667-ERJ-PA3F3900V	10	1798	ERJ-PA3F3900V	15	0	0	Resistor, US symbol
 40	1718	279-CRGH1206J120R	1	946	CRGH1206J120R	24	0	0	Resistores de Filme Espesso - SMD CRGH1206 5% 120R 0.5W
 40	1768	279-CRG0603F470K	1	1799	CRG0603F470K	24	0	0	Resistor, US symbol
 0	1769	603-RT0805FRE072K32L	1	1800	RT0805FRE072K32L	21	0	0	Resistores de Filme Fino - SMD 1/8W 2.32K ohm 1% 50ppm
 40	1770	MCT06030D1332BP500	1	1801	MCT06030D1332BP5	14	0	0	Resistor, US symbol
 40	1688	594-MCT0603MD1003DP5	1	914	MCT0603MD1003DP500	14	0	0	Resistores de Filme Fino - SMD .15W 100Kohms .5% 0603 SMD 25ppm
 40	1753	70-ILBB0603ER202V	1	1781	ILBB0603ER202V	14	0	0	Ferrite bead, small symbol
-40	1767	667-ERJ-PA3F3900V	10	1798	ERJ-PA3F3900V	15	0	0	Thick Film Resistors - SMD 0603 390ohm 1% Anti-Surge AEC-Q200
 40	1771	279-CRGCQ0603F2K2	1	1802	CRGCQ0603F2K2	24	0	0	Resistores de Filme Espesso - SMD CRGCQ 0603 2K2 1% SMD Resistor
 40	1774	279-CRG0603F39K	1	1805	CRG0603F39K	24	0	0	Resistores de Filme Espesso - SMD 39KOhms 1/10W 50V
 40	1775	603-RC0603FR-07270RP	1	1806	RC0603FR-07270RP	21	0	0	Resistores de Filme Espesso - SMD General Purpose Chip Resistor 0603, 270Ohms, 1%, 1/10W
@@ -9197,32 +9132,7 @@ COPY public.suppliercodes (supplier_id, component_id, ordercode, rounding, id, p
 40	1793	667-EEE-1EA330SP	1	1824	EEE-1EA330SP	15	0	0	Capacitores eletrolíticos de alumínio - SMD 33uF 25V
 40	1773	603-RT1206FRE07100KL	1	1804	RT1206FRE07100KL Prov	21	0	0	Resistores de Filme Fino - SMD 1/4W 100K ohm 1% 50p pm
 40	1794	754-RG3216P-1003-B-T1	1	1825	RG3216P-1003-B-T1	0	0	0	Resistor, US symbol
-40	1796	595-TMCS1100A4QDR	1	1827	TMCS1100A4QDR	2	0	0	Board Mount Current Sensors +/-600V basic isolat ion 20Arms 80kHz Ha A 595-TMCS1100A4QDT
-40	1795	512-HCPL0639	1	1826	HCPL0639	10	0	0	High Speed 10MBaud Logic Dual Ch Hi Performance Optocupler
-0	1797	871-B32922C3334M	1	1828	B32922C3334M	19	0	0	Capacitores de segurança 0.33uF 305V 20% 15mm L/S Class X2
-40	1616	667-EEE-1EA101XP	1	1829	EEE-1EA101XP	15	0	0	Capacitores eletrolíticos de alumínio - SMD 100uF 25V
-0	1702	80-C1206C105Z3VAC	1	1830	C1206C105Z3VAC	17	0	0	Capacitores de cerâmica multicamada MLCC - SMD/SMT 25V 1uF Y5V 1206 -20/+80%
-40	1798	80-C1206C106Z3VACTU	1	1831	C1206C106Z3VACTU	17	0	0	Capacitores de cerâmica multicamada MLCC - SMD/SMT 25V 10uF Y5V 1206 -20%,+80%
-0	1280	791-0805N102J500CT	1	1832	0805N102J500CT	16	0	0	Capacitores de cerâmica multicamada MLCC - SMD/SMT 1000pF +-5% 50V
-0	1284	791-0805N101J500CT	1	1833	0805N101J500CT	16	0	0	Capacitores de cerâmica multicamada MLCC - SMD/SMT 100pF +-5% 50V
-0	1799	603-RT0805BRD0749R9L	1	1835	RT0805BRD0749R9L	20	0	0	Resistores de Filme Fino - SMD 1/8W 49.9 ohm .1% 25 ppm
-0	1800	71-RCS12062R70FKEA	1	1836	RCS12062R70FKEA	14	0	0	Resistores de Filme Espesso - SMD 0.5watt 2.7ohms 1% 100ppm
-0	114	603-RC0805JR-073K3L	1	1837	RC0805JR-073K3L	21	0	0	Resistores de Filme Espesso - SMD General Purpose Chip Resistor 0805, 3.3kOhms, 5%, 1/8W
-0	644	603-RC0805JR-071K2L	1	1838	RC0805JR-071K2L	21	0	0	Resistores de Filme Espesso - SMD General Purpose Chip Resistor 0805, 1.2kOhms, 5%, 1/8W
-0	24	603-RC0805JR-0710KL	1	1839	RC0805JR-0710KL	21	0	0	Resistores de Filme Espesso - SMD General Purpose Chip Resistor 0805, 10kOhms, 5%, 1/8W
-0	659	603-RC0805JR-13100RL	1	1840	RC0805JR-13100RL	21	0	0	Resistores de Filme Espesso - SMD General Purpose Chip Resistor 0805, 100Ohms, 5%, 1/8W
-0	646	603-RC0805JR-1310RL	1	1841	RC0805JR-1310RL	21	0	0	Resistores de Filme Espesso - SMD General Purpose Chip Resistor 0805, 10Ohms, 5%, 1/8W
-0	1326	771-74HC1G125GW-G	1	1842	74HC1G125GW,125	27	0	0	Buffers e line drivers SOT353-1 BUFFERS & LINE DVRS
-0	1757	771-74HC1G14GW-G	1	1843	74HC1G14GW,125	27	0	0	Inversores SOT353-1 INVERTER
-0	1801	595-UA9637ACDR	1	1844	UA9637ACDR	2	0	0	Interface IC RS-422 Dual Differential Li ne Receiver A 595-UA9637ACD
-0	1802	511-ST485EBDR	1	1845	ST485EBDR	2	0	0	Half duplex RS-485/RS-422, 5 Mbps, ±15kV ESD, 5V supply, 256 bus load, SOIC-8
-0	1803	595-TMCS1126B6BQDVGR	1	1846	TMCS1126B6BQDVGR	2	0	0	Board Mount Current Sensors 80ARMS 500kHz Hall-e ffect current sensor
-0	1804	512-HCPL0601V	1	1847	HCPL0601	0	0	0	Single High Speed LSTTL/TTL Compatible Optocoupler with enable, dV/dt 10000/us, VCM 1000, max 7V VCC, SOIC-8
-0	1805	998-MIC6270YM5TR	1	1848	MIC6270YM5	0	0	0	Single, 1.6V-6.5V, 315nA Quiescent, Push-Pull Output, Comparator, SOT-23-5/SC-70
-0	1806	512-ES1JAF	1	1849	ES1J	10	0	0	Retificadores 600V 1A SMA Super Fast Rectifier
-40	1812	495-TMH-1215S	1	1856	TMH 1215S	0	0	0	
-40	1813	495-TMH-1212S	1	1857	TMH 1212S	0	0	0	Conversores DC/DC - Furo Passante 2W DC/DC Converter isolated, unregulated in a PCB Mount Plastic Case
-40	1716	771-BC807-40W-QX	1	1858	BC807-40W-QX	27	0	0	Transistores bipolares de junção - BJT SOT23 45V .5A PNP GP TRANS
+40	1756	859-LTV-816S-TA1	1	1785	LTV-816S-TA1	22	0	0	DC Optocoupler, Vce 35V, CTR 50%, SMDIP-4
 \.
 
 
@@ -9281,7 +9191,7 @@ SELECT pg_catalog.setval('public.cases_id_seq', 55, true);
 -- Name: components_id_seq; Type: SEQUENCE SET; Schema: public; Owner: jrm
 --
 
-SELECT pg_catalog.setval('public.components_id_seq', 1813, true);
+SELECT pg_catalog.setval('public.components_id_seq', 1794, true);
 
 
 --
@@ -9316,21 +9226,21 @@ SELECT pg_catalog.setval('public.listing_id_seq', 1, true);
 -- Name: location_entry_id_seq; Type: SEQUENCE SET; Schema: public; Owner: jrm
 --
 
-SELECT pg_catalog.setval('public.location_entry_id_seq', 3141, true);
+SELECT pg_catalog.setval('public.location_entry_id_seq', 3086, true);
 
 
 --
 -- Name: location_id_seq; Type: SEQUENCE SET; Schema: public; Owner: jrm
 --
 
-SELECT pg_catalog.setval('public.location_id_seq', 159, true);
+SELECT pg_catalog.setval('public.location_id_seq', 156, true);
 
 
 --
 -- Name: manufacturers_id_seq; Type: SEQUENCE SET; Schema: public; Owner: jrm
 --
 
-SELECT pg_catalog.setval('public.manufacturers_id_seq', 32, true);
+SELECT pg_catalog.setval('public.manufacturers_id_seq', 31, true);
 
 
 --
@@ -9365,7 +9275,7 @@ SELECT pg_catalog.setval('public.supergroups_id_seq', 17, true);
 -- Name: suppliercodes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: jrm
 --
 
-SELECT pg_catalog.setval('public.suppliercodes_id_seq', 1858, true);
+SELECT pg_catalog.setval('public.suppliercodes_id_seq', 1825, true);
 
 
 --
@@ -9434,6 +9344,4 @@ CREATE UNIQUE INDEX suppliers_id_key ON public.suppliers USING btree (id);
 --
 -- PostgreSQL database dump complete
 --
-
-\unrestrict InzaMuPWGCch4f4rSXqqUvjsapfBW187JOAoBGAffPdzMZX42xysLvFIJhFlvUQ
 
