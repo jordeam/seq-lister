@@ -27,7 +27,7 @@ const controller = {};
 function findInList(str, lst) {
   let i = -1;
   for (const elt of lst) {
-    console.log(`id=${elt.id} name=${elt.name} str=${str}`);
+//    console.log(`id=${elt.id} name=${elt.name} str=${str}`);
 //    if (elt.name.trim().toLowerCase().search(str.trim().toLowerCase()) >= 0) {
 //    if (elt.name.trim().toLowerCase().search(str.trim().toLowerCase()) >= 0) {
     const reg = new RegExp(`\\b${str}\\b`, 'ig');
@@ -36,7 +36,7 @@ function findInList(str, lst) {
       break;
     }
   }
-  console.log(`i=${i}`);
+  // console.log(`i=${i}`);
   return i;
 }
 
@@ -52,7 +52,7 @@ const fieldList = {
   foot: /Foot.*/i,
 };
 
-fieldList['desc'] = /Desc.*/i;
+// fieldList['desc'] = /Desc.*/i;
 
 /**
  * return all indexes of entries in str
@@ -63,18 +63,20 @@ function makeEntryIndexes(headerStr, mfrList, supList) {
   let qty, labels, pn, order, compname, descr, mfr, sup, foot;
   console.log(`header=%j`, header);
   for (const i in header) {
+    console.log(`header[i]=${header[i]} test=${fieldList['oc'].test(header[i])}`);
+
     if (fieldList['qty'].test(header[i]))
       qty = +i;
     else if (fieldList['ref'].test(header[i]))
       labels = +i;
     else if (fieldList['pn'].test(header[i]))
       pn = +i;
+    else if (fieldList['oc'].test(header[i]))
+      order = +i;
     else if (fieldList['mfr'].test(header[i]))
       mfr = +i;
     else if (fieldList['sup'].test(header[i]))
       sup = +i;
-    else if (fieldList['oc'].test(header[i]))
-     order = +i;
     else if (fieldList['val'].test(header[i]))
       compname = +i;
     else if (fieldList['desc'].test(header[i]))
@@ -82,6 +84,7 @@ function makeEntryIndexes(headerStr, mfrList, supList) {
     else if (fieldList['foot'].test(header[i]))
       foot = +i;
   }
+  console.log(`fieldList['oc']=${fieldList['oc']}`);
   console.log({qty, labels, pn, order, compname, descr, mfr, sup, foot});
   return {qty, labels, pn, order, compname, descr, mfr, sup, foot};
 }
@@ -108,7 +111,7 @@ function makeEntries(indx, entryLine, mfrList, supList) {
     else
       entry.pn = "";
     if (indx.order)
-      entry.ordercode = lst[indx.order] ? lst[indx.order].replace(/\"/g, '').trim() : "";
+      entry.ordercode = lst[indx.order].replace(/\"/g, '').trim();
     else
       entry.ordercode = "";
     if (indx.labels)
@@ -182,7 +185,7 @@ controller.home = asyncHandler(async (req, res, next) => {
     return next(err);
   }
   const bom_lst = loc.get('bom').split(/\r?\n/);
-  console.log(`Header=${bom_lst[0]}`);
+  // console.log(`Header=${bom_lst[0]}`);
   const indx = makeEntryIndexes(bom_lst[0], allManufacturers, allSuppliers);
   let bom = [];
   for (const line of bom_lst.slice(1)) {
