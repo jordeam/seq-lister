@@ -51,6 +51,7 @@ block content
         th Estoque
         th Necessário
         th A comprar
+        th Arred
         th PN
         th OrderCode
 
@@ -64,5 +65,6 @@ block content
           td(align="right") #{val.stock}
           td(align="right") #{val.needed}
           td(style="padding-right: 10px;" align="right") #{val.to_buy}
+          td(align="right") #{val.rounding}
           td #{val.partnumber}
           td #{val.ordercode}
