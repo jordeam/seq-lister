@@ -11,13 +11,13 @@ const controller = {};
 controller.home = asyncHandler(async (req, res, next) => {
   let shoplist;
   const id = +req.params.id;
-  if (id == 0 || id == 1)
-    shoplist = await seqlz.query("SELECT c.id AS comp_id, c.name AS cname, g.name AS gname, SUM(le.quant) AS stock, SUM(l.quant * le.quant_unit) AS needed, SUM(l.quant * le.quant_unit - le.quant) AS to_buy, cs.name AS case_name FROM location_entry AS le LEFT JOIN suppliercodes AS sc ON sc.id = le.supcode_id LEFT JOIN components AS c ON c.id = sc.component_id LEFT JOIN groups AS g ON g.id = c.group_id LEFT JOIN cases AS cs ON cs.id = c.case_id LEFT JOIN locations AS l ON l.id = le.location_id WHERE l.quant > 0 GROUP BY c.id, c.name, g.name, cs.name ORDER BY gname, cname, case_name",
+  if (id === 0 || id === 1)
+    shoplist = await seqlz.query("SELECT c.id AS comp_id, c.name AS cname, g.name AS gname, SUM(le.quant) AS stock, SUM(l.quant * le.quant_unit) AS needed, sc.rounding as rounding,  SUM(l.quant * le.quant_unit - le.quant) AS to_buy, cs.name AS case_name FROM location_entry AS le LEFT JOIN suppliercodes AS sc ON sc.id = le.supcode_id LEFT JOIN components AS c ON c.id = sc.component_id LEFT JOIN groups AS g ON g.id = c.group_id LEFT JOIN cases AS cs ON cs.id = c.case_id LEFT JOIN locations AS l ON l.id = le.location_id WHERE l.quant > 0 GROUP BY c.id, c.name, g.name, cs.name, sc.rounding ORDER BY gname, cname, case_name",
     {
       type: QueryTypes.SELECT
     });
   else
-    shoplist = await seqlz.query("SELECT c.id AS comp_id, c.name AS cname, g.name AS gname, sc.partnumber, sc.ordercode as ordercode, SUM(le.quant) AS stock, SUM(l.quant * le.quant_unit) AS needed, SUM(l.quant * le.quant_unit - le.quant) AS to_buy, cs.name AS case_name FROM location_entry AS le LEFT JOIN suppliercodes AS sc ON sc.id = le.supcode_id LEFT JOIN components AS c ON c.id = sc.component_id LEFT JOIN groups AS g ON g.id = c.group_id LEFT JOIN cases AS cs ON cs.id = c.case_id LEFT JOIN locations AS l ON l.id = le.location_id WHERE sc.supplier_id = $1 AND l.quant > 0 GROUP BY c.id, c.name, g.name, cs.name, sc.partnumber, sc.ordercode ORDER BY gname, cname, case_name",
+    shoplist = await seqlz.query("SELECT c.id AS comp_id, c.name AS cname, g.name AS gname, sc.partnumber, sc.ordercode as ordercode, sc.rounding as rounding, SUM(le.quant) AS stock, SUM(l.quant * le.quant_unit) AS needed, SUM(l.quant * le.quant_unit - le.quant) AS to_buy, cs.name AS case_name FROM location_entry AS le LEFT JOIN suppliercodes AS sc ON sc.id = le.supcode_id LEFT JOIN components AS c ON c.id = sc.component_id LEFT JOIN groups AS g ON g.id = c.group_id LEFT JOIN cases AS cs ON cs.id = c.case_id LEFT JOIN locations AS l ON l.id = le.location_id WHERE sc.supplier_id = $1 AND l.quant > 0 GROUP BY c.id, c.name, g.name, cs.name, sc.partnumber, sc.ordercode, sc.rounding ORDER BY gname, cname, case_name",
     {
       bind: [id],
       type: QueryTypes.SELECT
@@ -58,6 +58,13 @@ controller.home = asyncHandler(async (req, res, next) => {
       shoplist.forEach((elt) => {
         // populating the CSV content
         // and converting the null fields to ""
+        if (!Number.isFinite(elt.rounding) || elt.rounding < 1) {
+          // console.log(`elt.rounding=${elt.rounding}`);
+          elt.rounding = 1;
+        }
+        let rest = elt.to_buy % elt.rounding;
+        if (rest > 0)
+          elt.to_buy = (Math.trunc(elt.to_buy / elt.rounding) + 1) * elt.rounding;
         csvData += [++i, elt.gname, '"' + elt.cname + '"', '"' + elt.case_name + '"', elt.stock, elt.needed, elt.to_buy, elt.suppliers_a, elt.suppliers_i].join(",") + "\r\n";
       });
     }
@@ -67,6 +74,19 @@ controller.home = asyncHandler(async (req, res, next) => {
       shoplist.forEach((elt) => {
         // populating the CSV content
         // and converting the null fields to ""
+        if (i == 0) {
+          console.log(elt);
+          console.log(typeof elt.rounding);
+        }
+        if (!Number.isFinite(elt.rounding) || elt.rounding < 1) {
+          // console.log(`elt.rounding=${elt.rounding} before being set to 1`);
+          elt.rounding = 1;
+        }
+        let rest = elt.to_buy % elt.rounding;
+        if (rest > 0)
+          elt.to_buy = (Math.trunc(elt.to_buy / elt.rounding) + 1) * elt.rounding;
+        if (i == 0)
+          console.log(elt);
         csvData += [++i, elt.gname, '"' + elt.cname + '"', '"' + elt.case_name + '"', elt.stock, elt.needed, elt.to_buy, '"' + elt.partnumber + '"', '"' + elt.ordercode + '"'].join(",") + "\r\n";
       });
     }
