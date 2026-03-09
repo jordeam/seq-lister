@@ -1,6 +1,6 @@
 import { seqlz } from '../db.mjs';
 import { QueryTypes, Op } from 'sequelize';
-import asyncHandler from "express-async-handler";
+import asyncHandler from 'express-async-handler';
 import Suppliercode from '../models/suppliercode.mjs';
 import Supplier from '../models/supplier.mjs';
 
@@ -67,7 +67,7 @@ controller.home = asyncHandler(async (req, res, next) => {
       shoplist.forEach((elt) => {
         // populating the CSV content
         // and converting the null fields to ""
-        csvData += [++i, elt.gname, '"' + elt.cname + '"', '"' + elt.case_name + '"', elt.stock, elt.needed, elt.to_buy, elt.partnumber, elt.ordercode].join(",") + "\r\n";
+        csvData += [++i, elt.gname, '"' + elt.cname + '"', '"' + elt.case_name + '"', elt.stock, elt.needed, elt.to_buy, '"' + elt.partnumber + '"', '"' + elt.ordercode + '"'].join(",") + "\r\n";
       });
     }
     res.set({
@@ -77,7 +77,7 @@ controller.home = asyncHandler(async (req, res, next) => {
     .send(csvData);
   }
   else {
-    let supplier = await Supplier.findOne({where: {id: id}});
+    const supplier = await Supplier.findOne({where: {id: id}});
     res.render('shoplist_home', {
       user: req.user,
       id: req.params.id,
