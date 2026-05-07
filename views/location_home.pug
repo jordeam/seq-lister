@@ -91,6 +91,7 @@ block content
             span.tooltipotext Por unidade: quantidade necessária por placa
         th Saldo
         th Labels
+        th Enviados
       each val, idx in entries
         tr
           td(align="right") #{idx+1}
@@ -115,6 +116,7 @@ block content
             a.btn(style="background: #0bb;" href="/locationentry/"+val.id) #{val.quant_unit}
           td(style="padding-right: 10px;" align="right") #{val.quant - val.quant_unit * location.quant}
           td #{val.labels}
+          td(align="right") #{val.sent}
   else
     li Não existem componentes nesta localização.
 

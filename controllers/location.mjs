@@ -60,10 +60,19 @@ controller.home = asyncHandler(async (req, res, next) => {
     replacements: [req.params.id],
     type: QueryTypes.SELECT
   });
+  entries.forEach(elt => {
+    let match = /(^|((.*)\s+))env\s+([0-9]*)/.exec(elt.labels);
+    if (match) {
+      elt.sent = match[4];
+      elt.labels = match[3];
+    }
+    else
+      elt.sent = '';
+  });
   res.render("location_home", {
     user: req.user,
     location: loc,
-    entries: entries,
+    entries,
     allLocations,
   });
 });
