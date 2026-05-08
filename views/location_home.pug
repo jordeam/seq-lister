@@ -70,6 +70,42 @@ block content
   a.btn.btn-primary(href='/locationentry/choose/'+location.id+(usingTable? "/table" : ""))
     img(src="/image/add-icon.svg" alt="Adicionar" width="20pt" height="24pt")
 
+  //- style.
+  //-   table {
+  //-     width: 100%;
+  //-     border-collapse: collapse; /* Remove espaços entre as bordas */
+  //-   }
+
+  //-   th, td {
+  //-     padding: 12px;
+  //-     border: 1px solid #ddd;
+  //-     text-align: left;
+  //-   }
+
+  //-   // Aplica cor de fundo nas linhas PARES (2, 4, 6...) 
+  //-   tr:nth-child(even) {
+  //-     background-color: #f2f2f2;
+  //-   }
+
+  //-   // Opcional: Efeito de destaque ao passar o mouse
+  //-   tr:hover {
+  //-     background-color: #e9e9e9;
+  //-   }
+
+  //-   // Estilo para o cabeçalho não ser afetado
+  //-   th {
+  //-     background-color: #4CAF50;
+  //-     color: white;
+  //-   }
+
+  style.
+    tr:nth-child(even) { background: #f2f2f2; }
+    tr:hover {background-color: #9ee9e9;}
+    th {
+      background-color: #4CAF50;
+      color: white;
+      }
+
   if entries.length > 0
     table
       tr
@@ -90,8 +126,11 @@ block content
           div.tooltipo PU
             span.tooltipotext Por unidade: quantidade necessária por placa
         th Saldo
+        th
+          div.tooltipo Enviados
+            span.tooltipotext Quantidade enviada ao montador de placas
         th Labels
-        th Enviados
+
       each val, idx in entries
         tr
           td(align="right") #{idx+1}
@@ -115,8 +154,15 @@ block content
           td(style="padding-right: 10px; padding-left: 10px" align="right")
             a.btn(style="background: #0bb;" href="/locationentry/"+val.id) #{val.quant_unit}
           td(style="padding-right: 10px;" align="right") #{val.quant - val.quant_unit * location.quant}
-          td #{val.labels}
-          td(align="right") #{val.sent}
+          td(align="center") #{val.sent}
+          if Array.isArray(val.labels)
+            td
+              dd
+                each line in val.labels
+                  dl= line
+          else
+            td
+              | #{val.labels}
   else
     li Não existem componentes nesta localização.
 

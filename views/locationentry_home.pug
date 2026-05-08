@@ -7,7 +7,7 @@ block content
     | &nbsp; #[Strong Localização:] #{location.name}
 
   h2
-    a(href=component.url class='btn btn-primary')
+    a.btn.btn-primary(href=component.url)
       img(src="/image/component-icon.svg" alt="Componente" width="20pt" height="24pt")
     | &nbsp; #[Strong Componente:] #{component.name}
     if ccase.name.length > 0
@@ -27,6 +27,9 @@ block content
 
       label(for='labels') #[Italic Label(s)] no esquemático:
       input#name.form-control(type='text', placeholder='Labels dos componentes' name='labels' value=(undefined===locationentry ? '' : locationentry.labels) )
+
+      label(for="sent") Enviados para montagem:
+      input#name.form-control(type="number", placeholder="Número de componentes enviados" min="0" setp="1" name="sent" value=(undefined===locationentry ? 0 : locationentry.sent) )
 
     button.btn.btn-primary(type='submit')
       img(src="/image/ok-icon.svg" alt="Alterar" width="20pt" height="24pt")

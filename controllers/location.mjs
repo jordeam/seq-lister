@@ -22,6 +22,9 @@ const controller = {};
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Maximum chars in one line, for labels
+const MAXLINECHARS = 60;
+
 const paperTypes = [
   {id: 0, name: 'A4 Paper', value: 'a4paper', width: 210, height: 297},
   {id: 1, name: 'US Letter', value: 'letter', width: 8.5*25.4, height: 11*25.4},
@@ -42,6 +45,13 @@ controller.list = asyncHandler(async (req, res, next) => {
   });
 });
 
+function breakLine(text, limit) {
+  // regex search any char up to limit, but ending in [, . ! ? or spc]
+  const regex = new RegExp(`(.{1,${limit}})([,.!?\\s]|$)`, 'g');
+
+  return text.match(regex).map(line => line.trim());
+}
+
 // List all components of a location
 controller.home = asyncHandler(async (req, res, next) => {
   const [loc, allLocations] =
@@ -56,19 +66,26 @@ controller.home = asyncHandler(async (req, res, next) => {
     return next(err);
   }
 
-  const entries = await seqlz.query("SELECT le.id, c.name AS cname, g.name AS gname, sc.component_id, le.quant, le.quant_unit, le.box, le.labels, cs.name AS csname, le.supcode_id, sc.partnumber, sc.ordercode FROM location_entry AS le LEFT JOIN suppliercodes AS sc ON sc.id = le.supcode_id LEFT JOIN components AS c ON c.id = sc.component_id LEFT JOIN cases AS cs ON cs.id = c.case_id LEFT JOIN groups AS g ON g.id = c.group_id WHERE le.location_id = ? ORDER BY g.name, c.name", {
+  const entries = await seqlz.query("SELECT le.id, c.name AS cname, g.name AS gname, sc.component_id, le.quant, le.quant_unit, le.box, le.labels, le.sent, cs.name AS csname, le.supcode_id, sc.partnumber, sc.ordercode FROM location_entry AS le LEFT JOIN suppliercodes AS sc ON sc.id = le.supcode_id LEFT JOIN components AS c ON c.id = sc.component_id LEFT JOIN cases AS cs ON cs.id = c.case_id LEFT JOIN groups AS g ON g.id = c.group_id WHERE le.location_id = ? ORDER BY g.name, c.name", {
     replacements: [req.params.id],
     type: QueryTypes.SELECT
   });
-  entries.forEach(elt => {
+  for (const elt of entries) {
     let match = /(^|((.*)\s+))env\s+([0-9]*)/.exec(elt.labels);
     if (match) {
       elt.sent = match[4];
       elt.labels = match[3];
+      const le = await LocationEntry.findOne({where: {id: elt.id}});
+      le.sent = +elt.sent;
+      le.labels = elt.labels;
+      await le.save();
     }
-    else
-      elt.sent = '';
-  });
+    // break line after x chars
+    if (elt.labels.length > MAXLINECHARS + 4) {
+      elt.labels = breakLine(elt.labels, MAXLINECHARS);
+      console.log(elt.labels);
+    }
+  }
   res.render("location_home", {
     user: req.user,
     location: loc,

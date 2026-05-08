@@ -55,6 +55,7 @@ controller.update = asyncHandler(async (req, res, next) => {
   locationEntry.quant = req.body.quant;
   locationEntry.quant_unit = req.body.quant_unit;
   locationEntry.labels = req.body.labels.trim();
+  locationEntry.sent = req.body.sent;
   await locationEntry.save();
   const retURL = "/location/" + locationEntry.location_id;
   res.redirect(retURL);

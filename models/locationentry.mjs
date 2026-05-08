@@ -10,6 +10,7 @@ const LocationEntry = seqlz.define("location_entry", {
   quant_unit: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0 },
   quant_min: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0 },
   quant: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0 },
+  sent: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0 },
   box: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 1 },
   url: {
     type: DataTypes.VIRTUAL,
