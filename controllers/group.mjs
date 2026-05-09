@@ -11,7 +11,7 @@ const controller = {};
 controller.home = asyncHandler(async (req, res, next) => {
   // Get details of supergroup and all associated pets (in parallel)
   const allComponents = await seqlz.query(
-    "SELECT c.id, c.name, cs.name AS csname FROM components AS c, cases AS cs WHERE group_id = $1 AND cs.id = case_id ORDER BY c.name, cs.name",
+    "SELECT c.id, c.name, cs.name AS csname FROM components AS c, cases AS cs WHERE group_id = $1 AND cs.id = case_id ORDER BY cs.name, c.name",
     {
       bind: [req.params.id],
       type: QueryTypes.SELECT,

@@ -41,14 +41,16 @@ block content
       button.btn.btn-primary(type="submit")
         img(src="/image/add-icon.svg" alt="Adicionar" width="20pt" height="24pt")
 
-  dl
-  each val in allComponents
-    dd
-      a.btn.btn-primary(href='/component/'+val.id)
-        img(src="/image/component-icon.svg" alt="Editar" width="20pt" height="24pt")
-      | &nbsp; #{val.name} &nbsp; #{val.csname}
+  table
+    each val in allComponents
+      tr
+        td
+          a.btn.btn-primary(href='/component/'+val.id)
+            img(src="/image/component-icon.svg" alt="Editar" width="20pt" height="24pt")
+        td #{val.name}
+        td #{val.csname}
 
-  else
-    li Não existem componentes neste grupo.
+    else
+      li Não existem componentes neste grupo.
 
   script(src="/script/component_new.js")
