@@ -7,6 +7,8 @@ function copyToClipboard(text_id) {
   copyText.setSelectionRange(0, 99999); // For mobile devices
 
   // Copy the text inside the text field
-  navigator.clipboard.writeText(copyText.value);
+  navigator.clipboard.writeText(copyText.value).then(() => {
+      console.log(`Text copied=${copyText.value}`);
+    });
 }
 
