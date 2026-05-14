@@ -70,7 +70,7 @@ controller.home = asyncHandler(async (req, res, next) => {
     replacements: [req.params.id],
     type: QueryTypes.SELECT
   });
-  for (const elt of entries) {
+  for (const [i, elt] of entries.entries()) {
     let match = /(^|((.*)\s+))env\s+([0-9]*)/.exec(elt.labels);
     if (match) {
       elt.sent = match[4];
@@ -83,8 +83,13 @@ controller.home = asyncHandler(async (req, res, next) => {
     // break line after x chars
     if (elt.labels.length > MAXLINECHARS + 4) {
       elt.labels = breakLine(elt.labels, MAXLINECHARS);
-      console.log(elt.labels);
+      // console.log(elt.labels);
     }
+    const { count } = await Suppliercode.findAndCountAll({
+      where: { component_id: elt.component_id },
+    });
+    console.log(`nOpt=${count} component_id=${elt.component_id}`);
+    entries[i].nOpt = count;
   }
   res.render("location_home", {
     user: req.user,

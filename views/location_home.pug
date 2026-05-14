@@ -64,39 +64,10 @@ block content
     else
       p Inativo
 
-  h3 Componentes
-
-
-  a.btn.btn-primary(href='/locationentry/choose/'+location.id+(usingTable? "/table" : ""))
-    img(src="/image/add-icon.svg" alt="Adicionar" width="20pt" height="24pt")
-
-  //- style.
-  //-   table {
-  //-     width: 100%;
-  //-     border-collapse: collapse; /* Remove espaços entre as bordas */
-  //-   }
-
-  //-   th, td {
-  //-     padding: 12px;
-  //-     border: 1px solid #ddd;
-  //-     text-align: left;
-  //-   }
-
-  //-   // Aplica cor de fundo nas linhas PARES (2, 4, 6...) 
-  //-   tr:nth-child(even) {
-  //-     background-color: #f2f2f2;
-  //-   }
-
-  //-   // Opcional: Efeito de destaque ao passar o mouse
-  //-   tr:hover {
-  //-     background-color: #e9e9e9;
-  //-   }
-
-  //-   // Estilo para o cabeçalho não ser afetado
-  //-   th {
-  //-     background-color: #4CAF50;
-  //-     color: white;
-  //-   }
+  h3
+    a.btn.btn-primary(href='/locationentry/choose/'+location.id+(usingTable? "/table" : ""))
+      img(src="/image/add-icon.svg" alt="Adicionar" width="20pt" height="24pt")
+    | &nbsp; Componentes
 
   style.
     tr:nth-child(even) { background: #f2f2f2; }
@@ -114,6 +85,7 @@ block content
         th Grupo
         th Componente
         th Case
+        th Opt
         th(style="text-align: center;") Partnumber
         th(style="text-align: center;") Ordercode
         th(style="text-align: center;")
@@ -141,6 +113,8 @@ block content
           td
             a(href='/component/' + val.component_id) #[Strong #{val.cname}]
           td &nbsp; #{val.csname}
+          td
+            span(style="padding: 5px; background: #0ef; font-size: 0.8em;") #{val.nOpt}
           td
             a.btn(style="background: #0ef;" href='/suppliercode/'+val.supcode_id)
               span(style="font-size: 0.8em;") #[Strong #{val.partnumber}]
