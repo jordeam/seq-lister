@@ -13,4 +13,6 @@ router.get("/:id", locationEntryController.home);
 router.post("/:id", ensureAuthenticated, locationEntryController.update);
 router.get("/:id/delete", ensureAuthenticated, locationEntryController.delete);
 
+router.post("/:id/sent", ensureAuthenticated, locationEntryController.sent);
+
 export default router;

@@ -161,4 +161,18 @@ controller.insertNewComp = asyncHandler(async (req, res, next) => {
   res.redirect('/location/' + req.params.id);
 });
 
+controller.sent = asyncHandler(async (req, res, next) => {
+  const locationEntry = await LocationEntry.findOne({ where: { id: req.params.id } });
+  if (locationEntry === null) {
+    // No results.
+    const err = new Error("Entrada na Localização não encontrada.");
+    err.status = 404;
+    return next(err);
+  }
+  const sent = +req.body.sent.trim();
+  locationEntry.sent = sent;
+  await locationEntry.save();
+  res.json({status: 0, sent,});
+});
+
 export default controller;

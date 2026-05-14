@@ -114,7 +114,7 @@ block content
             a(href='/component/' + val.component_id) #[Strong #{val.cname}]
           td &nbsp; #{val.csname}
           td
-            span(style="padding: 5px; background: #0ef; font-size: 0.8em;") #{val.nOpt}
+            span.btn.btn-primary(style="padding: 5px; background: #0ef; font-size: 0.8em;") #{val.nOpt}
           td
             a.btn(style="background: #0ef;" href='/suppliercode/'+val.supcode_id)
               span(style="font-size: 0.8em;") #[Strong #{val.partnumber}]
@@ -128,7 +128,8 @@ block content
           td(style="padding-right: 10px; padding-left: 10px" align="right")
             a.btn(style="background: #0bb;" href="/locationentry/"+val.id) #{val.quant_unit}
           td(style="padding-right: 10px;" align="right") #{val.quant - val.quant_unit * location.quant}
-          td(align="center") #{val.sent}
+          td(align="right")
+            span.btn.btn-primary(style="background: #5df" id=val.id name=val.id value=val.sent onclick="editSent(this);") #{val.sent}
           if Array.isArray(val.labels)
             td
               dd
@@ -151,4 +152,16 @@ block content
 
       button.btn.btn-primary(type="submit") Inserir
 
+  div#sent_dialog.fixed-dialog(style="width: 40%; display: none;")
+    form#sent_form
+      p
+        label(for="sent")
+          | Quantidade:
+      input#sent(type="text" name="sent" value="0")
+      p
+        input.btn.btn-primary(type="button" name="close" value="Fechar" onclick="closeSent();")
+        | &nbsp;
+        input.btn.btn-primary(type="button" name="ok" value="Ok" onclick="okSent();")
+
   script(src="/script/component_new.js")
+  script(src="/script/location_new.js")
