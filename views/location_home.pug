@@ -127,9 +127,11 @@ block content
             a.btn(style="background: #0bb;" href="/locationentry/"+val.id) #{val.quant}
           td(style="padding-right: 10px; padding-left: 10px" align="right")
             a.btn(style="background: #0bb;" href="/locationentry/"+val.id) #{val.quant_unit}
-          td(style="padding-right: 10px;" align="right") #{val.quant - val.quant_unit * location.quant}
+          - var amount = val.quant - val.quant_unit * location.quant
+          - var needed = val.quant_unit * location.quant
+          td(style="padding-right: 10px;" align="right") #{amount}
           td(align="right")
-            span.btn.btn-primary(style="background: #5df" id=val.id name=val.id value=val.sent onclick="editSent(this);") #{val.sent}
+            span.btn.btn-primary(style="background: "+(val.sent >= val.quant_unit*location.quant ? "#5df" : "#f55") id=val.id name=val.id value=val.sent onclick="editSent(this,"+needed+");") #{val.sent}
           if Array.isArray(val.labels)
             td
               dd
@@ -158,6 +160,8 @@ block content
         label(for="sent")
           | Quantidade:
       input#sent(type="text" name="sent" value="0")
+      input(type="hidden" name="le_id" value="0")
+      input(type="hidden" name="needed" value="0")
       p
         input.btn.btn-primary(type="button" name="close" value="Fechar" onclick="closeSent();")
         | &nbsp;

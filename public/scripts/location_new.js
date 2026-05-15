@@ -13,8 +13,6 @@ function location_create(obj) {
         return false;
 }
 
-var current_id = 0;
-
 const inputElement = document.getElementById('sent');
 
 inputElement.addEventListener('keydown', function(event) {
@@ -22,21 +20,27 @@ inputElement.addEventListener('keydown', function(event) {
     event.preventDefault(); // Prevents form submission if input is inside a <form>
     okSent();
   }
+  else if (event.key === 'Escape') {
+    event.preventDefault();
+    closeSent();
+  }
 });
 
 function myFunction(value) {
   console.log("Enter pressed! Input value:", value);
 }
 
-function editSent(wdg) {
-  const diag = document.getElementById('sent_dialog');
+function editSent(wdg, needed) {
+  document.getElementById('sent_dialog').style.display='block';
   const n = wdg.getAttribute('value');
   const sent = document.getElementById('sent');
-  current_id = wdg.getAttribute('name');
+  const sent_form = document.getElementById('sent_form');
+  sent_form.elements['le_id'].value = wdg.getAttribute('name');
+  sent_form.elements['needed'].value = needed;
   sent.value = n;
-  diag.style.display = 'block';
   sent.focus();
   sent.select();
+  console.log(sent_form);
 }
 
 function closeSent() {
@@ -46,6 +50,7 @@ function closeSent() {
 
 function okSent() {
   const diag = document.getElementById('sent_dialog');
+  const sent_form = document.getElementById('sent_form');
   const sent = document.getElementById('sent');
   console.log(sent.value);
   const val = +sent.value;
@@ -56,6 +61,8 @@ function okSent() {
       sent: val,
     }).toString(),
   };
+  const current_id = sent_form.elements['le_id'].value;
+  const needed = +sent_form.elements['needed'].value;
   const req = new Request('/locationentry/'+current_id+'/sent', requestOptions);
   fetch(req)
     .then(res => {
@@ -68,7 +75,12 @@ function okSent() {
     .then(data => {
       console.log(data); // Use your JSON data here
       if (current_id > 0) {
-        document.getElementById(current_id).innerHTML = data.sent;
+        const elt = document.getElementById(current_id);
+        elt.innerHTML = data.sent;
+        if (needed > +data.sent)
+          elt.style.background = "#f55";
+        else
+          elt.style.background = '#5df';
       }
     })
     .catch(error => {
