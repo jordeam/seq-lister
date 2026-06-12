@@ -24,7 +24,7 @@ controller.get = asyncHandler(async (req, res, next) => {
 });
 
 controller.post = asyncHandler(async (req, res, next) => {
-  const components = await seqlz.query("SELECT c.id, c.name, g.name AS g_name FROM components AS c, groups AS g WHERE g.id = c.group_id AND c.name ~* $1 ORDER BY g.name, c.name",
+    const components = await seqlz.query("SELECT c.id, c.name, g.name AS g_name, cs.name AS csname FROM components AS c, groups AS g, cases AS cs WHERE g.id = c.group_id AND cs.id = c.case_id AND c.name ~* $1 ORDER BY g.name, cs.name, c.name",
                                     {
                                       bind: [req.body.expr],
                                       type: QueryTypes.SELECT,
@@ -45,7 +45,7 @@ controller.post = asyncHandler(async (req, res, next) => {
                                       type: QueryTypes.SELECT,
                                     });
 
-  const partnumbers = await seqlz.query("SELECT c.id, c.name, g.name AS g_name, sc.partnumber, sc.ordercode, s.name AS s_name, m.name AS m_name, sc.id AS sc_id FROM suppliercodes AS sc, components AS c, groups AS g, suppliers AS s, manufacturers AS m WHERE manufact_id = m.id AND supplier_id = s.id AND component_id = c.id AND group_id = g.id AND (partnumber ~* $1 OR ordercode ~* $1)",
+  const partnumbers = await seqlz.query("SELECT c.id, c.name, g.name AS g_name, sc.partnumber, sc.ordercode, s.name AS s_name, m.name AS m_name, sc.id AS sc_id, cs.name as csname FROM cases AS cs, suppliercodes AS sc, components AS c, groups AS g, suppliers AS s, manufacturers AS m WHERE manufact_id = m.id AND supplier_id = s.id AND cs.id = c.case_id AND component_id = c.id AND group_id = g.id AND (partnumber ~* $1 OR ordercode ~* $1)",
                                     {
                                       bind: [req.body.expr],
                                       type: QueryTypes.SELECT,

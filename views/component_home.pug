@@ -50,9 +50,9 @@ block content
       tr
         th
         th Part Number
-        th Fornecedor
-        th Cód. Fornecedor
         th Fabricante
+        th Cód. Fornecedor
+        th Fornecedor
         th Arred.
         th Localizações
       each val in suppliercodes
@@ -61,9 +61,9 @@ block content
             a.btn.btn-primary(href="/suppliercode/"+val.id.toString())
               img(src="/image/edit-icon.svg" alt="Editar"  width="20pt" height="24pt")
           td #{val.partnumber}
-          td #{val.s_name}
-          td #{val.ordercode}
           td #{val.m_name}
+          td #{val.ordercode}
+          td #{val.s_name}
           td #{val.rounding}
           td
             each elt in val.locs

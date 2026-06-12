@@ -93,10 +93,10 @@ block content
             spqn.tooltipotext Número da caixa
         th(style="text-align: center;")
           div.tooltipo STK
-            span.tooltipotext Quantidade em estoque
+            span.tooltipotext Quantidade em estoque nesta localização
         th(style="text-align: center;")
           div.tooltipo PU
-            span.tooltipotext Por unidade: quantidade necessária por placa
+            span.tooltipotext Por Unidade: quantidade necessária por placa
         th Saldo
         th
           div.tooltipo Enviados
@@ -114,7 +114,7 @@ block content
             a(href='/component/' + val.component_id) #[Strong #{val.cname}]
           td &nbsp; #{val.csname}
           td
-            span.btn.btn-primary(style="padding: 5px; background: #0ef; font-size: 0.8em;") #{val.nOpt}
+            span.btn.btn-primary(style="padding: 5px; background: #0ef; font-size: 0.8em;" onclick="optcompEdit(this,"+val.component_id+");" id="optcomp_"+val.id value=val.id) #{val.nOpt}
           td
             a.btn(style="background: #0ef;" href='/suppliercode/'+val.supcode_id)
               span(style="font-size: 0.8em;") #[Strong #{val.partnumber}]
@@ -124,7 +124,7 @@ block content
           td(align="center")
             a.btn(style="background: #0bb;" href="/locationentry/"+val.id) #{val.box}
           td(align="right")
-            a.btn(style="background: #0bb;" href="/locationentry/"+val.id) #{val.quant}
+            span.btn.btn-primary(style="background: #0bd;" onclick="stockEdit(this,"+val.id+");" id="stock_"+val.id value=val.quant) #{val.quant}
           td(style="padding-right: 10px; padding-left: 10px" align="right")
             a.btn(style="background: #0bb;" href="/locationentry/"+val.id) #{val.quant_unit}
           - var amount = val.quant - val.quant_unit * location.quant
@@ -154,18 +154,48 @@ block content
 
       button.btn.btn-primary(type="submit") Inserir
 
-  div#sent_dialog.fixed-dialog(style="width: 40%; display: none;")
+  div#sent_dialog.fixed-dialog(style="width: 300pt; display: none; border: 5pt solid #f84; border-radius:10px;")
     form#sent_form
+      h3 Enviados para Montagem
       p
         label(for="sent")
           | Quantidade:
-      input#sent(type="text" name="sent" value="0")
+      input#sent(type="number" increment="1" min="0" name="sent" value="0" autocomplete="off")
       input(type="hidden" name="le_id" value="0")
       input(type="hidden" name="needed" value="0")
+      hr
+      br
       p
         input.btn.btn-primary(type="button" name="close" value="Fechar" onclick="closeSent();")
         | &nbsp;
         input.btn.btn-primary(type="button" name="ok" value="Ok" onclick="okSent();")
+
+  div#stock_dialog.fixed-dialog(style="width: 300pt; display: none; border: 5pt solid #0bd; border-radius:10px;")
+    form#stock_form
+      h3 Estoque
+      p
+        label(for="stock")
+          | Quantidade:
+      input#stock(type="number" increment="1" min="0" name="stock" value="0" autocomplete="off")
+      input(type="hidden" name="le_id" value="0")
+      hr
+      br
+      p
+        input.btn.btn-primary(type="button" name="close" value="Fechar" onclick="stockClose();")
+        | &nbsp;
+        input.btn.btn-primary(type="button" name="ok" value="Ok" onclick="stockOk();")
+  div#optcomp_dialog.fixed-dialog(style="display: none; border: 5pt solid #0bd; border-radius:10px;")
+    form#optcomp_form
+      input(type="hidden" name="le_id" value="0")
+      input(type="hidden" name="comp_id" value="0")
+      table#optcomp_table
+      hr
+      br
+      p
+        input.btn.btn-primary(type="button" name="close" value="Fechar" onclick="optcompClose();")
+        | &nbsp;
+        input.btn.btn-primary(type="button" name="ok" value="Ok" onclick="optcompOk();")
+
 
   script(src="/script/component_new.js")
   script(src="/script/location_new.js")

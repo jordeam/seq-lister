@@ -4,8 +4,7 @@ import Location from "../models/location.mjs";
 import Case from '../models/case.mjs';
 import Group from '../models/group.mjs';
 import Component from "../models/component.mjs";
-import LocationEntry from '../models/locationentry.mjs';
-
+import Suppliercode from "../models/suppliercode.mjs";
 import asyncHandler from "express-async-handler";
 
 const controller = {};
@@ -108,6 +107,18 @@ controller.delete = asyncHandler(async (req, res, next) => {
   // await LocationEntry.destroy({where: {component_id: comp.id}});
   await comp.destroy();
   res.redirect('/group/' + group_id.toString());
+});
+
+// return all partnumbers of this component in JSON
+controller.optcomp = asyncHandler(async (req, res, next) => {
+  const partnumbers = await Suppliercode.findAll({ where: { component_id: req.params.id } });
+  if (partnumbers === null) {
+    // No results.
+    const err = new Error("Component Id not found.");
+    err.status = 404;
+    return next(err);
+  }
+  res.json({ status: 0, partnumbers, });
 });
 
 export default controller;

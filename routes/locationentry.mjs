@@ -13,6 +13,10 @@ router.get("/:id", locationEntryController.home);
 router.post("/:id", ensureAuthenticated, locationEntryController.update);
 router.get("/:id/delete", ensureAuthenticated, locationEntryController.delete);
 
+// fetch request for altering sent in database
 router.post("/:id/sent", ensureAuthenticated, locationEntryController.sent);
+
+// fetch request for altering stock in database
+router.post("/:id/stock", ensureAuthenticated, locationEntryController.stock);
 
 export default router;

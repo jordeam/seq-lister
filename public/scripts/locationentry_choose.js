@@ -61,7 +61,7 @@ function on_name_changed(obj) {
         }
         tbody.appendChild(tr);
         for (let elt of data) {
-          const row_data = [elt.gname, elt.compname, elt.case];
+          const row_data = [elt.gname, elt.compname, elt.csname];
           if (createHidden)
             row_data.push(elt.partnumber, elt.manufact, elt.ordercode, elt.supplier);
           const tr = document.createElement('tr');
