@@ -189,4 +189,19 @@ controller.stock = asyncHandler(async (req, res, next) => {
   res.json({ status: 0, stock, });
 });
 
+controller.newPartnumber = asyncHandler(async (req, res, next) => {
+  const locationEntry = await LocationEntry.findOne({ where: { id: req.params.id } });
+  const newPNId = req.body.newPNId;
+  const partnumber = await Suppliercode.findOne({ where: { id: newPNId } });
+  if (locationEntry === null || partnumber === null) {
+    // No results.
+    const err = new Error("Entrada na Localização ou em Partnumber não encontrada.");
+    err.status = 404;
+    return next(err);
+  }
+  locationEntry.supcode_id = newPNId;
+  await locationEntry.save();
+  res.json({ status: 0, le: locationEntry, partnumber, });
+});
+
 export default controller;

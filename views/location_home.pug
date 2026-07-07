@@ -119,10 +119,10 @@ block content
             span.btn.btn-primary(style="padding: 5px; background: #0ef; font-size: 0.8em;" onclick="optcompEdit(this);" id="optcomp_"+val.id value=val.id) #{val.nOpt}
           td
             a.btn(style="background: #0ef;" href='/suppliercode/'+val.supcode_id)
-              span(style="font-size: 0.8em;") #[Strong #{val.partnumber}]
+              span(id="pn_"+val.id style="font-size: 0.8em;") #[Strong #{val.partnumber}]
           td
             a.btn(href='/suppliercode/'+val.supcode_id)
-              span(style="font-size: 0.8em;") #[Strong #{val.ordercode}]
+              span(id="oc_"+val.id style="font-size: 0.8em;") #[Strong #{val.ordercode}]
           td(align="center")
             a.btn(style="background: #0bb;" href="/locationentry/"+val.id) #{val.box}
           td(align="right")
@@ -190,7 +190,7 @@ block content
   div#optcomp_dialog.fixed-dialog(style="display: none; border: 5pt solid #0bd; border-radius:10px;")
     form#optcomp_form
       input(type="hidden" name="le_id" value="0")
-      input(type="hidden" name="comp_id" value="0")
+      input(type="hidden" name="new_pn_id" value="0")
       h3#optcomp_title
       table#optcomp_table
       hr
@@ -198,7 +198,7 @@ block content
       p
         input.btn.btn-primary(type="button" name="close" value="Fechar" onclick="optcompClose();")
         | &nbsp;
-        input.btn.btn-primary(type="button" name="ok" value="Ok" onclick="optcompOk();")
+        input.btn.btn-primary(type="button" name="ok" value="Alterar" onclick="optcompOk();")
 
 
   script(src="/script/component_new.js")

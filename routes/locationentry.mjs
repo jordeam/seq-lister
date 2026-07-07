@@ -19,4 +19,7 @@ router.post("/:id/sent", ensureAuthenticated, locationEntryController.sent);
 // fetch request for altering stock in database
 router.post("/:id/stock", ensureAuthenticated, locationEntryController.stock);
 
+// change a suppliercode (partnumber) in location_entry
+router.post("/:id/newPartnumber", ensureAuthenticated, locationEntryController.newPartnumber);
+
 export default router;

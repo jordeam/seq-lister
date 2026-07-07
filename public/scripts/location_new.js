@@ -150,9 +150,52 @@ function optcompClose() {
   document.getElementById('optcomp_dialog').style.display = 'none';
 }
 
+// 2. Define the click handler function
+function optcompRadioClick(event) {
+  const optform = document.getElementById('optcomp_form');
+  optform.elements['new_pn_id'].value = event.target.value;
+}
+
+function optcompOk() {
+  const optform = document.getElementById('optcomp_form');
+  const newPNId = optform.elements['new_pn_id'].value;
+  const leId = optform.elements['le_id'].value;
+  console.log(`le_id=${leId} to set with newPNId=${newPNId}`);
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({
+      newPNId,
+    }).toString(),
+  };
+  const current_id = stock_form.elements['le_id'].value;
+  const req = new Request('/locationentry/' + leId + '/newPartnumber', requestOptions);
+  fetch(req)
+    .then(res => {
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+      // console.log(res);
+      return res.json(); // Returns a promise with the parsed JSON
+    })
+    .then(data => {
+      // console.log(data); // Use your JSON data here
+      if (leId > 0) {
+        document.getElementById(`pn_${leId}`).innerHTML = data.partnumber.partnumber;
+        document.getElementById(`oc_${leId}`).innerHTML = data.partnumber.ordercode;
+      }
+    })
+    .catch(error => {
+      console.error('Fetch operation failed:', error);
+    });
+  document.getElementById('optcomp_dialog').style.display = 'none';
+}
+
 function optcompEdit(wdg) {
   document.getElementById('optcomp_dialog').style.display = 'block';
   const le_id = +wdg.getAttribute('value');
+  const optform = document.getElementById('optcomp_form');
+  optform.elements['le_id'].value = le_id;
   const url = '/component/' + le_id + '/optcomp';
   fetch(url)
     .then(res => {
@@ -173,7 +216,7 @@ function optcompEdit(wdg) {
       const tr = document.createElement('tr');
       for (const e of theaders) {
         const th = document.createElement('th');
-        th.innerHTML = `${e}`;
+        th.innerText = `${e}`;
         tr.appendChild(th);
       }
       tbody.appendChild(tr);
@@ -186,7 +229,8 @@ function optcompEdit(wdg) {
         const inp = document.createElement('input');
         inp.type = 'radio';
         inp.name = 'pn';
-        inp.value = `pn_${elt.id}`;
+        inp.value = elt.id;
+        inp.addEventListener('click', optcompRadioClick);
         console.log (`elt.id=${elt.id} pn_id=${data.le.supcode_id}`);
         if (data.le.supcode_id == elt.id)
           inp.checked = true;
