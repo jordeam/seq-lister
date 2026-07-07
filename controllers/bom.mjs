@@ -190,8 +190,10 @@ controller.home = asyncHandler(async (req, res, next) => {
   let bom = [];
   for (const line of bom_lst.slice(1)) {
     const entry = makeEntries(indx, line, allManufacturers, allSuppliers);
+    // console.log(entry);
     bom.push(entry);
   }
+  // console.log(`Header=${bom_lst[0]}`);
   res.render("bom_home", {
     user: req.user,
     location: loc,

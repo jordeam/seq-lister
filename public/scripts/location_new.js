@@ -150,20 +150,10 @@ function optcompClose() {
   document.getElementById('optcomp_dialog').style.display = 'none';
 }
 
-function optcompEdit(wdg, comp_id) {
+function optcompEdit(wdg) {
   document.getElementById('optcomp_dialog').style.display = 'block';
   const le_id = +wdg.getAttribute('value');
-  const optcomp_form = document.getElementById('optcomp_form');
-  optcomp_form.elements['le_id'].value = le_id;
-  optcomp_form.elements['comp_id'].value = comp_id;
-  const url = '/component/' + comp_id + '/optcomp';
-  // const requestOptions = {
-  //   method: 'POST',
-  //   headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-  //   body: new URLSearchParams({
-  //     supcode_id,
-  //   }).toString(),
-  // };
+  const url = '/component/' + le_id + '/optcomp';
   fetch(url)
     .then(res => {
       if (!res.ok) {
@@ -175,8 +165,11 @@ function optcompEdit(wdg, comp_id) {
     .then(data => {
       console.log(data); // Use your JSON data here
       const table = document.getElementById('optcomp_table');
+      const title = document.getElementById('optcomp_title');
+      table.replaceChildren();
+      title.innerText = '';
       const tbody = document.createElement('tbody');
-      const theaders = ['Partnumber', 'Fabricante', 'Fornecedor', 'Código', 'Descrição'];
+      const theaders = ['', 'Partnumber', 'Fabricante', 'Fornecedor', 'Código', 'Descrição'];
       const tr = document.createElement('tr');
       for (const e of theaders) {
         const th = document.createElement('th');
@@ -184,16 +177,26 @@ function optcompEdit(wdg, comp_id) {
         tr.appendChild(th);
       }
       tbody.appendChild(tr);
-
+      if (data.partnumbers.length > 0) {
+        title.innerText = `${data.component.group.name} - ${data.component.name} - ${data.component.case.name}`;
+      }
       for (const elt of data.partnumbers) {
         const tr = document.createElement('tr');
-        const td1 = document.createElement('td');
-        td1.textContent = elt.partnumber+'';
-        tr.appendChild(td1);
-        const td2 = document.createElement('td');
-        td2.textContent = elt.manufact_id;
-        tr.appendChild(td2);
-        console.log(elt);
+        const td = document.createElement('td');
+        const inp = document.createElement('input');
+        inp.type = 'radio';
+        inp.name = 'pn';
+        inp.value = `pn_${elt.id}`;
+        console.log (`elt.id=${elt.id} pn_id=${data.le.supcode_id}`);
+        if (data.le.supcode_id == elt.id)
+          inp.checked = true;
+        td.appendChild(inp);
+        tr.appendChild(td);
+        for (const field of [elt.partnumber, elt.manufacturer.name, elt.supplier.name, elt.ordercode, elt.descr]) {
+          const td = document.createElement('td');
+          td.textContent = field;
+          tr.appendChild(td);
+        }
         tbody.appendChild(tr);
       }
       table.appendChild(tbody);

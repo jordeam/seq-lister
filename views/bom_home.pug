@@ -43,8 +43,10 @@ block content
         | &nbsp;
         span.fwidth(style="width: 20ch;") #{elt.compname}
         | &nbsp;
-        | ( PN#:#{elt.pn} - OC#:#{elt.ordercode}) #{elt.ref}
-        span &nbsp; Desc.: #{elt.descr}
+        | ( #[Strong PN:]#{elt.pn} - #[Strong OC#:]#{elt.ordercode}) #{elt.ref}
+        | &nbsp; #{elt.foot}
+        span &nbsp; #[Strong Desc.:] #{elt.descr}
+        span &nbsp; #[Strong Labels:] #{elt.labels}
       div(id="bom"+i)
 
   div#dialog.fixed-dialog(style="display: none;")

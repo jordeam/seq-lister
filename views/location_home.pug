@@ -85,7 +85,9 @@ block content
         th Grupo
         th Componente
         th Case
-        th Opt
+        th
+          div.tooltipo Opt
+            spqn.tooltipotext Opções para o mesmo componente
         th(style="text-align: center;") Partnumber
         th(style="text-align: center;") Ordercode
         th(style="text-align: center;")
@@ -114,7 +116,7 @@ block content
             a(href='/component/' + val.component_id) #[Strong #{val.cname}]
           td &nbsp; #{val.csname}
           td
-            span.btn.btn-primary(style="padding: 5px; background: #0ef; font-size: 0.8em;" onclick="optcompEdit(this,"+val.component_id+");" id="optcomp_"+val.id value=val.id) #{val.nOpt}
+            span.btn.btn-primary(style="padding: 5px; background: #0ef; font-size: 0.8em;" onclick="optcompEdit(this);" id="optcomp_"+val.id value=val.id) #{val.nOpt}
           td
             a.btn(style="background: #0ef;" href='/suppliercode/'+val.supcode_id)
               span(style="font-size: 0.8em;") #[Strong #{val.partnumber}]
@@ -184,10 +186,12 @@ block content
         input.btn.btn-primary(type="button" name="close" value="Fechar" onclick="stockClose();")
         | &nbsp;
         input.btn.btn-primary(type="button" name="ok" value="Ok" onclick="stockOk();")
+
   div#optcomp_dialog.fixed-dialog(style="display: none; border: 5pt solid #0bd; border-radius:10px;")
     form#optcomp_form
       input(type="hidden" name="le_id" value="0")
       input(type="hidden" name="comp_id" value="0")
+      h3#optcomp_title
       table#optcomp_table
       hr
       br
