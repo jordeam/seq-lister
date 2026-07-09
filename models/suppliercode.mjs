@@ -2,6 +2,7 @@ import { seqlz } from "../db.mjs";
 import { DataTypes } from "sequelize";
 import Component from "./component.mjs";
 import Suppliers from "./supplier.mjs";
+import Manufact from './manufacturer.mjs';
 
 const Suppliercode = seqlz.define("suppliercode", {
   id: {type: DataTypes.INTEGER, autoIncrement: true, allowNull: false, primaryKey: true, unique: true},
@@ -26,7 +27,8 @@ const Suppliercode = seqlz.define("suppliercode", {
                          raw: true
                        });
 
-Suppliercode.belongsTo(Component, {foreignKey: "component_id", allowNull: true});
-Suppliercode.belongsTo(Suppliers, {foreignKey: "supplier_id", allowNull: true});
+Suppliercode.belongsTo(Component, { foreignKey: "component_id", allowNull: true });
+Suppliercode.belongsTo(Suppliers, { foreignKey: "supplier_id", allowNull: true });
+Suppliercode.belongsTo(Manufact, { foreignKey: 'manufact_id', allowNull: true });
 
 export default Suppliercode;

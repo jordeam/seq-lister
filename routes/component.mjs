@@ -23,7 +23,4 @@ router.get("/:id", componentController.home);
 // update on POST
 router.post("/:id", ensureAuthenticated, componentController.update);
 
-// fetch request for show component partnumbers in database
-router.get("/:id/optcomp", componentController.optcomp);
-
 export default router;

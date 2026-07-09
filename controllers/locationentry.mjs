@@ -10,6 +10,7 @@ import SuperGroup from '../models/supergroup.mjs';
 import Manufacturer from '../models/manufacturer.mjs';
 import Supplier from '../models/supplier.mjs';
 import Suppliercode from '../models/suppliercode.mjs';
+import Manufact from '../models/manufacturer.mjs';
 
 const controller = {};
 
@@ -189,19 +190,60 @@ controller.stock = asyncHandler(async (req, res, next) => {
   res.json({ status: 0, stock, });
 });
 
+// replace a partnumber by a new on in a location entry
 controller.newPartnumber = asyncHandler(async (req, res, next) => {
   const locationEntry = await LocationEntry.findOne({ where: { id: req.params.id } });
   const newPNId = req.body.newPNId;
   const partnumber = await Suppliercode.findOne({ where: { id: newPNId } });
-  if (locationEntry === null || partnumber === null) {
+  let data = { err: false, message: [], };
+  if (locationEntry === null) {
+    data.err = true;
+    data.message.push('Localização do partnumber não encontrada');
+  }
+  if (partnumber === null) {
+    data.err = true;
+    data.message.push('Novo partnumber não encontrado');
+  }
+  if (!data.err) {
+    locationEntry.supcode_id = newPNId;
+    await locationEntry.save();
+    data=Object.assign(data, {le: locationEntry, partnumber, });
+  }
+  res.json(data);
+});
+
+// return all partnumbers of this component in JSON format. The component_id comes from a location_entry.
+controller.optcomp = asyncHandler(async (req, res, next) => {
+  // A User can have many Posts
+  const le_id = +req.params.id;
+  console.log(`le_id=${le_id}`);
+  const le = await LocationEntry.findOne({where: {id: le_id}});
+  const partnumber = await Suppliercode.findOne({where: {id: le.supcode_id}});
+  const comp_id = partnumber.component_id;
+  const comp = await Component.findOne({where: {id: comp_id}, include: [Case, Group]});
+  // console.log(comp.case.name);
+  const partsDirty = await Suppliercode.findAll({ where: { component_id: comp_id }, include: [Manufact, Supplier]});
+
+  // TODO: return {err: true, message: 'Component with partnumber Id not found.'}
+  if (partsDirty === null) {
     // No results.
-    const err = new Error("Entrada na Localização ou em Partnumber não encontrada.");
+    const err = new Error("Component Id not found.");
     err.status = 404;
     return next(err);
   }
-  locationEntry.supcode_id = newPNId;
-  await locationEntry.save();
-  res.json({ status: 0, le: locationEntry, partnumber, });
+
+  // console.log(partsDirty);
+  let parts = [];
+  for (const [i, p] of partsDirty.entries()) {
+    const les = await LocationEntry.findAll({where: {supcode_id: p.id}, include: Location});
+    // console.log('les.get:', les.get({plain: true}));
+    // console.log('*** get:');
+    let part = p.get({plain: true});
+    part.locs = les.map(le => ({ id: le.location.id, name: le.location.name }));
+    // console.log('*** part:', part);
+    parts.push(part);
+  }
+  res.json({ err: false, le, component: comp, parts, });
 });
 
 export default controller;

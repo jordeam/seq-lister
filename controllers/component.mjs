@@ -4,11 +4,7 @@ import Location from "../models/location.mjs";
 import Case from '../models/case.mjs';
 import Group from '../models/group.mjs';
 import Component from "../models/component.mjs";
-import Suppliercode from "../models/suppliercode.mjs";
 import asyncHandler from "express-async-handler";
-import Manufact from '../models/manufacturer.mjs';
-import Supplier from '../models/supplier.mjs';
-import LocationEntry from '../models/locationentry.mjs';
 
 const controller = {};
 
@@ -110,30 +106,6 @@ controller.delete = asyncHandler(async (req, res, next) => {
   // await LocationEntry.destroy({where: {component_id: comp.id}});
   await comp.destroy();
   res.redirect('/group/' + group_id.toString());
-});
-
-// return all partnumbers of this component in JSON
-controller.optcomp = asyncHandler(async (req, res, next) => {
-  // A User can have many Posts
-  const le_id = +req.params.id;
-  console.log(`le_id=${le_id}`);
-  const le = await LocationEntry.findOne({where: {id: le_id}});
-  const partnumber = await Suppliercode.findOne({where: {id: le.supcode_id}});
-  const comp_id = partnumber.component_id;
-  Component.belongsTo(Case, {foreignKey: 'case_id'});
-  Component.belongsTo(Group, {foreignKey: 'group_id'});
-  const comp = await Component.findOne({where: {id: comp_id}, include: [Case, Group]});
-
-  Suppliercode.belongsTo(Manufact, { foreignKey: 'manufact_id' });
-  Suppliercode.belongsTo(Supplier, { foreignKey: 'supplier_id' });
-  const partnumbers = await Suppliercode.findAll({ where: { component_id: comp_id }, include: [Manufact, Supplier]});
-  if (partnumbers === null) {
-    // No results.
-    const err = new Error("Component Id not found.");
-    err.status = 404;
-    return next(err);
-  }
-  res.json({ status: 0, le, component: comp, partnumbers, });
 });
 
 export default controller;

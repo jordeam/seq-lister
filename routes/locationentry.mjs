@@ -22,4 +22,7 @@ router.post("/:id/stock", ensureAuthenticated, locationEntryController.stock);
 // change a suppliercode (partnumber) in location_entry
 router.post("/:id/newPartnumber", ensureAuthenticated, locationEntryController.newPartnumber);
 
+// fetch request for show component partnumbers in location_entry
+router.get("/:id/optcomp", locationEntryController.optcomp);
+
 export default router;

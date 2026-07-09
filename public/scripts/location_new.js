@@ -168,7 +168,6 @@ function optcompOk() {
       newPNId,
     }).toString(),
   };
-  const current_id = stock_form.elements['le_id'].value;
   const req = new Request('/locationentry/' + leId + '/newPartnumber', requestOptions);
   fetch(req)
     .then(res => {
@@ -196,7 +195,7 @@ function optcompEdit(wdg) {
   const le_id = +wdg.getAttribute('value');
   const optform = document.getElementById('optcomp_form');
   optform.elements['le_id'].value = le_id;
-  const url = '/component/' + le_id + '/optcomp';
+  const url = '/locationentry/' + le_id + '/optcomp';
   fetch(url)
     .then(res => {
       if (!res.ok) {
@@ -212,7 +211,7 @@ function optcompEdit(wdg) {
       table.replaceChildren();
       title.innerText = '';
       const tbody = document.createElement('tbody');
-      const theaders = ['', 'Partnumber', 'Fabricante', 'Fornecedor', 'Código', 'Descrição'];
+      const theaders = ['', 'Partnumber', 'Fabricante', 'Fornecedor', 'Código', 'Descrição', 'Localizações'];
       const tr = document.createElement('tr');
       for (const e of theaders) {
         const th = document.createElement('th');
@@ -220,10 +219,11 @@ function optcompEdit(wdg) {
         tr.appendChild(th);
       }
       tbody.appendChild(tr);
-      if (data.partnumbers.length > 0) {
+      if (data.parts.length > 0) {
         title.innerText = `${data.component.group.name} - ${data.component.name} - ${data.component.case.name}`;
       }
-      for (const elt of data.partnumbers) {
+      console.log(`parts[0].locs[0].name=${data.parts[0].locs[0].name}`);
+      for (const elt of data.parts) {
         const tr = document.createElement('tr');
         const td = document.createElement('td');
         const inp = document.createElement('input');
@@ -231,7 +231,7 @@ function optcompEdit(wdg) {
         inp.name = 'pn';
         inp.value = elt.id;
         inp.addEventListener('click', optcompRadioClick);
-        console.log (`elt.id=${elt.id} pn_id=${data.le.supcode_id}`);
+        // console.log (`elt.id=${elt.id} pn_id=${data.le.supcode_id}`);
         if (data.le.supcode_id == elt.id)
           inp.checked = true;
         td.appendChild(inp);
@@ -241,6 +241,9 @@ function optcompEdit(wdg) {
           td.textContent = field;
           tr.appendChild(td);
         }
+        const tdLoc = document.createElement('td');
+        tdLoc.innerHTML = elt.locs.map(x => `<a href=/location/${x.id}>${x.name}</a>`).join(', &nbsp; ');
+        tr.appendChild(tdLoc);
         tbody.appendChild(tr);
       }
       table.appendChild(tbody);
