@@ -249,24 +249,30 @@ controller.search_pn = asyncHandler(async (req, res) => {
   //  console.log(`Header=${bom_lst[0]}`);
   const indx = makeEntryIndexes(bom_lst[0], manufacts, suppliers);
   const entry = makeEntries(indx, bom_lst[index + 1], manufacts, suppliers);
-
+  if (entry.mfr < 0)
+    entry.mfr = 0;
+  if (entry.sup < 0)
+    entry.sup = 0;
   let partnumbers;
 
   console.log(`entry.pn=${entry.pn}`);
+  console.log(entry);
   if (entry.pn.length > 1)
-      partnumbers = await seqlz.query("SELECT c.id AS comp_id, c.name AS comp_name, cs.name AS case_name, g.name AS g_name, sc.partnumber, sc.ordercode, s.name AS s_name, m.name AS m_name, sc.id AS sc_id FROM suppliercodes AS sc, components AS c, groups AS g, suppliers AS s, manufacturers AS m, cases as cs WHERE manufact_id = m.id AND supplier_id = s.id AND component_id = c.id AND group_id = g.id AND cs.id = c.case_id AND (partnumber ~* $1 OR ordercode ~* $1)",
+      partnumbers = await seqlz.query("SELECT c.id AS comp_id, c.name AS comp_name, cs.name AS case_name, g.name AS g_name, sc.partnumber, sc.ordercode, s.name AS s_name, m.name AS m_name, sc.id AS sc_id, sc.descr FROM suppliercodes AS sc, components AS c, groups AS g, suppliers AS s, manufacturers AS m, cases as cs WHERE manufact_id = m.id AND supplier_id = s.id AND component_id = c.id AND group_id = g.id AND cs.id = c.case_id AND (partnumber ~* $1 OR ordercode ~* $1)",
                                     {
                                       bind: [entry.pn],
                                       type: QueryTypes.SELECT,
                                     });
   if (partnumbers && partnumbers.length > 0) {
+    const manufact = await Manufacturer.findOne({where: {id: entry.mfr}});
+    const supplier = await Supplier.findOne({where: {id: entry.sup}});
     res.render("bom_by_partnumber", {
       loc,
       entry,
       index,
       partnumbers,
-      suppliers,
-      manufacts,
+      supplier,
+      manufact,
     });
   }
   else
@@ -275,6 +281,30 @@ controller.search_pn = asyncHandler(async (req, res) => {
 
 // insert component using the same partnumber
 controller.insert_pn = asyncHandler(async (req, res) => {
+  const pn_id = +req.body.sc_id;
+  console.log(`pn_id=${pn_id}`);
+  const pn = await Suppliercode.findOne({where: {id: pn_id}});
+  console.log(pn);
+  // update some partnumber fields
+  const supplier_id = +req.body.supplier_id;
+  const manufact_id = +req.body.manufact_id;
+  const descr = req.body.descr;
+  console.log(`supplier_id=${supplier_id} manufact_id=${manufact_id} descr=${descr}`);
+  let changed = false;
+  if (pn.supplier_id <= 1 && supplier_id > 1) {
+    pn.supplier_id = supplier_id;
+    changed = true;
+  }
+  if (pn.manufact_id <= 1 && manufact_id > 1) {
+    pn.manufact_id = manufact_id;
+    changed = true;
+  }
+  if (pn.descr.length < 2 && descr.length > 1) {
+    pn.descr = descr;
+    changed = true;
+  }
+  if (changed)
+    await pn.save();
   const location_id = +req.params.id;
   await LocationEntry.create({
     location_id,

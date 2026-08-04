@@ -53,4 +53,21 @@ block content
     div#dialog-content
     hr
     button.btn.btn-primary(type="button" onclick="close_dialog();") Fechar
+
+  div#dialog-pn.fixed-dialog(style="display: none;")
+    h2 Inserir componente com Partnumber existente
+    table
+      tr
+        td Quantidade:
+        td quant
+      tr
+        td Labels
+        td labels
+      tr
+        th Caixa
+        td 1
+    hr
+    button.btn.btn-primary(type="button" onclick="close_dialog();") Fechar
+
+
   script(src="/script/bom.js")

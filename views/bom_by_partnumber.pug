@@ -3,6 +3,9 @@ h3 Inserir componente com Partnumber existente
 form#insert-comp(method="post" action="/bom/"+loc.id+"/insert")
   input(type='hidden' name="loc_id" value=loc.id)
   input(type="hidden" name="index" value=index)
+  input(type="hidden" name="descr" value=entry.descr)
+  input(type="hidden" name="manufact_id" value=entry.mfr)
+  input(type="hidden" name="supplier_id" value=entry.sup)
   br
   label.labelbom(for="qty") Quantidade:
   input#qty(type="text" name="qty" value=entry.qty)
@@ -12,12 +15,19 @@ form#insert-comp(method="post" action="/bom/"+loc.id+"/insert")
   br
   label.labelbom(for="box") Caixa
   input#box(type="text" name="box" value="1")
+  br
+  | Descrição: #{entry.descr}
+  br
+  | Fabricante: #{manufact.name}
+  br
+  | Fornecedor: #{supplier.name}
   table
     tr
       th
       th Grupo
       th Valor
       th Case
+      th Descrição
       th PN
       th Fabricante
       th Ordercode
@@ -30,6 +40,7 @@ form#insert-comp(method="post" action="/bom/"+loc.id+"/insert")
         td #{partnumber.g_name}
         td #{partnumber.comp_name}
         td #{partnumber.case_name}
+        td #{partnumber.descr}
         td #{partnumber.partnumber}
         td #{partnumber.m_name}
         td #{partnumber.ordercode}

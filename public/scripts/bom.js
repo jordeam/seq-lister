@@ -34,6 +34,22 @@ function byPNClicked(wdg) {
     });
 }
 
+function byPNClicked2(wdg) {
+  const div = document.getElementById("dialog-pn");
+  const params = wdg.getAttribute("value");
+  const lst = params.split(",");
+  const locId = lst[0];
+  const i = lst[1];
+  //
+  fetch(`/bom/${locId}/search_pn?line=${i}`)
+    .then(res => { return res.text(); })
+    .then(res => {
+      div.innerHTML = res.toString();
+      document.getElementById('dialog').style = "display: block";
+      document.getElementById('back').style = 'pointer-events: none; opacity: 70%;';
+    });
+}
+
 function createCompClicked(wdg) {
   const div = document.getElementById("dialog-content");
   const params = wdg.getAttribute("value");
@@ -95,8 +111,9 @@ function insertWithPartnumber(wdg) {
       // rounding: form.elements.rounding.value,
       labels: form.elements.labels.value.trim(),
       box: +form.elements.box.value,
-      // supplier_id: form.elements.supplier_id.value,
-      // manufact_id: form.elements.manufact_id.value,
+      descr: form.elements.descr.value,
+      supplier_id: form.elements.supplier_id.value,
+      manufact_id: form.elements.manufact_id.value,
     }).toString(),
   };
 
@@ -342,5 +359,6 @@ function insertCompWithPN(wdg) {
 
 function close_dialog() {
   document.getElementById('dialog').style = 'display: none;';
+  document.getElementById('dialog-pn').style = 'display: none;';
   document.getElementById('back').style = 'display: block;';
 }
