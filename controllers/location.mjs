@@ -54,9 +54,10 @@ function breakLine(text, limit) {
 
 // List all components of a location
 controller.home = asyncHandler(async (req, res, next) => {
+  const location_id = +req.params.id;
   const [loc, allLocations] =
         await Promise.all([
-          Location.findOne({where: {id: req.params.id}}),
+          Location.findOne({where: {id: location_id}}),
           Location.findAll(),
         ]);
   if (loc === null) {
@@ -66,10 +67,13 @@ controller.home = asyncHandler(async (req, res, next) => {
     return next(err);
   }
 
+  let box = req.query.box ? +req.query.box : 0;
+  box = box > 0 ? box : 0;
   const entries = await seqlz.query("SELECT le.id, c.name AS cname, g.name AS gname, sc.component_id, le.quant, le.quant_unit, le.box, le.labels, le.sent, cs.name AS csname, le.supcode_id, sc.partnumber, sc.ordercode FROM location_entry AS le LEFT JOIN suppliercodes AS sc ON sc.id = le.supcode_id LEFT JOIN components AS c ON c.id = sc.component_id LEFT JOIN cases AS cs ON cs.id = c.case_id LEFT JOIN groups AS g ON g.id = c.group_id WHERE le.location_id = ? ORDER BY g.name, cs.name, c.name", {
-    replacements: [req.params.id],
-    type: QueryTypes.SELECT
-  });
+      replacements: [location_id],
+      type: QueryTypes.SELECT
+    });
+
   for (const [i, elt] of entries.entries()) {
     let match = /(^|((.*)\s+))env\s+([0-9]*)/.exec(elt.labels);
     if (match) {
@@ -91,10 +95,21 @@ controller.home = asyncHandler(async (req, res, next) => {
     console.log(`nOpt=${count} component_id=${elt.component_id}`);
     entries[i].nOpt = count;
   }
+  let boxes = [];
+  entries.forEach(entry => {
+    if (boxes.indexOf(entry.box) < 0)
+      boxes.push(entry.box);
+  });
+  if (box > 0)
+    entries.filter((item, index) => { return item.box === box; });
+  console.log(boxes);
+  console.log(`box=${box}`);
   res.render("location_home", {
     user: req.user,
     location: loc,
-    entries,
+    entries: box > 0 ? entries.filter(item => { return item.box === box; }) : entries,
+    box,
+    boxes: boxes.sort(),
     allLocations,
   });
 });

@@ -25,4 +25,7 @@ router.post("/:id/newPartnumber", ensureAuthenticated, locationEntryController.n
 // fetch request for show component partnumbers in location_entry
 router.get("/:id/optcomp", locationEntryController.optcomp);
 
+// fetch request for show component partnumbers in location_entry
+router.post("/:id/box", locationEntryController.box);
+
 export default router;

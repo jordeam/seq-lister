@@ -56,35 +56,35 @@ block content
             if elt.descr.length > 0
               | &nbsp; &mdash; #[i #{elt.descr}]
       br
-      label(for='partnumber') Partnumber:
-      input#partnumber.form-control(placeholder='Partnumber' name='partnumber')
+      label(for="partnumber") Partnumber:
+      input#partnumber.form-control(placeholder="Partnumber" name="partnumber")
       br
       label(for="manufact") Fabricante:
       select#manufact.form-control(name="manufact")
         each val in allManufacts
           option(value=val.id) #{val.name}
       br
-      label(for='ordercode') Código no fornecedor:
-      input#ordercode.form-control(placeholder='Código do fornecedor' name='ordercode')
+      label(for="ordercode") Código no fornecedor:
+      input#ordercode.form-control(placeholder="Código do fornecedor" name="ordercode")
       br
       label(for="supplier") Fornecedor:
       select#suppliers.form-control(name="supplier")
         each val in allSuppliers
           option(value=val.id) #{val.name}
       br
-      label(for='rounding') Arredondamento:
-      input#rounding.form-control(placeholder='Arredondamento' name='rounding')
+      label(for="rounding") Arredondamento:
+      input#rounding.form-control(placeholder="Arredondamento" name="rounding" value="1")
       br
-      label(for='descr') Descrição:
-      textarea#descr.form-control(rows="2" placeholder='Descrição' name='descr')
+      label(for="descr") Descrição:
+      textarea#descr.form-control(rows="2" placeholder="Descrição" name="descr")
       div#onlycomp
       br
       button.btn.btn-primary(type="submit" onclick="copyFormOnlyData('formonlycomp')")
-        img(src='/image/ok-icon.svg' alt="Criar" width="20pt" height="24pt")
+        img(src="/image/ok-icon.svg" alt="Criar" width="20pt" height="24pt")
 
   div#insert
     h3 Componentes com Partnumbers Existentes
 
     div#choices
 
-  script(src='/script/locationentry_choose.js')
+  script(src="/script/locationentry_choose.js")

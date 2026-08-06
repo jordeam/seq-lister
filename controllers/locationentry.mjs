@@ -162,6 +162,7 @@ controller.insertNewComp = asyncHandler(async (req, res, next) => {
   res.redirect('/location/' + req.params.id);
 });
 
+// Set number of components sent to assembly in location entry
 controller.sent = asyncHandler(async (req, res, next) => {
   const locationEntry = await LocationEntry.findOne({ where: { id: req.params.id } });
   if (locationEntry === null) {
@@ -174,6 +175,18 @@ controller.sent = asyncHandler(async (req, res, next) => {
   locationEntry.sent = sent;
   await locationEntry.save();
   res.json({status: 0, sent,});
+});
+
+// Set number of components box to assembly in location entry
+controller.box = asyncHandler(async (req, res, next) => {
+  const locationEntry = await LocationEntry.findOne({ where: { id: req.params.id } });
+  if (locationEntry === null) {
+    res.json({ status: 1, message: "Location Entry no Found", });
+  }
+  const box = +req.body.box.trim();
+  locationEntry.box = box;
+  await locationEntry.save();
+  res.json({ status: 0, box, });
 });
 
 controller.stock = asyncHandler(async (req, res, next) => {

@@ -54,15 +54,20 @@ block content
   div#not_edit(style="display: block;")
     p #[Strong Quantidade a fabricar:] #{location.quant}
 
-    p #[Strong Quantidade de caixas:] #{location.nbox}
+    p #[Strong Caixas: ]
+      each box in boxes
+        a(href=location.url+"?box="+box)
+          span.btn.btn-primary(style="padding: 5px; background: #0bb; font-size: 0.8em;") #{box}
+        | &nbsp;
+      a(href=location.url)
+        span.btn.btn-primary(style="padding: 5px; background: #0b9; font-size: 0.8em;") Todas
+  if location.note.length > 0
+    p #[Strong Obs.:] #{location.note}
 
-    if location.note.length > 0
-      p #[Strong Obs.:] #{location.note}
-
-    if location.active
-      p Ativo
-    else
-      p Inativo
+  if location.active
+    p Ativo
+  else
+    p Inativo
 
   h3
     a.btn.btn-primary(href='/locationentry/choose/'+location.id+(usingTable? "/table" : ""))
@@ -77,73 +82,72 @@ block content
       color: white;
       }
 
-  if entries.length > 0
-    table
-      tr
-        th(align="center") #
-        th
-        th Grupo
-        th Componente
-        th Case
-        th
-          div.tooltipo Opt
-            spqn.tooltipotext Opções para o mesmo componente
-        th(style="text-align: center;") Partnumber
-        th(style="text-align: center;") Ordercode
-        th(style="text-align: center;")
-          div.tooltipo Cx.
-            spqn.tooltipotext Número da caixa
-        th(style="text-align: center;")
-          div.tooltipo STK
-            span.tooltipotext Quantidade em estoque nesta localização
-        th(style="text-align: center;")
-          div.tooltipo PU
-            span.tooltipotext Por Unidade: quantidade necessária por placa
-        th Saldo
-        th
-          div.tooltipo Enviados
-            span.tooltipotext Quantidade enviada ao montador de placas
-        th Labels
-
-      each val, idx in entries
+  div#main-table
+    if entries.length > 0
+      table
         tr
-          td(align="right") #{idx+1}
-          td
-            a.btn.btn-primary(href='/locationentry/'+val.id+'/delete' onclick="return confirm('Tem certeza que quer excluir a entrada?');")
-              img(src="/image/trash-icon.svg" alt="Excluir" width="12pt" height="15pt")
-          td #{val.gname}
-          td
-            a(href='/component/' + val.component_id) #[Strong #{val.cname}]
-          td &nbsp; #{val.csname}
-          td
-            span.btn.btn-primary(style="padding: 5px; background: #0ef; font-size: 0.8em;" onclick="optcompEdit(this);" id="optcomp_"+val.id value=val.id) #{val.nOpt}
-          td
-            a.btn(style="background: #0ef;" href='/suppliercode/'+val.supcode_id)
-              span(id="pn_"+val.id style="font-size: 0.8em;") #[Strong #{val.partnumber}]
-          td
-            a.btn(href='/suppliercode/'+val.supcode_id)
-              span(id="oc_"+val.id style="font-size: 0.8em;") #[Strong #{val.ordercode}]
-          td(align="center")
-            a.btn(style="background: #0bb;" href="/locationentry/"+val.id) #{val.box}
-          td(align="right")
-            span.btn.btn-primary(style="background: #0bd;" onclick="stockEdit(this,"+val.id+");" id="stock_"+val.id value=val.quant) #{val.quant}
-          td(style="padding-right: 10px; padding-left: 10px" align="right")
-            a.btn(style="background: #0bb;" href="/locationentry/"+val.id) #{val.quant_unit}
-          - var amount = val.quant - val.quant_unit * location.quant
-          - var needed = val.quant_unit * location.quant
-          td(style="padding-right: 10px;" align="right") #{amount}
-          td(align="right")
-            span.btn.btn-primary(style="background: "+(val.sent >= val.quant_unit*location.quant ? "#5df" : "#f55") id=val.id name=val.id value=val.sent onclick="editSent(this,"+needed+");") #{val.sent}
-          if Array.isArray(val.labels)
+          th(align="center") #
+          th
+          th Grupo
+          th Componente
+          th Case
+          th
+            div.tooltipo Opt
+              spqn.tooltipotext Opções para o mesmo componente
+          th(style="text-align: center;") Partnumber
+          th(style="text-align: center;") Ordercode
+          th(style="text-align: center;") Caixa
+          th(style="text-align: center;")
+            div.tooltipo STK
+              span.tooltipotext Quantidade em estoque nesta localização
+          th(style="text-align: center;")
+            div.tooltipo PU
+              span.tooltipotext Por Unidade: quantidade necessária por placa
+          th Saldo
+          th
+            div.tooltipo E. M.
+              span.tooltipotext Quantidade enviada ao montador de placas
+          th Labels
+
+        each val, idx in entries
+          tr
+            td(align="right") #{idx+1}
             td
-              dd
-                each line in val.labels
-                  dl= line
-          else
+              a.btn.btn-primary(href='/locationentry/'+val.id+'/delete' onclick="return confirm('Tem certeza que quer excluir a entrada?');")
+                img(src="/image/trash-icon.svg" alt="Excluir" width="12pt" height="15pt")
+            td #{val.gname}
             td
-              | #{val.labels}
-  else
-    li Não existem componentes nesta localização.
+              a(href='/component/' + val.component_id) #[Strong #{val.cname}]
+            td &nbsp; #{val.csname}
+            td
+              span.btn.btn-primary(style="padding: 5px; background: #0ef; font-size: 0.8em;" onclick="optcompEdit(this);" id="optcomp_"+val.id value=val.id) #{val.nOpt}
+            td
+              a.btn(style="background: #0ef;" href='/suppliercode/'+val.supcode_id)
+                span(id="pn_"+val.id style="font-size: 0.8em;") #[Strong #{val.partnumber}]
+            td
+              a.btn(href='/suppliercode/'+val.supcode_id)
+                span(id="oc_"+val.id style="font-size: 0.8em;") #[Strong #{val.ordercode}]
+            td(align="center")
+              a.btn(style="background: #0bb;" onclick="boxEdit(this);" id="box_"+val.id value=val.id) #{val.box}
+            td(align="right")
+              span.btn.btn-primary(style="background: #0bd;" onclick="stockEdit(this);" id="stock_"+val.id value=val.id) #{val.quant}
+            td(style="padding-right: 10px; padding-left: 10px" align="right")
+              a.btn(style="background: #0bb;" href="/locationentry/"+val.id) #{val.quant_unit}
+            - var amount = val.quant - val.quant_unit * location.quant
+            - var needed = val.quant_unit * location.quant
+            td(style="padding-right: 10px;" align="right") #{amount}
+            td(align="right")
+              span.btn.btn-primary(style="background: "+(val.sent >= val.quant_unit*location.quant ? "#5df" : "#f55") id="sent_"+val.id name=val.id value=needed onclick="sentEdit(this);") #{val.sent}
+            if Array.isArray(val.labels)
+              td
+                dd
+                  each line in val.labels
+                    dl= line
+            else
+              td
+                | #{val.labels}
+    else
+      li Não existem componentes nesta localização.
 
     hr
 
@@ -168,9 +172,26 @@ block content
       hr
       br
       p
-        input.btn.btn-primary(type="button" name="close" value="Fechar" onclick="closeSent();")
+        input.btn.btn-primary(type="button" name="close" value="Fechar" onclick="sentClose();")
         | &nbsp;
-        input.btn.btn-primary(type="button" name="ok" value="Ok" onclick="okSent();")
+        input.btn.btn-primary(type="button" name="ok" value="Ok" onclick="sentOk();")
+
+
+  div#box_dialog.fixed-dialog(style="width: 300pt; display: none; border: 5pt solid #f84; border-radius:10px;")
+    form#box_form
+      h3 Enviados para Montagem
+      p
+        label(for="box")
+          | Quantidade:
+      input#box(type="number" increment="1" min="1" name="box" value="1" autocomplete="off")
+      input(type="hidden" name="le_id" value="0")
+      input(type="hidden" name="needed" value="0")
+      hr
+      br
+      p
+        input.btn.btn-primary(type="button" name="close" value="Fechar" onclick="boxClose();")
+        | &nbsp;
+        input.btn.btn-primary(type="button" name="ok" value="Ok" onclick="boxOk();")
 
   div#stock_dialog.fixed-dialog(style="width: 300pt; display: none; border: 5pt solid #0bd; border-radius:10px;")
     form#stock_form

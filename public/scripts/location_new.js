@@ -13,36 +13,38 @@ function location_create(obj) {
         return false;
 }
 
+//
+// Sent to Assembly
+//
+
 document.getElementById('sent').addEventListener('keydown', event => {
   if (event.key === 'Enter') {
     event.preventDefault(); // Prevents form submission if input is inside a <form>
-    okSent();
+    sentOk();
   }
   else if (event.key === 'Escape') {
     event.preventDefault();
-    closeSent();
+    sentClose();
   }
 });
 
-function editSent(wdg, needed) {
+function sentEdit(wdg) {
   document.getElementById('sent_dialog').style.display='block';
-  const n = wdg.getAttribute('value');
   const sent = document.getElementById('sent');
   const sent_form = document.getElementById('sent_form');
   sent_form.elements['le_id'].value = wdg.getAttribute('name');
-  sent_form.elements['needed'].value = needed;
-  sent.value = n;
+  sent_form.elements['needed'].value = wdg.getAttribute('value');
+  sent.value = wdg.innerHTML;
   sent.focus();
   sent.select();
-  // console.log(sent_form);
 }
 
-function closeSent() {
+function sentClose() {
   const diag = document.getElementById('sent_dialog');
   diag.style.display = 'none';
 }
 
-function okSent() {
+function sentOk() {
   const diag = document.getElementById('sent_dialog');
   const sent_form = document.getElementById('sent_form');
   const sent = document.getElementById('sent');
@@ -55,9 +57,9 @@ function okSent() {
       sent: val,
     }).toString(),
   };
-  const current_id = sent_form.elements['le_id'].value;
+  const le_id = sent_form.elements['le_id'].value;
   const needed = +sent_form.elements['needed'].value;
-  const req = new Request('/locationentry/'+current_id+'/sent', requestOptions);
+  const req = new Request('/locationentry/'+le_id+'/sent', requestOptions);
   fetch(req)
     .then(res => {
       if (!res.ok) {
@@ -68,8 +70,8 @@ function okSent() {
     })
     .then(data => {
       // console.log(data); // Use your JSON data here
-      if (current_id > 0) {
-        const elt = document.getElementById(current_id);
+      if (le_id > 0) {
+        const elt = document.getElementById('sent_'+le_id);
         elt.innerHTML = data.sent;
         if (needed > +data.sent)
           elt.style.background = "#f55";
@@ -83,6 +85,9 @@ function okSent() {
   diag.style.display = 'none';
 }
 
+//
+// Stock
+//
 document.getElementById('stock').addEventListener('keydown', event => {
   if (event.key === 'Enter') {
     event.preventDefault(); // Prevents form submission if input is inside a <form>
@@ -98,16 +103,15 @@ function stockClose() {
   document.getElementById('stock_dialog').style.display = 'none';
 }
 
-function stockEdit(wdg, le_id) {
+function stockEdit(wdg) {
   document.getElementById('stock_dialog').style.display = 'block';
-  const n = wdg.getAttribute('value');
   const stock = document.getElementById('stock');
   const stock_form = document.getElementById('stock_form');
-  stock_form.elements['le_id'].value = le_id;
-  stock.value = n;
+  stock_form.elements['le_id'].value = wdg.getAttribute('value');
+  stock.value = wdg.innerHTML;
   stock.focus();
   stock.select();
-  // console.log(stock_form);
+  console.log(stock_form);
 }
 
 function stockOk() {
@@ -138,6 +142,74 @@ function stockOk() {
       if (current_id > 0) {
         const elt = document.getElementById("stock_"+current_id);
         elt.innerHTML = data.stock;
+      }
+    })
+    .catch(error => {
+      console.error('Fetch operation failed:', error);
+    });
+  diag.style.display = 'none';
+}
+
+//
+// Box
+//
+document.getElementById('box').addEventListener('keydown', event => {
+  if (event.key === 'Enter') {
+    event.preventDefault(); // Prevents form submission if input is inside a <form>
+    boxOk();
+  }
+  else if (event.key === 'Escape') {
+    event.preventDefault();
+    boxClose();
+  }
+});
+
+function boxClose() {
+  document.getElementById('box_dialog').style.display = 'none';
+}
+
+function boxEdit(wdg) {
+  document.getElementById('box_dialog').style.display = 'block';
+  const box = document.getElementById('box');
+  const box_form = document.getElementById('box_form');
+  const le_id = wdg.getAttribute('value');
+  console.log(le_id);
+  box_form.elements['le_id'].value = le_id;
+  box.value = wdg.innerHTML;
+  box.focus();
+  box.select();
+  // console.log(box_form);
+}
+
+function boxOk() {
+  const diag = document.getElementById('box_dialog');
+  const box_form = document.getElementById('box_form');
+  const box = document.getElementById('box');
+  // console.log(box.value);
+  const val = +box.value;
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({
+      box: val,
+    }).toString(),
+  };
+  const le_id = box_form.elements['le_id'].value;
+  console.log(`le_id=${le_id}`);
+  const req = new Request('/locationentry/'+le_id+'/box', requestOptions);
+  fetch(req)
+    .then(res => {
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+      // console.log(res);
+      return res.json(); // Returns a promise with the parsed JSON
+    })
+    .then(data => {
+      // console.log(data); // Use your JSON data here
+      if (le_id > 0) {
+        const elt = document.getElementById("box_"+le_id);
+        elt.innerHTML = data.box;
       }
     })
     .catch(error => {
